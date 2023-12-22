@@ -1,20 +1,115 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler'
+import {
+  DefaultTheme,
+  DarkTheme,
+  NavigationContainer,
+} from '@react-navigation/native'
+import MainNavigation from './navigation/MainNavigation'
+import { Provider } from 'react-redux'
+import { store } from './redux/store'
+import { StatusBar, Text, View, useColorScheme } from 'react-native'
+import colors from './constants/colors'
+import Toast from 'react-native-toast-message'
+import { useEffect, useState } from 'react'
+import { RootState } from './redux'
+import { useDispatch, useSelector } from 'react-redux'
+import * as NavigationBar from 'expo-navigation-bar'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import rules from './constants/rules'
+import { updateCompanies } from './redux/companies'
+import { CalculateStock, UpdateCompaniesData } from './functions/functions'
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const toastConfig = {
+    ToastMessage: ({ props }: any) => (
+      <View
+        style={{
+          width: '92%',
+          backgroundColor: colors.black,
+          padding: 16,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 40,
+          borderRadius: 4,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            color: colors.White,
+            textAlign: 'left',
+          }}
+        >
+          {props.title}
+        </Text>
+      </View>
+    ),
+  }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  function AppComponent() {
+    const systemTheme = useColorScheme()
+    const theme = useSelector((state: RootState) => state.theme)
+    const companies = useSelector((state: RootState) => state.companies)
+
+    const themeColor: any = theme === 'system' ? systemTheme : theme
+    const millisecondsInDay = 24 * 60 * 60 * 1000
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+      NavigationBar.setBackgroundColorAsync(colors[themeColor].bgColor)
+      NavigationBar.setButtonStyleAsync(
+        themeColor === 'dark' ? 'light' : 'dark'
+      )
+    }, [themeColor])
+
+    function SetNewData() {
+      const newCompaniesData = UpdateCompaniesData(companies)
+      console.log(newCompaniesData[0].history.length)
+
+      dispatch(updateCompanies(newCompaniesData))
+      AsyncStorage.setItem('companies', JSON.stringify(newCompaniesData))
+    }
+
+    const [lastUpdate, setLastUpdate] = useState<number>(0)
+
+    useEffect(() => {
+      let timer = setTimeout(() => {
+        if (
+          companies?.length &&
+          new Date().getSeconds() % 15 === 0 &&
+          companies[0].history[companies[0].history.length - 1].time.split(
+            ':'
+          )[2] !== new Date().getSeconds().toString().padStart(2, '0')
+        ) {
+          SetNewData()
+        }
+
+        setLastUpdate(new Date().getTime())
+      }, 500) //TODO check
+
+      return () => {
+        clearTimeout(timer)
+      }
+    }, [lastUpdate, companies])
+
+    return (
+      <>
+        <StatusBar
+          barStyle={themeColor === 'dark' ? 'light-content' : 'dark-content'}
+          backgroundColor={colors[themeColor].bgColor}
+        />
+      </>
+    )
+  }
+
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <AppComponent />
+        <MainNavigation />
+      </NavigationContainer>
+      <Toast config={toastConfig} />
+    </Provider>
+  )
+}

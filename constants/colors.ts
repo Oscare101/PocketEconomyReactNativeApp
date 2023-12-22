@@ -1,0 +1,37 @@
+const colors: any = {
+  dark: {
+    bgColor: '#0E0E0F',
+    cardColor: '#FFFFFF12',
+    shadowBG: '#000000A8',
+    text: '#F5F5F5',
+    comment: '#606060',
+    disable: '#353535',
+    infoText: '#418CC4',
+    infoBg: '#1D3446',
+    successText: '#65A96C',
+    successBg: '#283D2B',
+    warningText: '#C9B46B',
+    warningBg: '#46402B',
+    errorText: '#C55050',
+    errorBg: '#452223',
+  },
+  light: {
+    bgColor: '#F5F5F5',
+    cardColor: '#00000012',
+    shadowBG: '#00000040',
+    text: '#0E0E0F',
+    comment: '#A0A0A0',
+    disable: '#D3D3D3',
+    infoText: '#418CC4',
+    infoBg: '#C6DDEE',
+    successText: '#51AB32',
+    successBg: '#CBE6C2',
+    warningText: '#CEBA00',
+    warningBg: '#F1EBB3',
+    errorText: '#B82C2C',
+    errorBg: '#EAC0C0',
+  },
+  black: '#000000',
+}
+
+export default colors
