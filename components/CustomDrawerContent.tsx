@@ -12,7 +12,7 @@ import {
   useColorScheme,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { GetMoneyAmount } from '../functions/functions'
+import { GetMoneyAmount, GetUserStocksCapital } from '../functions/functions'
 import { RootState } from '../redux'
 import { useSelector } from 'react-redux'
 import { User } from '../constants/interfaces'
@@ -23,6 +23,7 @@ export default function CustomDrawerContent(props: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const user: User = useSelector((state: RootState) => state.user)
+  const companies: any = useSelector((state: RootState) => state.companies)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
@@ -133,13 +134,25 @@ export default function CustomDrawerContent(props: any) {
             Name
           </Text>
         </View>
-        {/* <Text style={[styles.money, { color: colors[themeColor].comment }]}>
-          $ {GetMoneyAmount(user.capital).value}.
+        <Text style={[styles.money, { color: colors[themeColor].comment }]}>
+          $ {GetMoneyAmount(user.cash).value}.
           <Text style={styles.moneyDecimal}>
-            {GetMoneyAmount(user.capital).decimal}
+            {GetMoneyAmount(user.cash).decimal}
           </Text>{' '}
-          {GetMoneyAmount(user.capital).title}
-        </Text> */}
+          {GetMoneyAmount(user.cash).title} cash
+        </Text>
+        <Text style={[styles.money, { color: colors[themeColor].text }]}>
+          $ {GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).value}
+          .
+          <Text style={styles.moneyDecimal}>
+            {
+              GetMoneyAmount(GetUserStocksCapital(user.stocks, companies))
+                .decimal
+            }
+          </Text>{' '}
+          {GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).title}{' '}
+          in stocks
+        </Text>
         <FlatList
           scrollEnabled={false}
           style={{ width: '100%', marginTop: 50 }}

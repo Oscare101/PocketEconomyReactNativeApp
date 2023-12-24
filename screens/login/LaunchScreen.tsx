@@ -19,6 +19,7 @@ import {
 } from '../../functions/functions'
 import defaultData from '../../defaultData.json'
 import { MMKV } from 'react-native-mmkv'
+import rules from '../../constants/rules'
 export const storage = new MMKV()
 
 const width = Dimensions.get('screen').width
@@ -37,13 +38,14 @@ export default function LaunchScreen({ navigation }: any) {
     }
 
     const user: any = storage.getString('user')
-    if (user) {
+
+    if (!!user && JSON.parse(user).name) {
       dispatch(updateUser(JSON.parse(user)))
     } else {
       const defaultUser: User = {
         name: 'Oscare',
         loginDate: new Date().toISOString().split('T')[0],
-        cash: 1000,
+        cash: rules.user.startCash,
         stocks: [],
         history: [],
       }
@@ -53,7 +55,7 @@ export default function LaunchScreen({ navigation }: any) {
 
     const companies: any = storage.getString('companies')
     //!!companies && JSON.parse(companies).length
-    if (companies && JSON.parse(companies).length) {
+    if (!!companies && JSON.parse(companies).length) {
       const updatedCompanies = UpdateCompaniesData(JSON.parse(companies))
       dispatch(updateCompanies(updatedCompanies))
     } else {

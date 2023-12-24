@@ -54,7 +54,6 @@ export default function App() {
     const companies = useSelector((state: RootState) => state.companies)
 
     const themeColor: any = theme === 'system' ? systemTheme : theme
-    const millisecondsInDay = 24 * 60 * 60 * 1000
     const dispatch = useDispatch()
 
     useEffect(() => {

@@ -249,9 +249,9 @@ export default function InvestScreen({ navigation }: any) {
               <Text
                 style={{
                   color:
-                    +hourPercent > 0.01
+                    +hourPercent > 0
                       ? colors[themeColor].successText
-                      : hourPercent < 0.01
+                      : hourPercent < 0
                       ? colors[themeColor].errorText
                       : colors[themeColor].warningText,
                 }}
@@ -269,9 +269,9 @@ export default function InvestScreen({ navigation }: any) {
               <Text
                 style={{
                   color:
-                    +dayPercent > 0.01
+                    +dayPercent > 0
                       ? colors[themeColor].successText
-                      : dayPercent < 0.01
+                      : dayPercent < 0
                       ? colors[themeColor].errorText
                       : colors[themeColor].warningText,
                 }}

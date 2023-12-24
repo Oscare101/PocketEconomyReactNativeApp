@@ -15,7 +15,11 @@ import { updateTheme } from '../redux/theme'
 import { MMKV } from 'react-native-mmkv'
 import { User, UserStock } from '../constants/interfaces'
 import Button from './Button'
-import { GetMoneyAmount } from '../functions/functions'
+import {
+  GetMoneyAmount,
+  ReduceUserStocks,
+  SetNewUserStocks,
+} from '../functions/functions'
 import { useState } from 'react'
 import { updateUser } from '../redux/user'
 export const storage = new MMKV()
@@ -65,7 +69,9 @@ export default function TransactionBlockModal(props: any) {
     {
       title: 'Tour stocks worth',
       icon: 'cash-outline',
-      value: GetUserStocksAmount().averagePrice,
+      value: `$ ${GetMoneyAmount(GetUserStocksAmount().averagePrice).value}.${
+        GetMoneyAmount(GetUserStocksAmount().averagePrice).decimal
+      } ${GetMoneyAmount(GetUserStocksAmount().averagePrice).title}`,
     },
     {
       title: 'Current stocks price',
@@ -88,55 +94,38 @@ export default function TransactionBlockModal(props: any) {
     // },
   ]
 
-  function SetNewUserStocks(
-    userStocks: UserStock[],
-    amount: number,
-    newPrice: number
-  ) {
-    let newUserStocks: UserStock[] = []
-    if (userStocks.find((s: any) => s.name === props.transactionStockName)) {
-      newUserStocks = userStocks.map((s: UserStock) => {
-        if (s.name === props.transactionStockName) {
-          const prevAmountOfStocks = s.amount
-          const prevPriceOfStock = s.averagePrice
-          const newAmount = prevAmountOfStocks + amount
-          const newPriceStock =
-            (prevPriceOfStock * prevAmountOfStocks + amount * newPrice) /
-            newAmount
-          return {
-            name: s.name,
-            averagePrice: newPriceStock,
-            amount: newAmount,
-          }
-        } else {
-          return s
-        }
-      })
-    } else {
-      newUserStocks = [
-        ...userStocks,
-        {
-          name: props.transactionStockName,
-          averagePrice: newPrice,
-          amount: amount,
-        },
-      ]
-    }
-    return newUserStocks
-  }
-
   function BuyStocks() {
     const price = GetCompanyPrice()
     const amount = +amounOfStocks
     const value = +(price * +amounOfStocks).toFixed(2)
-    console.log(value)
     const newUserData = {
       ...user,
       cash: +(user.cash - value).toFixed(2),
-      stocks: SetNewUserStocks(user.stocks, amount, price),
+      stocks: SetNewUserStocks(
+        user.stocks,
+        amount,
+        price,
+        props.transactionStockName
+      ),
     }
-    console.log(newUserData)
     dispatch(updateUser(newUserData))
+    storage.set('user', JSON.stringify(newUserData))
+
+    props.onClose()
+  }
+
+  function SellStocks() {
+    const value = +(GetCompanyPrice() * +amounOfStocks).toFixed(2)
+    const amount = +amounOfStocks
+    const newUserData = {
+      ...user,
+      cash: +(user.cash + value).toFixed(2),
+      stocks: ReduceUserStocks(user.stocks, amount, props.transactionStockName),
+    }
+    dispatch(updateUser(newUserData))
+    storage.set('user', JSON.stringify(newUserData))
+
+    props.onClose()
   }
 
   function RenderUserTransactionItem({ item }: any) {
@@ -183,6 +172,7 @@ export default function TransactionBlockModal(props: any) {
       </View>
     )
   }
+
   const infoBlock = (
     <>
       <FlatList
@@ -364,7 +354,139 @@ export default function TransactionBlockModal(props: any) {
       />
     </>
   )
-  const sellBlock = <></>
+  const sellBlock = (
+    <>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: 60,
+          width: '100%',
+          paddingHorizontal: 20,
+          // opacity: theme === item.state ? 1 : 0.5,
+          alignSelf: 'center',
+        }}
+      >
+        <Ionicons
+          name={'briefcase-outline'}
+          size={20}
+          color={colors[themeColor].text}
+        />
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: 20,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              color: colors[themeColor].text,
+            }}
+          >
+            Sell price
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              color: colors[themeColor].text,
+            }}
+          >
+            $ {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).value}.
+            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).decimal}{' '}
+            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).title}
+          </Text>
+        </View>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          width: '92%',
+          marginBottom: 5,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setAmounOfStocks(GetUserStocksAmount().stockAmount.toString())
+          }}
+          activeOpacity={0.8}
+        >
+          <Text
+            style={{
+              color: colors[themeColor].infoText,
+              textDecorationStyle: 'solid',
+              textDecorationColor: colors[themeColor].infoText,
+              textDecorationLine: 'underline',
+            }}
+          >
+            Max
+          </Text>
+        </TouchableOpacity>
+        <Text style={{ color: colors[themeColor].comment }}>
+          {' '}
+          can sell {GetUserStocksAmount().stockAmount}
+        </Text>
+      </View>
+
+      <TextInput
+        style={{
+          width: '92%',
+          borderWidth: 1,
+          borderColor: colors[themeColor].comment,
+          borderRadius: 10,
+          padding: 10,
+          fontSize: 20,
+          color: colors[themeColor].text,
+        }}
+        placeholder="amount of stocks ot buy"
+        value={amounOfStocks}
+        keyboardType="number-pad"
+        placeholderTextColor={colors[themeColor].disable}
+        onChangeText={(value: string) => {
+          const formatedValue = value.replace(/[^0-9]/g, '')
+          if (formatedValue === '0') {
+            return false
+          } else if (+formatedValue > GetUserStocksAmount().stockAmount) {
+            setAmountOfStocksToBuyError(true)
+            return false
+          } else {
+            setAmounOfStocks(formatedValue)
+            setAmountOfStocksToBuyError(false)
+          }
+        }}
+      />
+      <Text
+        style={{
+          fontSize: 12,
+          color: colors[themeColor].errorText,
+          opacity:
+            amountOfStocksToBuyError ||
+            +amounOfStocks > GetUserStocksAmount().stockAmount
+              ? 1
+              : 0,
+          marginVertical: 5,
+        }}
+      >
+        Can't sell more then {GetUserStocksAmount().stockAmount}
+      </Text>
+      <Button
+        title="Sell"
+        type="info"
+        action={() => {
+          SellStocks()
+        }}
+        disable={
+          !amounOfStocks || +amounOfStocks > GetUserStocksAmount().stockAmount
+        }
+      />
+    </>
+  )
   return (
     <>
       <View

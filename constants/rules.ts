@@ -1,4 +1,5 @@
 export default {
+  user: { startCash: 1000 },
   stock: {
     percentPerDay: 5,
     secondsPerTact: 60,

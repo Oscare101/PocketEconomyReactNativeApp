@@ -163,14 +163,14 @@ export default function StockScreen({ navigation, route }: any) {
     },
     {
       title: 'Your stocks growth',
-      value: `${
+      value: `${+(
         (GetCompany().history[GetCompany().history.length - 1].price /
           (user.stocks.find((s: any) => s.name === route.params.companyName)
             ?.averagePrice ||
             GetCompany().history[GetCompany().history.length - 1].price) -
           1) *
         100
-      } %`,
+      ).toFixed(2)} %`,
       stockStatIcon: user.stocks.find(
         (s: any) => s.name === route.params.companyName
       ),
@@ -491,34 +491,6 @@ export default function StockScreen({ navigation, route }: any) {
               { backgroundColor: colors[themeColor].cardColor },
             ]}
           >
-            {countElapsedPeriods(
-              `${stocksToRender[stocksToRender.length - 1].date}T${
-                stocksToRender[stocksToRender.length - 1].time
-              }`
-            ) > 1 && false ? (
-              // TODO fix this
-              <View
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '100%',
-                  height: columnHeight,
-                  position: 'absolute',
-                  backgroundColor: '#ff000066',
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: width * 0.07,
-                    color: colors[themeColor].comment,
-                  }}
-                >
-                  Data is outdated
-                </Text>
-              </View>
-            ) : (
-              <></>
-            )}
             <FlatList
               horizontal
               scrollEnabled={false}
@@ -627,6 +599,7 @@ export default function StockScreen({ navigation, route }: any) {
         dismiss={() => bottomSheetModalRef.current?.dismiss()}
         content={bottomSheetContent}
         transactionStockName={route.params.companyName}
+        onClose={() => bottomSheetModalRef.current?.dismiss()}
       />
     </BottomSheetModalProvider>
   )

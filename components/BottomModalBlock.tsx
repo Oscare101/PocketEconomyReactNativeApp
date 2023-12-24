@@ -67,6 +67,7 @@ export default function BottomModalBlock(props: any) {
         ) : props.content === 'transactionBlock' ? (
           <TransactionBlockModal
             transactionStockName={props.transactionStockName}
+            onClose={() => props.onClose()}
           />
         ) : (
           <></>

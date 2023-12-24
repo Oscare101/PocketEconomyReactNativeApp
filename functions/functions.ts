@@ -1,5 +1,6 @@
+import { UserStock } from '../constants/interfaces'
 import rules from '../constants/rules'
-
+import defaultData from '../defaultData.json'
 export function GetMoneyAmount(money: number) {
   const grades = [
     { value: 10 ** 6, title: 'M' },
@@ -35,7 +36,6 @@ export function GetTendention(history: any[]) {
   const temporaryArr = [...history].slice(-3)
   temporaryArr.sort((a, b) => b.price - a.price)
 
-  // console.log(history)
   if (JSON.stringify(temporaryArr) === JSON.stringify([...history].slice(-3))) {
     // down
     return +1
@@ -156,14 +156,14 @@ export function CreateDefaultHistory(comapanies: any[]) {
       ...rest,
       history: [
         {
-          date: new Date('2023-12-22').toISOString().split('T')[0],
+          date: new Date().toISOString().split('T')[0],
           time: `${new Date()
             .getHours()
             .toString()
             .padStart(2, '0')}:${new Date()
             .getMinutes()
             .toString()
-            .padStart(2, '0')}:00`,
+            .padStart(2, '0')}`,
           price: c.price,
         },
       ],
@@ -186,10 +186,9 @@ export function GetEconomicsProgress(companies: any[]) {
   const economicsArr: any = []
 
   companies.map((s: any) => {
-    // const start = s.history[0].price
+    const start = s.history[0].price
     const finish = s.history[s.history.length - 1].price
-    const percent =
-      (s.history[s.history.length - 1].price / s.history[0].price - 1) * 100
+    const percent = (finish / start - 1) * 100
     economicsArr.push({
       finish: finish,
       percent: percent,
@@ -214,6 +213,38 @@ export function GetEconomicsProgress(companies: any[]) {
   return +(economicsCapitalPercent / economicsCapitalStart).toFixed(2)
 }
 
+export function GetEconomicsAllTimeProgress(companies: any[]) {
+  const economicsArr: any = []
+  const defaultDataPrices: any = defaultData
+
+  companies.map((s: any) => {
+    const start = defaultDataPrices[s.name].price
+    const finish = s.history[s.history.length - 1].price
+    const percent = (finish / start - 1) * 100
+    economicsArr.push({
+      finish: finish,
+      percent: percent,
+      companySize: s.stat.companySize,
+    })
+  })
+
+  // use company size to get their weight in economics
+  const economicsCapitalStart = economicsArr.reduce(
+    (a: any, b: any) =>
+      a + rules.stock.companySizeStocksAmount[b.companySize - 1],
+    0
+  )
+
+  // use company size to multiply their percent
+  const economicsCapitalPercent = economicsArr.reduce(
+    (a: any, b: any) =>
+      a + rules.stock.companySizeStocksAmount[b.companySize - 1] * b.percent,
+    0
+  )
+
+  return +(economicsCapitalPercent / economicsCapitalStart / 100 + 1).toFixed(2)
+}
+
 export function GetSortedCompaniesByProgress(companies: any[]) {
   const newCompaniesDate = companies.map((c: any) => {
     const companyProgress = +(
@@ -231,4 +262,74 @@ export function GetUserProgress(history: any[]) {
   }
 
   return 0
+}
+
+export function GetUserStocksCapital(stocks: UserStock[], companies: any[]) {
+  let capital = 0
+
+  stocks.forEach((s: any) => {
+    const comapnyPrice = companies.find((c: any) => c.name === s.name).history[
+      companies.find((c: any) => c.name === s.name).history.length - 1
+    ].price
+    capital += s.amount * comapnyPrice
+  })
+  return +capital.toFixed(2)
+}
+
+export function SetNewUserStocks(
+  userStocks: UserStock[],
+  amount: number,
+  newPrice: number,
+  stockName: string
+) {
+  let newUserStocks: UserStock[] = []
+  if (userStocks.find((s: any) => s.name === stockName)) {
+    newUserStocks = userStocks.map((s: UserStock) => {
+      if (s.name === stockName) {
+        const prevAmountOfStocks = s.amount
+        const prevPriceOfStock = s.averagePrice
+        const newAmount = prevAmountOfStocks + amount
+        const newPriceStock =
+          (prevPriceOfStock * prevAmountOfStocks + amount * newPrice) /
+          newAmount
+        return {
+          name: s.name,
+          averagePrice: newPriceStock,
+          amount: newAmount,
+        }
+      } else {
+        return s
+      }
+    })
+  } else {
+    newUserStocks = [
+      ...userStocks,
+      {
+        name: stockName,
+        averagePrice: newPrice,
+        amount: amount,
+      },
+    ]
+  }
+  return newUserStocks
+}
+
+export function ReduceUserStocks(
+  userStocks: UserStock[],
+  amount: number,
+  stockName: string
+) {
+  const newUserStocks: UserStock[] = userStocks.map((s: UserStock) => {
+    if (s.name === stockName) {
+      // if (amount === s.amount) { return false } else { return s }
+      return {
+        ...s,
+        amount: s.amount - amount,
+      }
+    } else {
+      return s
+    }
+  })
+
+  return newUserStocks.filter((s: UserStock) => s.amount)
 }
