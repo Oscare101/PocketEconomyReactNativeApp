@@ -1,6 +1,7 @@
 import {
   Dimensions,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -177,38 +178,64 @@ export default function PortfolioScreen({ navigation }: any) {
   }
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: colors[themeColor].bgColor },
-      ]}
+    <ScrollView
+      style={{ flex: 1, backgroundColor: colors[themeColor].bgColor }}
     >
-      <HeaderDrawer title="Portfolio" />
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.container,
+          { backgroundColor: colors[themeColor].bgColor },
+        ]}
       >
-        {/* <Text style={[styles.userName, { color: colors[themeColor].text }]}>
+        <HeaderDrawer title="Portfolio" />
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: colors[themeColor].cardColor },
+          ]}
+        >
+          {/* <Text style={[styles.userName, { color: colors[themeColor].text }]}>
           {user.name}
         </Text> */}
-        <FlatList
-          data={userPortfolioData}
-          renderItem={RenderUserPortfolioItem}
-        />
+          <FlatList
+            data={userPortfolioData}
+            renderItem={RenderUserPortfolioItem}
+            scrollEnabled={false}
+          />
+        </View>
+        <Text style={[styles.comment, { color: colors[themeColor].comment }]}>
+          The rating is a reflection of the growth of the player's capital
+          relative to the economy, the rating will be {'>'} 1 if the capital
+          grows faster than the economy and {'<'} 1 if it is slower
+        </Text>
+        <Text style={[styles.title, { color: colors[themeColor].text }]}>
+          User Stocks
+        </Text>
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: colors[themeColor].cardColor },
+          ]}
+        >
+          {user.stocks.length ? (
+            <FlatList
+              data={user.stocks}
+              renderItem={RenderUserStockItem}
+              scrollEnabled={false}
+            />
+          ) : (
+            <Text
+              style={{
+                fontSize: width * 0.05,
+                color: colors[themeColor].comment,
+              }}
+            >
+              No stocks yet
+            </Text>
+          )}
+        </View>
       </View>
-      <Text style={[styles.comment, { color: colors[themeColor].comment }]}>
-        The rating is a reflection of the growth of the player's capital
-        relative to the economy, the rating will be {'>'} 1 if the capital grows
-        faster than the economy and {'<'} 1 if it is slower
-      </Text>
-      <Text style={[styles.title, { color: colors[themeColor].text }]}>
-        User Stocks
-      </Text>
-      <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
-      >
-        <FlatList data={user.stocks} renderItem={RenderUserStockItem} />
-      </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -240,6 +267,6 @@ const styles = StyleSheet.create({
   },
   money: { fontSize: width * 0.04 },
   decimal: { fontSize: width * 0.035, fontWeight: '400' },
-  comment: { fontSize: width * 0.035, width: '92%' },
+  comment: { fontSize: width * 0.035, width: '92%', marginVertical: 5 },
   title: { fontSize: width * 0.05, textAlign: 'left', width: '92%' },
 })

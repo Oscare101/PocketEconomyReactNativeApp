@@ -110,7 +110,12 @@ export default function PortfolioScreen({ navigation }: any) {
         </Text> */}
         <View style={styles.rowBetween}>
           <Text style={[styles.infoText, { color: colors[themeColor].text }]}>
-            Economics growth:
+            Economics growth:{' '}
+            <Text
+              style={[styles.infoText, { color: colors[themeColor].comment }]}
+            >
+              (last 24h)
+            </Text>
           </Text>
           <StatusItem
             title={`${GetEconomicsProgress(companies)} %`}
@@ -150,7 +155,7 @@ export default function PortfolioScreen({ navigation }: any) {
           <FlatList
             style={{
               width: '100%',
-              marginVertical: 5,
+              marginTop: 5,
               backgroundColor: colors[themeColor].cardColor,
               padding: 10,
               borderRadius: 10,

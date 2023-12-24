@@ -34,7 +34,6 @@ export default function CustomDrawerContent(props: any) {
       icon: 'briefcase-outline',
       screen: 'PortfolioScreen',
     },
-    { title: 'Rating', icon: 'people-outline', screen: '' },
     {
       title: 'Statistics',
       icon: 'analytics-outline',

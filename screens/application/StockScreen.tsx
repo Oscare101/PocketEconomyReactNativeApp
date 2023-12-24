@@ -430,17 +430,11 @@ export default function StockScreen({ navigation, route }: any) {
     )
   }
 
-  function RenderTimes({ item }: any) {
-    return (
-      <Text style={{ color: colors[themeColor].text }}>
-        {item.time},{stocksToRender.length}
-      </Text>
-    )
-  }
-
   return (
     <BottomSheetModalProvider>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView
+        style={{ flex: 1, backgroundColor: colors[themeColor].bgColor }}
+      >
         <View
           style={[
             styles.container,
@@ -585,11 +579,6 @@ export default function StockScreen({ navigation, route }: any) {
               }}
             />
           </View>
-          <FlatList
-            scrollEnabled={false}
-            data={GetCompany().history.slice(-10).reverse()}
-            renderItem={RenderTimes}
-          />
         </View>
       </ScrollView>
       {/* BottomSheet */}
