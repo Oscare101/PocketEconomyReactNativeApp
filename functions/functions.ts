@@ -211,7 +211,7 @@ export function GetEconomicsProgress(companies: any[]) {
     0
   )
 
-  return +(economicsCapitalPercent / economicsCapitalStart).toFixed(2)
+  return economicsCapitalPercent / economicsCapitalStart
 }
 
 export function GetEconomicsAllTimeProgress(companies: any[]) {
@@ -243,7 +243,7 @@ export function GetEconomicsAllTimeProgress(companies: any[]) {
     0
   )
 
-  return +(economicsCapitalPercent / economicsCapitalStart / 100 + 1).toFixed(2)
+  return economicsCapitalPercent / economicsCapitalStart / 100 + 1
 }
 
 export function GetSortedCompaniesByProgress(companies: any[]) {

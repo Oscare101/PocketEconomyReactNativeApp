@@ -43,11 +43,11 @@ const periodButtonsData: any = [
 ]
 
 function GetTargetLengthRender(length: number) {
-  if (length < rules.stock.tactsPerDay / 2) {
-    return length
-  } else {
-    return rules.stock.tactsPerHour
-  }
+  // if (length < rules.stock.tactsPerDay / 2) {
+  //   return length
+  // } else {
+  return rules.stock.tactsPerHour
+  // }
 }
 
 export default function StockScreen({ navigation, route }: any) {
@@ -266,7 +266,7 @@ export default function StockScreen({ navigation, route }: any) {
   function GetCompresedStocksHistory(history: any[]) {
     const originalLength = history.length
     const targetLength = GetTargetLengthRender(originalLength)
-    const compressionFactor = originalLength / targetLength
+    const compressionFactor = Math.floor(originalLength / targetLength)
 
     if (originalLength <= targetLength) {
       return history
@@ -373,6 +373,7 @@ export default function StockScreen({ navigation, route }: any) {
           setPeriodToRender(item.title)
 
           setNumToRender(GetTargetLengthRender(item.numToRender))
+
           setStocksToRender(
             GetCompresedStocksHistory(
               GetCompany().history.slice(-item.numToRender)

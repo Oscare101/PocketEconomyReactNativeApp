@@ -76,16 +76,12 @@ export default function PortfolioScreen({ navigation }: any) {
         companies.find((c: any) => c.name === s.name).history.length - 1
       ].price
 
-      const stockProgress = +((stockPrice / s.averagePrice - 1) * 100).toFixed(
-        2
-      )
+      const stockProgress = (stockPrice / s.averagePrice - 1) * 100
 
       progressTotal += s.amount * stockPrice * stockProgress
     })
 
-    return (
-      progressTotal / GetUserStocksCapital(user.stocks, companies)
-    ).toFixed(2)
+    return progressTotal / GetUserStocksCapital(user.stocks, companies)
   }
 
   function GetUserRating() {
@@ -93,8 +89,8 @@ export default function PortfolioScreen({ navigation }: any) {
 
     const userProgress = GetUserAllTimeProgress()
 
-    const rating = userProgress / economicsProgress
-    return +rating.toFixed(2)
+    const rating = (userProgress - 1) / (economicsProgress - 1)
+    return +rating
   }
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
@@ -135,7 +131,11 @@ export default function PortfolioScreen({ navigation }: any) {
       icon: true,
     },
 
-    { title: "Palyer's rating", value: `${GetUserRating()}`, icon: true },
+    {
+      title: "Palyer's rating",
+      value: `${GetUserRating().toFixed(2)}`,
+      icon: true,
+    },
   ]
 
   function RenderUserPortfolioItem({ item }: any) {
@@ -247,7 +247,7 @@ export default function PortfolioScreen({ navigation }: any) {
           </Text>
           <StatusItem
             icon=""
-            title={`${GetPortfolioProgress()} %`}
+            title={`${GetPortfolioProgress().toFixed(2)} %`}
             type={
               +GetPortfolioProgress() > 0
                 ? 'success'

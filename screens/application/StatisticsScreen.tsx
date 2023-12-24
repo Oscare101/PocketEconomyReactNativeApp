@@ -118,7 +118,7 @@ export default function PortfolioScreen({ navigation }: any) {
             </Text>
           </Text>
           <StatusItem
-            title={`${GetEconomicsProgress(companies)} %`}
+            title={`${GetEconomicsProgress(companies).toFixed(2)} %`}
             type={
               GetEconomicsProgress(companies) > 0.01
                 ? 'success'
