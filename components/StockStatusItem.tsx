@@ -33,21 +33,41 @@ const companySize = [
   'Multinational corporation',
   'Global conglomerate',
 ]
-const colorsArr = ['#cc4b41', '#cc8741', '#ccc341', '#a7cc41', '#54cc41']
 
 export default function StockStatusItem(props: StockStatusItemProps) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+
+  const colorsTextArr = [
+    colors[themeColor].errorText,
+    colors[themeColor].semiErrorText,
+    colors[themeColor].warningText,
+    colors[themeColor].semiSuccessText,
+    colors[themeColor].successText,
+  ]
+  const colorsBgArr = [
+    colors[themeColor].errorBg,
+    colors[themeColor].semiErrorBg,
+    colors[themeColor].warningBg,
+    colors[themeColor].semiSuccessBg,
+    colors[themeColor].successBg,
+  ]
+
   const icons: any = {
     volatility: 'trending-up-outline',
     dividendsConsistency: 'time-outline',
     companySize: 'business-outline',
   }
-  const color = {
-    volatility: colorsArr[colorsArr.length - props.statNumber],
-    dividendsConsistency: colorsArr[props.statNumber - 1],
-    companySize: colorsArr[props.statNumber - 1],
+  const colorText = {
+    volatility: colorsTextArr[colorsTextArr.length - props.statNumber],
+    dividendsConsistency: colorsTextArr[props.statNumber - 1],
+    companySize: colorsTextArr[props.statNumber - 1],
+  }
+  const colorBg = {
+    volatility: colorsBgArr[colorsBgArr.length - props.statNumber],
+    dividendsConsistency: colorsBgArr[props.statNumber - 1],
+    companySize: colorsBgArr[props.statNumber - 1],
   }
   const titles = {
     volatility: volatility[props.statNumber - 1],
@@ -60,7 +80,7 @@ export default function StockStatusItem(props: StockStatusItemProps) {
       style={[
         styles.stat,
         {
-          backgroundColor: `${color[props.type]}40`,
+          backgroundColor: `${colorBg[props.type]}`,
         },
       ]}
     >
@@ -69,7 +89,7 @@ export default function StockStatusItem(props: StockStatusItemProps) {
           style={[
             styles.buttonTitle,
             {
-              color: color[props.type],
+              color: colorText[props.type],
               marginRight: 5,
             },
           ]}
@@ -82,7 +102,7 @@ export default function StockStatusItem(props: StockStatusItemProps) {
       <Ionicons
         name={icons[props.type]}
         size={width * 0.04}
-        color={color[props.type]}
+        color={colorText[props.type]}
       />
     </View>
   )

@@ -1,6 +1,7 @@
 import {
   Dimensions,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -102,52 +103,60 @@ export default function PortfolioScreen({ navigation }: any) {
       ]}
     >
       <HeaderDrawer title="Statistics" />
-      <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1, width: '100%' }}
       >
-        {/* <Text style={[styles.userName, { color: colors[themeColor].text }]}>
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: colors[themeColor].cardColor },
+          ]}
+        >
+          {/* <Text style={[styles.userName, { color: colors[themeColor].text }]}>
           {user.name}
         </Text> */}
-        <View style={styles.rowBetween}>
-          <Text style={[styles.infoText, { color: colors[themeColor].text }]}>
-            Economics growth:{' '}
+          <View style={styles.rowBetween}>
+            <Text style={[styles.infoText, { color: colors[themeColor].text }]}>
+              Economics growth:{' '}
+              <Text
+                style={[styles.infoText, { color: colors[themeColor].comment }]}
+              >
+                (last 24h)
+              </Text>
+            </Text>
+            <StatusItem
+              title={`${GetEconomicsProgress(companies).toFixed(2)} %`}
+              type={
+                GetEconomicsProgress(companies) > 0.01
+                  ? 'success'
+                  : GetEconomicsProgress(companies) < -0.01
+                  ? 'error'
+                  : 'warning'
+              }
+              icon=""
+            />
+          </View>
+          <View style={styles.columnStart}>
             <Text
               style={[styles.infoText, { color: colors[themeColor].comment }]}
             >
-              (last 24h)
+              Best companies: (last 24h)
             </Text>
-          </Text>
-          <StatusItem
-            title={`${GetEconomicsProgress(companies).toFixed(2)} %`}
-            type={
-              GetEconomicsProgress(companies) > 0.01
-                ? 'success'
-                : GetEconomicsProgress(companies) < -0.01
-                ? 'error'
-                : 'warning'
-            }
-            icon=""
-          />
-        </View>
-        <View style={styles.columnStart}>
-          <Text
-            style={[styles.infoText, { color: colors[themeColor].comment }]}
-          >
-            Best companies: (last 24h)
-          </Text>
-          <FlatList
-            style={{
-              width: '100%',
-              marginVertical: 5,
-              backgroundColor: colors[themeColor].cardColor,
-              padding: 10,
-              borderRadius: 10,
-            }}
-            data={GetSortedCompaniesByProgress(companies).slice(0, 3)}
-            renderItem={RenderCompanyProgress}
-            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
-          />
-          <Text
+            <FlatList
+              style={{
+                width: '100%',
+                marginVertical: 5,
+                backgroundColor: colors[themeColor].cardColor,
+                padding: 10,
+                borderRadius: 10,
+              }}
+              data={GetSortedCompaniesByProgress(companies)}
+              renderItem={RenderCompanyProgress}
+              ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+              scrollEnabled={false}
+            />
+            {/* <Text
             style={[styles.infoText, { color: colors[themeColor].comment }]}
           >
             Worst companies: (last 24h)
@@ -163,9 +172,9 @@ export default function PortfolioScreen({ navigation }: any) {
             data={GetSortedCompaniesByProgress(companies).slice(-3)}
             renderItem={RenderCompanyProgress}
             ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
-          />
-        </View>
-        {/* <View style={styles.rowBetween}>
+          /> */}
+          </View>
+          {/* <View style={styles.rowBetween}>
           <Text
             style={[styles.infoText, { color: colors[themeColor].comment }]}
           >
@@ -194,7 +203,8 @@ export default function PortfolioScreen({ navigation }: any) {
             {CountDaysPlayed(user.loginDate)} d
           </Text>
         </View> */}
-      </View>
+        </View>
+      </ScrollView>
     </View>
   )
 }
@@ -211,6 +221,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginTop: 10,
+    alignSelf: 'center',
   },
   rowBetween: {
     width: '100%',

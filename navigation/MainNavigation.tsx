@@ -9,18 +9,43 @@ import {
 } from '@react-navigation/drawer'
 import LaunchScreen from '../screens/login/LaunchScreen'
 
-import TestScreen from '../screens/application/TestScreen'
 import SettingsScreen from '../screens/application/SettingsScreen'
 import CustomDrawerContent from '../components/CustomDrawerContent'
 import PortfolioScreen from '../screens/application/PortfolioScreen'
 import InvestScreen from '../screens/application/InvestScreen'
 import StockScreen from '../screens/application/StockScreen'
 import StatisticsScreen from '../screens/application/StatisticsScreen'
+import CustomBottomTabContent from '../components/CustomBottomTabContent'
+import DepositsScreen from '../screens/application/DepositsScreen'
+
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 const Drawer = createDrawerNavigator()
 
 export default function MainNavigation() {
+  function InvestNavigation() {
+    return (
+      <Tab.Navigator
+        tabBar={(props: any) => <CustomBottomTabContent {...props} />}
+      >
+        <Tab.Screen
+          name="InvestScreen"
+          component={InvestScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="DepositsScreen"
+          component={DepositsScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Tab.Navigator>
+    )
+  }
+
   function DrawerNavigation() {
     return (
       <Drawer.Navigator
@@ -29,8 +54,8 @@ export default function MainNavigation() {
       >
         <Drawer.Screen
           options={{ headerShown: false }}
-          name="TestScreen"
-          component={TestScreen}
+          name="PortfolioScreen"
+          component={PortfolioScreen}
         />
         <Drawer.Screen
           options={{ headerShown: false }}
@@ -39,13 +64,8 @@ export default function MainNavigation() {
         />
         <Drawer.Screen
           options={{ headerShown: false }}
-          name="PortfolioScreen"
-          component={PortfolioScreen}
-        />
-        <Drawer.Screen
-          options={{ headerShown: false }}
-          name="InvestScreen"
-          component={InvestScreen}
+          name="InvestNavigation"
+          component={InvestNavigation}
         />
         <Drawer.Screen
           options={{ headerShown: false }}

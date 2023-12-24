@@ -435,6 +435,7 @@ export default function StockScreen({ navigation, route }: any) {
   return (
     <BottomSheetModalProvider>
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{ flex: 1, backgroundColor: colors[themeColor].bgColor }}
       >
         <View

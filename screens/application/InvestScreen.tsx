@@ -317,7 +317,7 @@ export default function InvestScreen({ navigation }: any) {
         { backgroundColor: colors[themeColor].bgColor },
       ]}
     >
-      <HeaderDrawer title="Invest" />
+      <HeaderDrawer title="Stocks" />
       <FlatList
         horizontal
         scrollEnabled={false}

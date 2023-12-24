@@ -132,7 +132,7 @@ export default function PortfolioScreen({ navigation }: any) {
     },
 
     {
-      title: "Palyer's rating",
+      title: "Palyer's all time rating",
       value: `${GetUserRating().toFixed(2)}`,
       icon: true,
     },
@@ -209,6 +209,7 @@ export default function PortfolioScreen({ navigation }: any) {
 
   return (
     <ScrollView
+      showsVerticalScrollIndicator={false}
       style={{ flex: 1, backgroundColor: colors[themeColor].bgColor }}
     >
       <View

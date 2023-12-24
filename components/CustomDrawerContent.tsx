@@ -28,7 +28,7 @@ export default function CustomDrawerContent(props: any) {
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
   const screensButtonData = [
-    { title: 'Invest', icon: 'bar-chart-outline', screen: 'InvestScreen' },
+    { title: 'Invest', icon: 'bar-chart-outline', screen: 'InvestNavigation' },
     {
       title: 'Portfolio',
       icon: 'briefcase-outline',
@@ -39,7 +39,6 @@ export default function CustomDrawerContent(props: any) {
       icon: 'analytics-outline',
       screen: 'StatisticsScreen',
     },
-    { title: 'Settings', icon: 'cog-outline', screen: 'SettingsScreen' },
   ]
 
   function RenderScreenButtonItem({ item }: any) {
@@ -169,25 +168,7 @@ export default function CustomDrawerContent(props: any) {
           )}
         />
       </View>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {
-          props.navigation.jumpTo('TestScreen')
-        }}
-        style={[
-          styles.navigationButton,
-          { backgroundColor: colors[themeColor].cardColor },
-        ]}
-      >
-        <Text
-          style={[
-            styles.navigationButtonTitle,
-            { color: colors[themeColor].text },
-          ]}
-        >
-          Test
-        </Text>
-      </TouchableOpacity>
+
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
