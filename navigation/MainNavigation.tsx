@@ -15,7 +15,7 @@ import CustomDrawerContent from '../components/CustomDrawerContent'
 import PortfolioScreen from '../screens/application/PortfolioScreen'
 import InvestScreen from '../screens/application/InvestScreen'
 import StockScreen from '../screens/application/StockScreen'
-
+import StatisticsScreen from '../screens/application/StatisticsScreen'
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 const Drawer = createDrawerNavigator()
@@ -46,6 +46,11 @@ export default function MainNavigation() {
           options={{ headerShown: false }}
           name="InvestScreen"
           component={InvestScreen}
+        />
+        <Drawer.Screen
+          options={{ headerShown: false }}
+          name="StatisticsScreen"
+          component={StatisticsScreen}
         />
       </Drawer.Navigator>
     )

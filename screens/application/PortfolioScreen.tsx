@@ -72,13 +72,13 @@ export default function PortfolioScreen({ navigation }: any) {
           >
             Capital:
           </Text>
-          <Text style={[styles.money, { color: colors[themeColor].text }]}>
+          {/* <Text style={[styles.money, { color: colors[themeColor].text }]}>
             $ {GetMoneyAmount(user.capital).value}.
             <Text style={styles.decimal}>
               {GetMoneyAmount(user.capital).decimal}
             </Text>{' '}
             {GetMoneyAmount(user.capital).title}
-          </Text>
+          </Text> */}
         </View>
         {/* <View style={styles.rowBetween}>
           <Text

@@ -12,91 +12,56 @@ import { updateCompanies } from '../../redux/companies'
 import {
   AddSecondsToDateTime,
   CalculateStock,
+  CreateDefaultHistory,
   GetElapsedHistory,
   UpdateCompaniesData,
   countElapsedPeriods,
 } from '../../functions/functions'
+import defaultData from '../../defaultData.json'
+import { MMKV } from 'react-native-mmkv'
+export const storage = new MMKV()
 
 const width = Dimensions.get('screen').width
 
 export default function LaunchScreen({ navigation }: any) {
   const dispatch = useDispatch()
 
-  async function GetData() {
-    const theme: any = await AsyncStorage.getItem('theme')
+  function GetStorage() {
+    const theme: any = storage.getString('theme')
 
     if (theme) {
       dispatch(updateTheme(theme))
     } else {
       dispatch(updateTheme('system'))
-      await AsyncStorage.setItem('theme', 'system')
+      storage.set('theme', 'system')
     }
 
-    const user: any = await AsyncStorage.getItem('user')
+    const user: any = storage.getString('user')
     if (user) {
       dispatch(updateUser(JSON.parse(user)))
     } else {
       const defaultUser: User = {
         name: 'Oscare',
         loginDate: new Date().toISOString().split('T')[0],
-        capital: 1000,
+        cash: 1000,
         stocks: [],
         history: [],
       }
       dispatch(updateUser(defaultUser))
-      await AsyncStorage.setItem('user', JSON.stringify(defaultUser))
+      storage.set('user', JSON.stringify(defaultUser))
     }
 
-    const companies: any = await AsyncStorage.getItem('companies')
-
-    if (!!companies && JSON.parse(companies).length) {
+    const companies: any = storage.getString('companies')
+    //!!companies && JSON.parse(companies).length
+    if (companies && JSON.parse(companies).length) {
       const updatedCompanies = UpdateCompaniesData(JSON.parse(companies))
       dispatch(updateCompanies(updatedCompanies))
     } else {
-      const defaultCompanies: Company[] = [
-        {
-          name: 'ABCTech',
-          industry: 'information technology',
-          stat: {
-            volatility: 2,
-            dividendsConsistency: 5,
-            companySize: 5,
-            dividendsRate: 4.0,
-          },
-          description:
-            'ABCTech is an innovative leader in the field of information technology, providing advanced solutions for the dynamic digital world',
-          history: [
-            {
-              date: new Date().toISOString().split('T')[0],
-              time: `${new Date().getHours()}:${new Date().getMinutes()}:00`,
-              price: 159,
-            },
-          ],
-          logo: '',
-        },
-        {
-          name: 'Apollo',
-          industry: 'power & utilities',
-          stat: {
-            volatility: 2,
-            dividendsConsistency: 3,
-            companySize: 5,
-            dividendsRate: 4.0,
-          },
-          description:
-            'Apollo is a company transforming the energy industry through high-tech and environmentally friendly solutions',
-          history: [
-            {
-              date: new Date().toISOString().split('T')[0],
-              time: `${new Date().getHours()}:${new Date().getMinutes()}:00`,
-              price: 68.5,
-            },
-          ],
-          logo: '',
-        },
-      ]
+      const defaultCompanies: Company[] = UpdateCompaniesData(
+        CreateDefaultHistory(Object.values(defaultData))
+      )
       dispatch(updateCompanies(defaultCompanies))
-      await AsyncStorage.setItem('companies', JSON.stringify(defaultCompanies))
+      storage.set('companies', JSON.stringify(defaultCompanies))
     }
 
     navigation.reset({
@@ -106,7 +71,7 @@ export default function LaunchScreen({ navigation }: any) {
   }
 
   useEffect(() => {
-    GetData()
+    GetStorage()
   }, [])
 
   return (

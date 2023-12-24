@@ -24,18 +24,18 @@ export interface UserStock {
   name: string
   averagePrice: number
   amount: number
-  date: string
 }
 
 export interface UserHistory {
   date: string
+  time: string
   capital: number
 }
 
 export interface User {
   name: string
   loginDate: string
-  capital: number
+  cash: number
   stocks: UserStock[]
   history: UserHistory[]
 }

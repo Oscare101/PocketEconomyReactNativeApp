@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   StyleSheet,
   Text,
@@ -15,7 +16,19 @@ import HeaderDrawer from '../../components/HeaderDrawer'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import StockStatusItem from '../../components/StockStatusItem'
-import { GetMoneyAmount } from '../../functions/functions'
+import { GetMoneyAmount, GetProfit } from '../../functions/functions'
+import rules from '../../constants/rules'
+import { useState } from 'react'
+
+const width = Dimensions.get('screen').width
+const filterButtons = [
+  { text: 'Aa', value: 'Name' },
+  { text: '%', value: 'DividendsRate' },
+  { text: '$', value: 'Price' },
+  { icon: 'trending-up-outline', value: 'Volatility' },
+  { icon: 'time-outline', value: 'DividendsConsistency' },
+  { icon: 'business-outline', value: 'CompanySize' },
+]
 
 export default function InvestScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
@@ -24,7 +37,133 @@ export default function InvestScreen({ navigation }: any) {
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
+  const [sortBy, setSortBy] = useState<string>('Name')
+  const [sortFrom, setSortFrom] = useState<string>('High')
+
+  function GetDataAboutCompanies(companies: any[]) {
+    const newData = companies.map((c: any) => {
+      return { ...c, history: c.history.slice(-1) }
+    })
+    return newData
+  }
+
+  function GetSortedCompanies() {
+    const sort: any = {
+      NameFromLow: Object.values(companies).sort((a, b) =>
+        b.name.localeCompare(a.name)
+      ),
+      NameFromHigh: Object.values(companies).sort((a, b) =>
+        a.name.localeCompare(b.name)
+      ),
+      VolatilityFromLow: Object.values(companies).sort(
+        (a, b) => b.stat.volatility - a.stat.volatility
+      ),
+      VolatilityFromHigh: Object.values(companies).sort(
+        (a, b) => a.stat.volatility - b.stat.volatility
+      ),
+      DividendsConsistencyFromLow: Object.values(companies).sort(
+        (a, b) => a.stat.dividendsConsistency - b.stat.dividendsConsistency
+      ),
+      DividendsConsistencyFromHigh: Object.values(companies).sort(
+        (a, b) => b.stat.dividendsConsistency - a.stat.dividendsConsistency
+      ),
+      CompanySizeFromLow: Object.values(companies).sort(
+        (a, b) => a.stat.companySize - b.stat.companySize
+      ),
+      CompanySizeFromHigh: Object.values(companies).sort(
+        (a, b) => b.stat.companySize - a.stat.companySize
+      ),
+      DividendsRateFromLow: Object.values(companies).sort(
+        (a, b) => a.stat.dividendsRate - b.stat.dividendsRate
+      ),
+      DividendsRateFromHigh: Object.values(companies).sort(
+        (a, b) => b.stat.dividendsRate - a.stat.dividendsRate
+      ),
+      PriceFromLow: Object.values(companies).sort(
+        (a, b) =>
+          a.history[a.history.length - 1].price -
+          b.history[b.history.length - 1].price
+      ),
+      PriceFromHigh: Object.values(companies).sort(
+        (a, b) =>
+          b.history[b.history.length - 1].price -
+          a.history[a.history.length - 1].price
+      ),
+    }
+    return sort[`${sortBy}From${sortFrom}`]
+  }
+
+  function RenderFilterButton({ item }: any) {
+    return (
+      <TouchableOpacity
+        style={{
+          width: width / 7,
+          marginHorizontal: width / 7 / 12,
+          height: 30,
+          marginVertical: 5,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor:
+            sortBy === item.value
+              ? colors[themeColor].comment
+              : colors[themeColor].disable,
+          borderRadius: 5,
+          flexDirection: 'row',
+        }}
+        onPress={() => {
+          if (sortBy === item.value) {
+            setSortFrom((sortFrom) => (sortFrom === 'Low' ? 'High' : 'Low'))
+          } else {
+            setSortBy(item.value)
+            setSortFrom('High')
+          }
+        }}
+      >
+        {sortBy === item.value ? (
+          <Ionicons
+            name={sortFrom === 'Low' ? 'caret-up' : 'caret-down'}
+            size={14}
+            color={
+              sortBy === item.value
+                ? colors[themeColor].text
+                : colors[themeColor].comment
+            }
+          />
+        ) : (
+          <></>
+        )}
+
+        {item.text ? (
+          <Text
+            style={{
+              fontSize: 14,
+              color:
+                sortBy === item.value
+                  ? colors[themeColor].text
+                  : colors[themeColor].comment,
+            }}
+          >
+            {item.text}
+          </Text>
+        ) : (
+          <Ionicons
+            name={item.icon}
+            size={14}
+            color={
+              sortBy === item.value
+                ? colors[themeColor].text
+                : colors[themeColor].comment
+            }
+          />
+        )}
+      </TouchableOpacity>
+    )
+  }
+
   function RenderCompanyItem({ item }: any) {
+    const hourPercent = GetProfit(item.history.slice(-rules.stock.tactsPerHour))
+    const dayPercent = GetProfit(item.history)
+
     return (
       <TouchableOpacity
         style={{
@@ -67,23 +206,17 @@ export default function InvestScreen({ navigation }: any) {
 
           <Text
             style={{
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: '300',
               color: colors[themeColor].text,
             }}
           >
             {item.industry}
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-
-              width: '100%',
-            }}
-          >
-            <Text style={{ fontSize: 18, color: colors[themeColor].text }}>
+          <View style={styles.rowBetween}>
+            <Text
+              style={[styles.stockStat, { color: colors[themeColor].text }]}
+            >
               Price: ${' '}
               {
                 GetMoneyAmount(item.history[item.history.length - 1].price)
@@ -99,8 +232,52 @@ export default function InvestScreen({ navigation }: any) {
                   .title
               }
             </Text>
-            <Text style={{ fontSize: 18, color: colors[themeColor].text }}>
+            <Text
+              style={[styles.stockStat, { color: colors[themeColor].text }]}
+            >
               Divident rate: {item.stat.dividendsRate} %
+            </Text>
+          </View>
+          <View style={styles.rowBetween}>
+            <Text
+              style={[
+                styles.companyStockPercent,
+                { color: colors[themeColor].comment },
+              ]}
+            >
+              Hour:{' '}
+              <Text
+                style={{
+                  color:
+                    +hourPercent > 0.01
+                      ? colors[themeColor].successText
+                      : hourPercent < 0.01
+                      ? colors[themeColor].errorText
+                      : colors[themeColor].warningText,
+                }}
+              >
+                {hourPercent}%
+              </Text>
+            </Text>
+            <Text
+              style={[
+                styles.companyStockPercent,
+                { color: colors[themeColor].comment },
+              ]}
+            >
+              Day:{' '}
+              <Text
+                style={{
+                  color:
+                    +dayPercent > 0.01
+                      ? colors[themeColor].successText
+                      : dayPercent < 0.01
+                      ? colors[themeColor].errorText
+                      : colors[themeColor].warningText,
+                }}
+              >
+                {dayPercent}%
+              </Text>
             </Text>
           </View>
         </View>
@@ -142,8 +319,15 @@ export default function InvestScreen({ navigation }: any) {
     >
       <HeaderDrawer title="Invest" />
       <FlatList
+        horizontal
+        scrollEnabled={false}
         style={{ width: '100%' }}
-        data={companies}
+        data={filterButtons}
+        renderItem={RenderFilterButton}
+      />
+      <FlatList
+        style={{ width: '100%' }}
+        data={GetSortedCompanies()}
         renderItem={RenderCompanyItem}
       />
     </View>
@@ -156,5 +340,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  rowBetween: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  stockStat: { fontSize: 16, flex: 1, fontWeight: '300' },
+  companyStockPercent: {
+    fontSize: 12,
+    fontWeight: '300',
+    flex: 1,
   },
 })

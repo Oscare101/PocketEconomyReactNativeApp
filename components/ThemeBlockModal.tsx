@@ -11,8 +11,8 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { Ionicons } from '@expo/vector-icons'
 import { updateTheme } from '../redux/theme'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import { MMKV } from 'react-native-mmkv'
+export const storage = new MMKV()
 const themeButtonsData = [
   {
     state: 'system',
@@ -56,7 +56,7 @@ export default function ThemeBlockModal() {
         }}
         onPress={() => {
           dispatch(updateTheme(item.state))
-          AsyncStorage.setItem('theme', item.state)
+          storage.set('theme', item.state)
         }}
       >
         <Ionicons name={item.icon} size={24} color={colors[themeColor].text} />

@@ -16,6 +16,7 @@ interface ButtonProps {
   type: 'success' | 'warning' | 'error' | 'info'
   disable: boolean
   action: any
+  style?: any
 }
 
 export default function Button(props: ButtonProps) {
@@ -27,15 +28,25 @@ export default function Button(props: ButtonProps) {
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: colors[themeColor][`${props.type}Bg`] },
+        {
+          backgroundColor: props.disable
+            ? colors[themeColor].cardColor
+            : colors[themeColor][`${props.type}Bg`],
+        },
+        props.style,
       ]}
+      disabled={props.disable}
       activeOpacity={0.8}
       onPress={props.action}
     >
       <Text
         style={[
           styles.buttonTitle,
-          { color: colors[themeColor][`${props.type}Text`] },
+          {
+            color: props.disable
+              ? colors[themeColor].disable
+              : colors[themeColor][`${props.type}Text`],
+          },
         ]}
       >
         {props.title}

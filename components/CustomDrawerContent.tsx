@@ -34,7 +34,11 @@ export default function CustomDrawerContent(props: any) {
       screen: 'PortfolioScreen',
     },
     { title: 'Rating', icon: 'people-outline', screen: '' },
-    { title: 'Statistics', icon: 'analytics-outline', screen: '' },
+    {
+      title: 'Statistics',
+      icon: 'analytics-outline',
+      screen: 'StatisticsScreen',
+    },
     { title: 'Settings', icon: 'cog-outline', screen: 'SettingsScreen' },
   ]
 
@@ -129,13 +133,13 @@ export default function CustomDrawerContent(props: any) {
             Name
           </Text>
         </View>
-        <Text style={[styles.money, { color: colors[themeColor].comment }]}>
+        {/* <Text style={[styles.money, { color: colors[themeColor].comment }]}>
           $ {GetMoneyAmount(user.capital).value}.
           <Text style={styles.moneyDecimal}>
             {GetMoneyAmount(user.capital).decimal}
           </Text>{' '}
           {GetMoneyAmount(user.capital).title}
-        </Text>
+        </Text> */}
         <FlatList
           scrollEnabled={false}
           style={{ width: '100%', marginTop: 50 }}

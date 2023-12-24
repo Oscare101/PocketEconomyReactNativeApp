@@ -4,7 +4,7 @@ import { User } from '../constants/interfaces'
 const initialState: User = {
   name: 'Oscare',
   loginDate: '2023-12-21',
-  capital: 1000,
+  cash: 1000,
   stocks: [],
   history: [],
 }

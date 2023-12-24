@@ -1,6 +1,7 @@
 import {
   Dimensions,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,10 +13,21 @@ import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import colors from '../../constants/colors'
 import StockStatusItem from '../../components/StockStatusItem'
-import { GetMoneyAmount } from '../../functions/functions'
+import {
+  GetMoneyAmount,
+  GetProfit,
+  countElapsedPeriods,
+} from '../../functions/functions'
 import rules from '../../constants/rules'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import StatusItem from '../../components/StatusItem'
+import { User } from '../../constants/interfaces'
+import Button from '../../components/Button'
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet'
+import BottomModalBlock from '../../components/BottomModalBlock'
 
 const width = Dimensions.get('screen').width
 const stockWidth = width * 0.92 - 20
@@ -24,16 +36,25 @@ const columnHeight: number = 150
 const dotSize: number = 2
 const lineWidth: number = 2
 
-const periodButtonsData = [
+const periodButtonsData: any = [
   { title: 'Hour', numToRender: rules.stock.tactsPerHour },
   { title: 'Day', numToRender: rules.stock.tactsPerDay },
-  { title: 'Week', numToRender: rules.stock.tactsPerWeek },
+  // { title: 'Week', numToRender: rules.stock.tactsPerWeek },
 ]
+
+function GetTargetLengthRender(length: number) {
+  // if (length === rules.stock.tactsPerDay) {
+  //   return rules.stock.tactsPerDay / 10
+  // }
+  return rules.stock.tactsPerHour
+}
 
 export default function StockScreen({ navigation, route }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const companies = useSelector((state: RootState) => state.companies)
+  const user: User = useSelector((state: RootState) => state.user)
+
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
   const [pressedPrice, setPressedPrice] = useState<any>()
@@ -47,10 +68,18 @@ export default function StockScreen({ navigation, route }: any) {
       GetCompany().history.slice(-rules.stock.tactsPerHour)
     )
   )
+  const [bottomSheetContent, setBottomSheetContent] = useState<any>('')
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const snapPoints = useMemo(() => [360], [])
 
   useEffect(() => {
     setStocksToRender(
-      GetCompresedStocksHistory(GetCompany().history.slice(-numToRender))
+      GetCompresedStocksHistory(
+        GetCompany().history.slice(
+          -periodButtonsData.find((i: any) => i.title === periodToRender)
+            .numToRender
+        )
+      )
     )
   }, [companies])
 
@@ -61,11 +90,16 @@ export default function StockScreen({ navigation, route }: any) {
     return currentCompany
   }
 
-  function GetProfit(stockArr: any[]) {
-    const first = stockArr[0].price
-    const last = stockArr[stockArr.length - 1].price
-    const result = last / first - 1
-    return +result.toFixed(2)
+  function GetUserStockPrice() {
+    const amount =
+      user.stocks.find((s: any) => s.name === route.params.companyName)
+        ?.amount || 0
+    const price = GetCompany().history[GetCompany().history.length - 1].price
+    // user.stocks.find((s: any) => s.name === route.params.companyName)
+    //   ?.averagePrice || 0
+    return `$ ${GetMoneyAmount(amount * price).value}.${
+      GetMoneyAmount(amount * price).decimal
+    } ${GetMoneyAmount(amount * price).title}`
   }
 
   const companyStatData = [
@@ -110,10 +144,39 @@ export default function StockScreen({ navigation, route }: any) {
       value: GetCompany().history[GetCompany().history.length - 1].time,
     },
     {
-      title: periodToRender,
-
+      title: `Last ${periodToRender.toLocaleLowerCase()} progress`,
       stockStatIcon: true,
       value: `${GetProfit(stocksToRender)} %`,
+    },
+  ]
+
+  const userStockData = [
+    {
+      title: 'Your stocks amount',
+      value:
+        user.stocks.find((s: any) => s.name === route.params.companyName)
+          ?.amount || 0,
+    },
+    {
+      title: 'Your stocks price',
+      value: GetUserStockPrice(),
+    },
+    {
+      title: 'Your stocks growth',
+      value: `${
+        (GetCompany().history[GetCompany().history.length - 1].price /
+          (user.stocks.find((s: any) => s.name === route.params.companyName)
+            ?.averagePrice ||
+            GetCompany().history[GetCompany().history.length - 1].price) -
+          1) *
+        100
+      } %`,
+      stockStatIcon: user.stocks.find(
+        (s: any) => s.name === route.params.companyName
+      ),
+      disable: !user.stocks.find(
+        (s: any) => s.name === route.params.companyName
+      ),
     },
   ]
 
@@ -136,9 +199,9 @@ export default function StockScreen({ navigation, route }: any) {
             icon=""
             title={item.value}
             type={
-              item.value > 0.01
+              +item.value.replace('%', '') > 0.01
                 ? 'success'
-                : item.value < 0.01
+                : +item.value.replace('%', '') < -0.01
                 ? 'error'
                 : 'warning'
             }
@@ -201,7 +264,7 @@ export default function StockScreen({ navigation, route }: any) {
 
   function GetCompresedStocksHistory(history: any[]) {
     const originalLength = history.length
-    const targetLength = originalLength
+    const targetLength = GetTargetLengthRender(originalLength)
     const compressionFactor = originalLength / targetLength
 
     if (originalLength <= targetLength) {
@@ -210,11 +273,18 @@ export default function StockScreen({ navigation, route }: any) {
 
     const compressedArray = []
     for (let i = 0; i < targetLength; i++) {
+      const pointsInRange =
+        history
+          .slice(
+            i * compressionFactor,
+            i * compressionFactor + compressionFactor
+          )
+          .reduce((a, b) => a + b.price, 0) / compressionFactor
+
       const point = Math.floor(i * compressionFactor)
 
-      compressedArray.push(history[point])
+      compressedArray.push({ ...history[point], price: pointsInRange })
     }
-    console.log(originalLength, compressedArray.length)
 
     return compressedArray
   }
@@ -289,7 +359,7 @@ export default function StockScreen({ navigation, route }: any) {
     return (
       <TouchableOpacity
         style={{
-          width: '31%',
+          width: '48%',
           backgroundColor: colors[themeColor].cardColor,
           padding: 10,
           borderRadius: 10,
@@ -300,7 +370,8 @@ export default function StockScreen({ navigation, route }: any) {
         onPress={() => {
           setPressedPrice(null)
           setPeriodToRender(item.title)
-          setNumToRender(item.numToRender)
+
+          setNumToRender(GetTargetLengthRender(item.numToRender))
           setStocksToRender(
             GetCompresedStocksHistory(
               GetCompany().history.slice(-item.numToRender)
@@ -311,7 +382,7 @@ export default function StockScreen({ navigation, route }: any) {
         <Text
           style={{
             color:
-              numToRender === item.numToRender
+              periodToRender === item.title
                 ? colors[themeColor].text
                 : colors[themeColor].comment,
           }}
@@ -322,123 +393,242 @@ export default function StockScreen({ navigation, route }: any) {
     )
   }
 
+  function RenderUserStat({ item }: any) {
+    return (
+      <View style={[styles.statItemBlock, { opacity: item.disable ? 0.3 : 1 }]}>
+        <Text
+          style={[styles.statItemTitle, { color: colors[themeColor].text }]}
+        >
+          {item.title}
+        </Text>
+        {item.statIcon ? (
+          <StockStatusItem
+            title={true}
+            type={item.type}
+            statNumber={item.statNumber}
+          />
+        ) : item.stockStatIcon ? (
+          <StatusItem
+            icon=""
+            title={item.value}
+            type={
+              +item.value.replace('%', '') > 0.01
+                ? 'success'
+                : +item.value.replace('%', '') < -0.01
+                ? 'error'
+                : 'warning'
+            }
+          />
+        ) : (
+          <Text
+            style={[styles.statItemTitle, { color: colors[themeColor].text }]}
+          >
+            {item.value}
+          </Text>
+        )}
+      </View>
+    )
+  }
+
   function RenderTimes({ item }: any) {
-    return <Text style={{ color: colors[themeColor].text }}>{item.time}</Text>
+    return (
+      <Text style={{ color: colors[themeColor].text }}>
+        {item.time},{stocksToRender.length}
+      </Text>
+    )
   }
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: colors[themeColor].bgColor },
-      ]}
-    >
-      <View style={styles.companyHeader}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Ionicons
-            name="chevron-back"
-            size={width * 0.07}
-            color={colors[themeColor].text}
-          />
-        </TouchableOpacity>
-
-        <Text
-          numberOfLines={1}
-          style={[styles.headerTitle, { color: colors[themeColor].text }]}
-        >
-          {route.params.companyName}
-        </Text>
-      </View>
-      <Text style={[styles.description, { color: colors[themeColor].comment }]}>
-        {GetCompany()?.description}
-      </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '92%',
-        }}
-      >
-        {periodButtonsData.map((item: any, index: number) => (
-          <RenderPeriodButtonItem item={item} key={index} />
-        ))}
-      </View>
-      <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
-      >
-        <FlatList
-          horizontal
-          scrollEnabled={false}
-          showsHorizontalScrollIndicator={false}
-          data={stocksToRender}
-          scrollsToTop
-          renderItem={RenderItem}
-          initialNumToRender={numToRender}
-          removeClippedSubviews={true}
-          getItemLayout={(_: any, index: number) => ({
-            length: stockWidth / numToRender,
-            offset: (stockWidth / numToRender) * index,
-            index,
-          })}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
-          <Text style={{ color: colors[themeColor].comment }}>
-            {stocksToRender[0].time}
-          </Text>
-          <Text style={{ color: colors[themeColor].comment }}>
-            {stocksToRender[stocksToRender.length - 1].time}
-          </Text>
-        </View>
-      </View>
-      {pressedPrice?.price ? (
+    <BottomSheetModalProvider>
+      <ScrollView style={{ flex: 1 }}>
         <View
           style={[
-            styles.card,
-            {
-              backgroundColor: colors[themeColor].cardColor,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            },
+            styles.container,
+            { backgroundColor: colors[themeColor].bgColor },
           ]}
         >
-          <Text style={{ color: colors[themeColor].text }}>
-            {pressedPrice?.date} {pressedPrice?.time}
+          <View style={styles.companyHeader}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}
+            >
+              <Ionicons
+                name="chevron-back"
+                size={width * 0.07}
+                color={colors[themeColor].text}
+              />
+            </TouchableOpacity>
+
+            <Text
+              numberOfLines={1}
+              style={[styles.headerTitle, { color: colors[themeColor].text }]}
+            >
+              {route.params.companyName}
+            </Text>
+          </View>
+          <Text
+            style={[styles.description, { color: colors[themeColor].comment }]}
+          >
+            {GetCompany()?.description}
           </Text>
-          <Text style={{ color: colors[themeColor].text }}>
-            $ {GetMoneyAmount(pressedPrice?.price).value}.
-            {GetMoneyAmount(pressedPrice?.price).decimal}{' '}
-            {GetMoneyAmount(pressedPrice?.price).title}
-          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '92%',
+            }}
+          >
+            {periodButtonsData.map((item: any, index: number) => (
+              <RenderPeriodButtonItem item={item} key={index} />
+            ))}
+          </View>
+          {/* STOCK CHART */}
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors[themeColor].cardColor },
+            ]}
+          >
+            {countElapsedPeriods(
+              `${stocksToRender[stocksToRender.length - 1].date}T${
+                stocksToRender[stocksToRender.length - 1].time
+              }`
+            ) > 1 && false ? (
+              // TODO fix this
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                  height: columnHeight,
+                  position: 'absolute',
+                  backgroundColor: '#ff000066',
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: width * 0.07,
+                    color: colors[themeColor].comment,
+                  }}
+                >
+                  Data is outdated
+                </Text>
+              </View>
+            ) : (
+              <></>
+            )}
+            <FlatList
+              horizontal
+              scrollEnabled={false}
+              showsHorizontalScrollIndicator={false}
+              data={stocksToRender}
+              scrollsToTop
+              renderItem={RenderItem}
+              initialNumToRender={numToRender}
+              removeClippedSubviews={true}
+              getItemLayout={(_: any, index: number) => ({
+                length: stockWidth / numToRender,
+                offset: (stockWidth / numToRender) * index,
+                index,
+              })}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+            >
+              <Text style={{ color: colors[themeColor].comment }}>
+                {stocksToRender[0].time}
+              </Text>
+              <Text style={{ color: colors[themeColor].comment }}>
+                {stocksToRender[stocksToRender.length - 1].time}
+              </Text>
+            </View>
+          </View>
+          {/* PRESSED PRICE */}
+          {pressedPrice?.price ? (
+            <View
+              style={[
+                styles.card,
+                {
+                  backgroundColor: colors[themeColor].cardColor,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                },
+              ]}
+            >
+              <Text style={{ color: colors[themeColor].text }}>
+                {pressedPrice?.date} {pressedPrice?.time}
+              </Text>
+              <Text style={{ color: colors[themeColor].text }}>
+                $ {GetMoneyAmount(pressedPrice?.price).value}.
+                {GetMoneyAmount(pressedPrice?.price).decimal}{' '}
+                {GetMoneyAmount(pressedPrice?.price).title}
+              </Text>
+            </View>
+          ) : (
+            <></>
+          )}
+          {/* STAT */}
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors[themeColor].cardColor },
+            ]}
+          >
+            <FlatList
+              scrollEnabled={false}
+              data={companyStatData}
+              renderItem={RenderStat}
+              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            />
+          </View>
+          {/* TRANSACTION */}
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors[themeColor].cardColor },
+            ]}
+          >
+            <FlatList
+              scrollEnabled={false}
+              data={userStockData}
+              renderItem={RenderUserStat}
+              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            />
+
+            <Button
+              style={{ width: '100%', marginTop: 10 }}
+              title="Transaction"
+              disable={false}
+              type="info"
+              action={() => {
+                setBottomSheetContent('transactionBlock')
+                bottomSheetModalRef.current?.present()
+              }}
+            />
+          </View>
+          <FlatList
+            scrollEnabled={false}
+            data={GetCompany().history.slice(-10).reverse()}
+            renderItem={RenderTimes}
+          />
         </View>
-      ) : (
-        <></>
-      )}
-      <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
-      >
-        <FlatList
-          data={companyStatData}
-          renderItem={RenderStat}
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        />
-      </View>
-      <FlatList
-        data={GetCompany().history.slice(-10).reverse()}
-        renderItem={RenderTimes}
+      </ScrollView>
+      {/* BottomSheet */}
+      <BottomModalBlock
+        bottomSheetModalRef={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        dismiss={() => bottomSheetModalRef.current?.dismiss()}
+        content={bottomSheetContent}
+        transactionStockName={route.params.companyName}
       />
-    </View>
+    </BottomSheetModalProvider>
   )
 }
 

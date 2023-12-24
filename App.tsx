@@ -14,10 +14,11 @@ import { useEffect, useState } from 'react'
 import { RootState } from './redux'
 import { useDispatch, useSelector } from 'react-redux'
 import * as NavigationBar from 'expo-navigation-bar'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import rules from './constants/rules'
 import { updateCompanies } from './redux/companies'
 import { CalculateStock, UpdateCompaniesData } from './functions/functions'
+import { MMKV } from 'react-native-mmkv'
+export const storage = new MMKV()
 
 export default function App() {
   const toastConfig = {
@@ -64,11 +65,10 @@ export default function App() {
     }, [themeColor])
 
     function SetNewData() {
-      const newCompaniesData = UpdateCompaniesData(companies)
-      console.log(newCompaniesData[0].history.length)
+      const newCompaniesData = UpdateCompaniesData(companies).slice()
 
       dispatch(updateCompanies(newCompaniesData))
-      AsyncStorage.setItem('companies', JSON.stringify(newCompaniesData))
+      storage.set('companies', JSON.stringify(newCompaniesData))
     }
 
     const [lastUpdate, setLastUpdate] = useState<number>(0)
@@ -77,10 +77,11 @@ export default function App() {
       let timer = setTimeout(() => {
         if (
           companies?.length &&
-          new Date().getSeconds() % 15 === 0 &&
+          new Date().getSeconds() === 0 &&
+          // new Date().getMinutes() % 5 === 0 &&
           companies[0].history[companies[0].history.length - 1].time.split(
             ':'
-          )[2] !== new Date().getSeconds().toString().padStart(2, '0')
+          )[1] !== new Date().getMinutes().toString().padStart(2, '0')
         ) {
           SetNewData()
         }

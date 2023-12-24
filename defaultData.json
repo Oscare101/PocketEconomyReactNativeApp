@@ -1,0 +1,702 @@
+{
+  "ABCTech": {
+    "name": "ABCTech",
+    "industry": "information technology",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 5,
+      "companySize": 5,
+      "dividendsRate": 4.0
+    },
+    "price": 156.0,
+    "description": "ABCTech is an innovative leader in the field of information technology, providing advanced solutions for the dynamic digital world",
+    "history": [],
+    "logo": ""
+  },
+  "Apollo": {
+    "name": "Apollo",
+    "industry": "power & utilities",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 3,
+      "companySize": 5,
+      "dividendsRate": 4.0
+    },
+    "price": 68.5,
+    "description": "Apollo is a company transforming the energy industry through high-tech and environmentally friendly solutions",
+    "history": [],
+    "logo": ""
+  },
+  "Underwater Petroleum": {
+    "name": "Underwater Petroleum",
+    "industry": "oil & gas",
+    "stat": {
+      "volatility": 3,
+      "dividendsConsistency": 3,
+      "companySize": 5,
+      "dividendsRate": 1.0
+    },
+    "price": 220.0,
+    "description": "Underwater Petroleum extracts oil and gas from the depths of the ocean, using advanced technologies and adhering to ecological standards",
+    "history": [],
+    "logo": ""
+  },
+  "UrbanCraft Constructions": {
+    "name": "UrbanCraft Constructions",
+    "industry": "construction",
+    "stat": {
+      "volatility": 5,
+      "dividendsConsistency": 2,
+      "companySize": 5,
+      "dividendsRate": 2.0
+    },
+    "price": 560.0,
+    "description": "UrbanCraft Constructions is the epicenter of urban improvement, offering innovative solutions for building the future",
+    "history": [],
+    "logo": ""
+  },
+  "Golden West": {
+    "name": "Golden West",
+    "industry": "financial",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 3,
+      "companySize": 5,
+      "dividendsRate": 4.0
+    },
+    "price": 2500.0,
+    "description": "Golden West is a financial conglomerate creating prosperity and opportunities for its clients in the financial world",
+    "history": [],
+    "logo": ""
+  },
+  "GourmetGlobe Dining": {
+    "name": "GourmetGlobe Dining",
+    "industry": "foodservice",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 4,
+      "companySize": 5,
+      "dividendsRate": 3.0
+    },
+    "price": 365.0,
+    "description": "GourmetGlobe Dining offers a taste in a unique format, bringing together culinary gems from around the world",
+    "history": [],
+    "logo": ""
+  },
+  "CodeCraft": {
+    "name": "CodeCraft",
+    "industry": "information technology",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 2,
+      "companySize": 5,
+      "dividendsRate": 4.0
+    },
+    "price": 115.0,
+    "description": "CodeCraft is a technological workshop developing software solutions to tackle complex tasks",
+    "history": [],
+    "logo": ""
+  },
+  "Sentinel Defense Dynamics": {
+    "name": "Sentinel Defense Dynamics",
+    "industry": "military",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 1,
+      "companySize": 5,
+      "dividendsRate": 1.0
+    },
+    "price": 96.0,
+    "description": "Sentinel Defense Dynamics combines high-tech solutions to ensure security and protection",
+    "history": [],
+    "logo": ""
+  },
+  "FuelHub": {
+    "name": "FuelHub",
+    "industry": "oil & gas",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 4,
+      "companySize": 5,
+      "dividendsRate": 4.0
+    },
+    "price": 475.0,
+    "description": "FuelHub is an innovative fuel provider ensuring stability in energy needs",
+    "history": [],
+    "logo": ""
+  },
+  "UniPlant": {
+    "name": "UniPlant",
+    "industry": "foodservice",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 5,
+      "companySize": 4,
+      "dividendsRate": 3.0
+    },
+    "price": 109.0,
+    "description": "UniPlant is an emerging player in the food industry, cultivating and processing natural ingredients",
+    "history": [],
+    "logo": ""
+  },
+  "Blue Internet": {
+    "name": "Blue Internet",
+    "industry": "information technology",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 4,
+      "companySize": 4,
+      "dividendsRate": 2.0
+    },
+    "price": 180.0,
+    "description": "Blue Internet is a tech trailblazer, connecting the world through cutting-edge internet solutions and digital innovations",
+    "history": [],
+    "logo": ""
+  },
+  "Shot Zone": {
+    "name": "Shot Zone",
+    "industry": "military",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 2,
+      "companySize": 4,
+      "dividendsRate": 2.0
+    },
+    "price": 2000.0,
+    "description": "Shot Zone specializes in advanced weaponry and military solutions, ensuring precision and effectiveness in defense",
+    "history": [],
+    "logo": ""
+  },
+  "Wolf": {
+    "name": "Wolf",
+    "industry": "financial",
+    "stat": {
+      "volatility": 3,
+      "dividendsConsistency": 3,
+      "companySize": 4,
+      "dividendsRate": 3.0
+    },
+    "price": 565.0,
+    "description": "Wolf is a financial powerhouse, navigating markets with strategic prowess and ensuring financial success for its",
+    "history": [],
+    "logo": ""
+  },
+  "Apex Builders Alliance": {
+    "name": "Apex Builders Alliance",
+    "industry": "construction",
+    "stat": {
+      "volatility": 3,
+      "dividendsConsistency": 3,
+      "companySize": 4,
+      "dividendsRate": 3.0
+    },
+    "price": 918.0,
+    "description": "Apex Builders Alliance leads in construction, shaping skylines with innovative and sustainable building projects",
+    "history": [],
+    "logo": ""
+  },
+  "PrimePulse Consumer Goods": {
+    "name": "PrimePulse Consumer Goods",
+    "industry": "consumer",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 4,
+      "companySize": 4,
+      "dividendsRate": 2.0
+    },
+    "price": 156.0,
+    "description": "PrimePulse Consumer Goods crafts premium products, enhancing the lifestyles of consumers with quality and style",
+    "history": [],
+    "logo": ""
+  },
+  "FlavorFusion Catering": {
+    "name": "FlavorFusion Catering",
+    "industry": "foodservice",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 5,
+      "companySize": 4,
+      "dividendsRate": 3.0
+    },
+    "price": 90.0,
+    "description": "FlavorFusion Catering brings culinary artistry to events, offering a delightful fusion of flavors and culinary expertise",
+    "history": [],
+    "logo": ""
+  },
+  "TechTribe Innovations": {
+    "name": "TechTribe Innovations",
+    "industry": "information technology",
+    "stat": {
+      "volatility": 5,
+      "dividendsConsistency": 4,
+      "companySize": 4,
+      "dividendsRate": 2.0
+    },
+    "price": 65.0,
+    "description": "TechTribe Innovations pioneers tech solutions, uniting a tribe of innovators to drive advancements in the digital landscape.",
+    "history": [],
+    "logo": ""
+  },
+  "EchoEdge Entertainment": {
+    "name": "EchoEdge Entertainment",
+    "industry": "media",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 4,
+      "companySize": 4,
+      "dividendsRate": 3.0
+    },
+    "price": 185.0,
+    "description": "EchoEdge Entertainment creates captivating media experiences, pushing the boundaries of entertainment and storytelling",
+    "history": [],
+    "logo": ""
+  },
+  "PetroPulse Resources": {
+    "name": "PetroPulse Resources",
+    "industry": "oil & gas",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 3,
+      "companySize": 4,
+      "dividendsRate": 3.0
+    },
+    "price": 95.0,
+    "description": "PetroPulse Resources is a leader in the oil and gas sector, driving resource exploration and sustainable energy solutions",
+    "history": [],
+    "logo": ""
+  },
+  "ClearNews": {
+    "name": "ClearNews",
+    "industry": "media",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 4,
+      "companySize": 4,
+      "dividendsRate": 3.0
+    },
+    "price": 30.0,
+    "description": "ClearNews delivers unbiased and transparent news coverage, keeping the public informed with clarity and accuracy",
+    "history": [],
+    "logo": ""
+  },
+  "Karpaty": {
+    "name": "Karpaty",
+    "industry": "consumer",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 5,
+      "companySize": 3,
+      "dividendsRate": 3.0
+    },
+    "price": 16.0,
+    "description": "Karpaty is a consumer brand committed to delivering quality and authenticity, enriching lives with its diverse product",
+    "history": [],
+    "logo": ""
+  },
+  "HelpCity": {
+    "name": "HelpCity",
+    "industry": "healthcare",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 4,
+      "companySize": 3,
+      "dividendsRate": 3.0
+    },
+    "price": 5.36,
+    "description": "HelpCity is dedicated to healthcare solutions, providing accessible and compassionate services to improve community well-being",
+    "history": [],
+    "logo": ""
+  },
+  "100floors": {
+    "name": "100floors",
+    "industry": "construction",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 2,
+      "companySize": 3,
+      "dividendsRate": 2.0
+    },
+    "price": 22.0,
+    "description": "100floors is at the forefront of skyscraper construction, elevating cityscapes with architectural marvels and engineering excellence",
+    "history": [],
+    "logo": ""
+  },
+  "Print": {
+    "name": "Print",
+    "industry": "media",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 2,
+      "companySize": 3,
+      "dividendsRate": 1.0
+    },
+    "price": 14.0,
+    "description": "Print is a media powerhouse, delivering news and entertainment through traditional print formats with a modern twist.",
+    "history": [],
+    "logo": ""
+  },
+  "Harvest Harmony Farms": {
+    "name": "Harvest Harmony Farms",
+    "industry": "agriculture",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 3,
+      "companySize": 3,
+      "dividendsRate": 3.0
+    },
+    "price": 67.0,
+    "description": "Harvest Harmony Farms cultivates sustainable agriculture, bringing fresh and wholesome produce to global markets",
+    "history": [],
+    "logo": ""
+  },
+  "Horizon Infrastructure Group": {
+    "name": "Horizon Infrastructure Group",
+    "industry": "construction",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 4,
+      "companySize": 3,
+      "dividendsRate": 2.0
+    },
+    "price": 158.0,
+    "description": "Horizon Infrastructure Group leads in building essential infrastructure, connecting communities with reliable and efficient solutions",
+    "history": [],
+    "logo": ""
+  },
+  "WealthWave Ventures": {
+    "name": "WealthWave Ventures",
+    "industry": "financial",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 1,
+      "companySize": 3,
+      "dividendsRate": 4.0
+    },
+    "price": 55.0,
+    "description": "WealthWave Ventures navigates the financial landscape with a wave of innovative investment strategies, fostering wealth creation",
+    "history": [],
+    "logo": ""
+  },
+  "CureSphere Pharmaceuticals": {
+    "name": "CureSphere Pharmaceuticals",
+    "industry": "healthcare",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 2,
+      "companySize": 3,
+      "dividendsRate": 2.0
+    },
+    "price": 18.0,
+    "description": "CureSphere Pharmaceuticals pioneers breakthroughs in healthcare, developing life-changing medications and therapies",
+    "history": [],
+    "logo": ""
+  },
+  "Radiant": {
+    "name": "Radiant",
+    "industry": "media",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 1,
+      "companySize": 3,
+      "dividendsRate": 4.0
+    },
+    "price": 9.0,
+    "description": "Radiant is a media force illuminating stories with brilliance, captivating audiences through visual and auditory excellence",
+    "history": [],
+    "logo": ""
+  },
+  "EnergyEpic": {
+    "name": "EnergyEpic",
+    "industry": "oil & gas",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 2,
+      "companySize": 3,
+      "dividendsRate": 2.0
+    },
+    "price": 11.0,
+    "description": "EnergyEpic is a trailblazer in the oil and gas industry, driving epic innovations and sustainable energy practices",
+    "history": [],
+    "logo": ""
+  },
+  "EcoEnergy": {
+    "name": "EcoEnergy",
+    "industry": "power & utilities",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 2,
+      "companySize": 3,
+      "dividendsRate": 2.0
+    },
+    "price": 28.0,
+    "description": "EcoEnergy leads the way in sustainable power solutions, harnessing eco-friendly technologies to power the future",
+    "history": [],
+    "logo": ""
+  },
+  "Stone": {
+    "name": "Stone",
+    "industry": "construction",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 5,
+      "companySize": 2,
+      "dividendsRate": 3.0
+    },
+    "price": 66.0,
+    "description": "Stone is a construction innovator, building foundations that stand the test of time with strength and architectural elegance",
+    "history": [],
+    "logo": ""
+  },
+  "The Carrot": {
+    "name": "The Carrot",
+    "industry": "agriculture",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 3,
+      "companySize": 2,
+      "dividendsRate": 4.0
+    },
+    "price": 9.0,
+    "description": "The Carrot is a symbol of agricultural excellence, cultivating and delivering fresh and nutritious carrots to consumers worldwide.",
+    "history": [],
+    "logo": ""
+  },
+  "AllWood": {
+    "name": "AllWood",
+    "industry": "consumer",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 1,
+      "companySize": 2,
+      "dividendsRate": 1.5
+    },
+    "price": 2.12,
+    "description": "AllWood is a consumer brand rooted in natural materials, crafting premium goods with a focus on sustainability and craftsmanship",
+    "history": [],
+    "logo": ""
+  },
+  "AgroVista Innovations": {
+    "name": "AgroVista Innovations",
+    "industry": "agriculture",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 4,
+      "companySize": 2,
+      "dividendsRate": 3.0
+    },
+    "price": 17.0,
+    "description": "AgroVista Innovations pioneers advancements in agriculture, integrating cutting-edge technologies to enhance crop yield and quality",
+    "history": [],
+    "logo": ""
+  },
+  "Elite Essence Brands": {
+    "name": "Elite Essence Brands",
+    "industry": "consumer",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 5,
+      "companySize": 2,
+      "dividendsRate": 4.0
+    },
+    "price": 32.0,
+    "description": "Elite Essence Brands curates luxury consumer experiences, offering elite products that define sophistication and style",
+    "history": [],
+    "logo": ""
+  },
+  "Capital Crest Holdings": {
+    "name": "Capital Crest Holdings",
+    "industry": "financial",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 2,
+      "companySize": 2,
+      "dividendsRate": 1.0
+    },
+    "price": 91.0,
+    "description": "Capital Crest Holdings is a financial stronghold, managing and growing capital with strategic precision in dynamic markets",
+    "history": [],
+    "logo": ""
+  },
+  "Culinary Craftworks": {
+    "name": "Culinary Craftworks",
+    "industry": "foodservice",
+    "stat": {
+      "volatility": 3,
+      "dividendsConsistency": 2,
+      "companySize": 2,
+      "dividendsRate": 1.5
+    },
+    "price": 6.5,
+    "description": "Culinary Craftworks is a culinary atelier, creating gastronomic masterpieces and crafting memorable dining experiences",
+    "history": [],
+    "logo": ""
+  },
+  "Vitality Health Systems": {
+    "name": "Vitality Health Systems",
+    "industry": "healthcare",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 3,
+      "companySize": 2,
+      "dividendsRate": 3.0
+    },
+    "price": 112.0,
+    "description": "Vitality Health Systems is committed to vitality and well-being, providing healthcare solutions that empower individuals to lead healthier lives.",
+    "history": [],
+    "logo": ""
+  },
+  "Visionary Media Nexus": {
+    "name": "Visionary Media Nexus",
+    "industry": "media",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 2,
+      "companySize": 2,
+      "dividendsRate": 2.0
+    },
+    "price": 45.5,
+    "description": "Visionary Media Nexus is at the forefront of media innovation, creating visionary content that captivates and inspires audiences",
+    "history": [],
+    "logo": ""
+  },
+  "ValorTech Armaments": {
+    "name": "ValorTech Armaments",
+    "industry": "military",
+    "stat": {
+      "volatility": 3,
+      "dividendsConsistency": 3,
+      "companySize": 2,
+      "dividendsRate": 1.5
+    },
+    "price": 3.0,
+    "description": "ValorTech Armaments specializes in cutting-edge military technology, ensuring the safety and strength of armed forces worldwide",
+    "history": [],
+    "logo": ""
+  },
+  "PowerGrid": {
+    "name": "PowerGrid",
+    "industry": "power & utilities",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 2,
+      "companySize": 2,
+      "dividendsRate": 1.5
+    },
+    "price": 22.0,
+    "description": "PowerGrid is the backbone of reliable power, managing and optimizing energy grids to ensure a steady supply for communities",
+    "history": [],
+    "logo": ""
+  },
+  "GreenGrove Cultivations": {
+    "name": "GreenGrove Cultivations",
+    "industry": "agriculture",
+    "stat": {
+      "volatility": 4,
+      "dividendsConsistency": 5,
+      "companySize": 1,
+      "dividendsRate": 3.0
+    },
+    "price": 18.9,
+    "description": "GreenGrove Cultivations is a steward of sustainable agriculture, nurturing groves that produce eco-friendly and nutritious crops",
+    "history": [],
+    "logo": ""
+  },
+  "LuxeLife Ventures": {
+    "name": "LuxeLife Ventures",
+    "industry": "consumer",
+    "stat": {
+      "volatility": 3,
+      "dividendsConsistency": 4,
+      "companySize": 1,
+      "dividendsRate": 1.0
+    },
+    "price": 1.8,
+    "description": "LuxeLife Ventures enriches lifestyles with opulent consumer experiences, offering premium products and services that embody luxury",
+    "history": [],
+    "logo": ""
+  },
+  "Quasar Finance": {
+    "name": "Quasar Finance",
+    "industry": "financial",
+    "stat": {
+      "volatility": 5,
+      "dividendsConsistency": 2,
+      "companySize": 1,
+      "dividendsRate": 3.0
+    },
+    "price": 12.0,
+    "description": "Quasar Finance is a financial powerhouse with astronomical ambitions, navigating the financial cosmos with precision and innovation",
+    "history": [],
+    "logo": ""
+  },
+  "MediCore Innovations": {
+    "name": "MediCore Innovations",
+    "industry": "healthcare",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 5,
+      "companySize": 1,
+      "dividendsRate": 3.0
+    },
+    "price": 60.0,
+    "description": "MediCore Innovations pioneers groundbreaking healthcare solutions, revolutionizing patient care with cutting-edge medical technologies",
+    "history": [],
+    "logo": ""
+  },
+  "DataDynasty": {
+    "name": "DataDynasty",
+    "industry": "information technology",
+    "stat": {
+      "volatility": 3,
+      "dividendsConsistency": 3,
+      "companySize": 1,
+      "dividendsRate": 1.0
+    },
+    "price": 0.3,
+    "description": "DataDynasty reigns in the digital realm, providing robust and secure data solutions that empower businesses and organizations",
+    "history": [],
+    "logo": ""
+  },
+  "StrategicShield": {
+    "name": "StrategicShield",
+    "industry": "military",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 2,
+      "companySize": 1,
+      "dividendsRate": 4.0
+    },
+    "price": 5.0,
+    "description": "StrategicShield is a fortress of military defense, providing strategic solutions and technologies to safeguard nations.",
+    "history": [],
+    "logo": ""
+  },
+  "EcoFuel": {
+    "name": "EcoFuel",
+    "industry": "oil & gas",
+    "stat": {
+      "volatility": 1,
+      "dividendsConsistency": 2,
+      "companySize": 1,
+      "dividendsRate": 3.5
+    },
+    "price": 1.4,
+    "description": "EcoFuel is afriendly fuel solutions, driving innovation in the oil and gas sector with a commitment to sustainability",
+    "history": [],
+    "logo": ""
+  },
+  "Next Gen Power": {
+    "name": "Next Gen Power",
+    "industry": "power & utilities",
+    "stat": {
+      "volatility": 2,
+      "dividendsConsistency": 3,
+      "companySize": 1,
+      "dividendsRate": 2.5
+    },
+    "price": 2.0,
+    "description": "Next Gen Power is at the forefront of the power revolution, leveraging next-gen technologies to shape the future of energy production and distribution",
+    "history": [],
+    "logo": ""
+  }
+}
