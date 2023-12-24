@@ -16,7 +16,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as NavigationBar from 'expo-navigation-bar'
 import rules from './constants/rules'
 import { updateCompanies } from './redux/companies'
-import { CalculateStock, UpdateCompaniesData } from './functions/functions'
+import {
+  CalculateStock,
+  UpdateCompaniesData,
+  countElapsedPeriods,
+} from './functions/functions'
 import { MMKV } from 'react-native-mmkv'
 export const storage = new MMKV()
 
@@ -74,19 +78,27 @@ export default function App() {
 
     useEffect(() => {
       let timer = setTimeout(() => {
+        // if (
+        //   companies?.length &&
+        //   new Date().getSeconds() === 0 &&
+        //   // new Date().getMinutes() % 5 === 0 &&
+        //   companies[0].history[companies[0].history.length - 1].time.split(
+        //     ':'
+        //   )[1] !== new Date().getMinutes().toString().padStart(2, '0')
+        // ) {
         if (
-          companies?.length &&
-          new Date().getSeconds() === 0 &&
-          // new Date().getMinutes() % 5 === 0 &&
-          companies[0].history[companies[0].history.length - 1].time.split(
-            ':'
-          )[1] !== new Date().getMinutes().toString().padStart(2, '0')
+          countElapsedPeriods(
+            `${companies[0].history[companies[0].history.length - 1].date}T${
+              companies[0].history[companies[0].history.length - 1].time
+            }`
+          )
         ) {
           SetNewData()
         }
+        // console.log(companies[0].history)
 
         setLastUpdate(new Date().getTime())
-      }, 500) //TODO check
+      }, 1000) //TODO check
 
       return () => {
         clearTimeout(timer)

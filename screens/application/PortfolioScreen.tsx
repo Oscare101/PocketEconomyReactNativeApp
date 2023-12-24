@@ -13,13 +13,14 @@ import colors from '../../constants/colors'
 import {
   CountDaysPlayed,
   GetEconomicsAllTimeProgress,
+  GetEconomicsProgress,
   GetMoneyAmount,
   GetUserStocksCapital,
 } from '../../functions/functions'
 import StatusItem from '../../components/StatusItem'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
-import { User } from '../../constants/interfaces'
+import { User, UserStock } from '../../constants/interfaces'
 import rules from '../../constants/rules'
 
 const width = Dimensions.get('screen').width
@@ -67,8 +68,29 @@ export default function PortfolioScreen({ navigation }: any) {
     return progress
   }
 
+  function GetPortfolioProgress() {
+    let progressTotal = 0
+
+    user.stocks.map((s: UserStock) => {
+      const stockPrice = companies.find((c: any) => c.name === s.name).history[
+        companies.find((c: any) => c.name === s.name).history.length - 1
+      ].price
+
+      const stockProgress = +((stockPrice / s.averagePrice - 1) * 100).toFixed(
+        2
+      )
+
+      progressTotal += s.amount * stockPrice * stockProgress
+    })
+
+    return (
+      progressTotal / GetUserStocksCapital(user.stocks, companies)
+    ).toFixed(2)
+  }
+
   function GetUserRating() {
     const economicsProgress = GetEconomicsAllTimeProgress(companies)
+
     const userProgress = GetUserAllTimeProgress()
 
     const rating = userProgress / economicsProgress
@@ -105,6 +127,14 @@ export default function PortfolioScreen({ navigation }: any) {
       } ${GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).title}`,
     },
     { title: 'Days played', value: `${CountDaysPlayed(user.loginDate)} d` },
+    {
+      title: "Palyer's rating (last 24h)",
+      value: `${+(
+        +GetPortfolioProgress() / GetEconomicsProgress(companies)
+      ).toFixed(2)}`,
+      icon: true,
+    },
+
     { title: "Palyer's rating", value: `${GetUserRating()}`, icon: true },
   ]
 
@@ -164,7 +194,7 @@ export default function PortfolioScreen({ navigation }: any) {
         </Text>
         <StatusItem
           icon=""
-          title={stockProgress}
+          title={`${stockProgress} %`}
           type={
             +stockProgress > 0
               ? 'success'
@@ -208,9 +238,26 @@ export default function PortfolioScreen({ navigation }: any) {
           relative to the economy, the rating will be {'>'} 1 if the capital
           grows faster than the economy and {'<'} 1 if it is slower
         </Text>
-        <Text style={[styles.title, { color: colors[themeColor].text }]}>
-          User Stocks
-        </Text>
+        <View style={[styles.rowBetween, { width: '92%' }]}>
+          <Text style={[styles.title, { color: colors[themeColor].text }]}>
+            User Stocks{' '}
+            <Text style={[styles.title, { color: colors[themeColor].comment }]}>
+              (last 24h)
+            </Text>
+          </Text>
+          <StatusItem
+            icon=""
+            title={`${GetPortfolioProgress()} %`}
+            type={
+              +GetPortfolioProgress() > 0
+                ? 'success'
+                : +GetPortfolioProgress() < 0
+                ? 'error'
+                : 'warning'
+            }
+          />
+        </View>
+
         <View
           style={[
             styles.card,
@@ -268,5 +315,5 @@ const styles = StyleSheet.create({
   money: { fontSize: width * 0.04 },
   decimal: { fontSize: width * 0.035, fontWeight: '400' },
   comment: { fontSize: width * 0.035, width: '92%', marginVertical: 5 },
-  title: { fontSize: width * 0.05, textAlign: 'left', width: '92%' },
+  title: { fontSize: width * 0.05 },
 })

@@ -99,9 +99,10 @@ export function AddSecondsToDateTime(inputDateTime: string) {
     'T' +
     newDate.getHours().toString().padStart(2, '0') +
     ':' +
-    newDate.getMinutes().toString().padStart(2, '0') +
-    ':' +
-    newDate.getSeconds().toString().padStart(2, '0')
+    newDate.getMinutes().toString().padStart(2, '0')
+  // +
+  // ':' +
+  // newDate.getSeconds().toString().padStart(2, '0')
 
   return formattedResult
 }

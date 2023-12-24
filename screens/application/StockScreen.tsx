@@ -43,10 +43,11 @@ const periodButtonsData: any = [
 ]
 
 function GetTargetLengthRender(length: number) {
-  // if (length === rules.stock.tactsPerDay) {
-  //   return rules.stock.tactsPerDay / 10
-  // }
-  return rules.stock.tactsPerHour
+  if (length < rules.stock.tactsPerDay / 2) {
+    return length
+  } else {
+    return rules.stock.tactsPerHour
+  }
 }
 
 export default function StockScreen({ navigation, route }: any) {
