@@ -115,7 +115,7 @@ export default function CustomDrawerContent(props: any) {
               size={width * 0.15}
               color={colors[themeColor].text}
             /> */}
-            {/* TODO: change this */}
+            {/* TODO: change image */}
             <Image
               source={{
                 uri: 'https://www.jamsadr.com/images/neutrals/person-donald-900x1080.jpg',

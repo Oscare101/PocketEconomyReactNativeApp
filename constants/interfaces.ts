@@ -40,6 +40,13 @@ export interface UserHistory {
   capital: number
 }
 
+export interface DividendHistory {
+  name: string
+  interest: number
+  value: number
+  date: string
+}
+
 export interface User {
   name: string
   loginDate: string
@@ -47,4 +54,5 @@ export interface User {
   stocks: UserStock[]
   history: UserHistory[]
   deposits: UserDeposit[]
+  dividendsHistory?: DividendHistory[] // TODO remove ?
 }

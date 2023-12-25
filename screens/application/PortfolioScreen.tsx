@@ -16,9 +16,11 @@ import {
   GetEconomicsProgress,
   GetMoneyAmount,
   GetPortfolioProgress,
+  GetRatingPerPeriod,
   GetUserDepositsCapital,
   GetUserRating,
   GetUserStocksCapital,
+  IsPeriodEnough,
 } from '../../functions/functions'
 import StatusItem from '../../components/StatusItem'
 import { RootState } from '../../redux'
@@ -45,25 +47,12 @@ export default function PortfolioScreen({ navigation }: any) {
   const [stockShowProgress, setStockShowProgress] = useState<boolean>(false)
   const [openStocksList, setOpenStocksList] = useState<boolean>(false)
   const [openDepositsList, setOpenDepositsList] = useState<boolean>(false)
+  const [openDividendsList, setOpenDividendsList] = useState<boolean>(false)
 
   const [bottomSheetContent, setBottomSheetContent] =
     useState<any>('RatingInfo')
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => [360], [])
-
-  function GetRatingPerPeriod(period: number) {
-    const portfolio = GetPortfolioProgress(user, companies, period)
-    console.log(portfolio)
-
-    return +(portfolio / GetEconomicsProgress(companies, period)).toFixed(2)
-  }
-
-  function IsPeriodEnough(period: number) {
-    if (companies[0].history.length < period) {
-      return false
-    }
-    return true
-  }
 
   const userRatingData = [
     {
@@ -73,17 +62,17 @@ export default function PortfolioScreen({ navigation }: any) {
     },
     {
       title: 'Rating (last 1h)',
-      valueAvailable: IsPeriodEnough(rules.stock.tactsPerHour),
-      value: IsPeriodEnough(rules.stock.tactsPerHour)
-        ? `${GetRatingPerPeriod(rules.stock.tactsPerHour)}`
+      valueAvailable: IsPeriodEnough(companies, rules.stock.tactsPerHour),
+      value: IsPeriodEnough(companies, rules.stock.tactsPerHour)
+        ? `${GetRatingPerPeriod(user, companies, rules.stock.tactsPerHour)}`
         : '',
       ratingIcon: true,
     },
     {
       title: 'Rating (last 24h)',
-      valueAvailable: IsPeriodEnough(rules.stock.tactsPerDay),
-      value: IsPeriodEnough(rules.stock.tactsPerDay)
-        ? `${GetRatingPerPeriod(rules.stock.tactsPerDay)}`
+      valueAvailable: IsPeriodEnough(companies, rules.stock.tactsPerDay),
+      value: IsPeriodEnough(companies, rules.stock.tactsPerDay)
+        ? `${GetRatingPerPeriod(user, companies, rules.stock.tactsPerDay)}`
         : '',
       ratingIcon: true,
     },
@@ -141,18 +130,25 @@ export default function PortfolioScreen({ navigation }: any) {
       progress: GetPortfolioProgress(user, companies, 0).toFixed(2),
       data: user.stocks,
     },
+    {
+      type: 'Dividends',
+      title: 'Dividends',
+      icon: 'download-outline',
+      // value: `$ 000`,
+      data: user.dividendsHistory,
+    },
     // TODO finish deposits
-    // {
-    //   type: 'Deposits',
-    //   title: 'Deposits',
-    //   icon: 'card-outline',
-    //   value: `$ ${
-    //     GetMoneyAmount(GetUserDepositsCapital(user.deposits)).value
-    //   }.${GetMoneyAmount(GetUserDepositsCapital(user.deposits)).decimal} ${
-    //     GetMoneyAmount(GetUserDepositsCapital(user.deposits)).title
-    //   }`,
-    //   data: user.deposits,
-    // },
+    {
+      type: 'Deposits',
+      title: 'Deposits',
+      icon: 'card-outline',
+      value: `$ ${
+        GetMoneyAmount(GetUserDepositsCapital(user.deposits)).value
+      }.${GetMoneyAmount(GetUserDepositsCapital(user.deposits)).decimal} ${
+        GetMoneyAmount(GetUserDepositsCapital(user.deposits)).title
+      }`,
+      data: user.deposits,
+    },
   ]
 
   function RenderUserRatingItem({ item }: any) {
@@ -428,6 +424,70 @@ export default function PortfolioScreen({ navigation }: any) {
       </View>
     )
 
+    const dividendsBlock = (
+      <View
+        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      >
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setOpenDividendsList(!openDividendsList)}
+          style={[
+            styles.rowBetween,
+            {
+              height: width * 0.08 + 10,
+              marginVertical: 0,
+            },
+          ]}
+        >
+          <Ionicons
+            name={item.icon}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+            {item.title}
+          </Text>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              setBottomSheetContent('DividendsInfo')
+              bottomSheetModalRef.current?.present()
+            }}
+          >
+            <Ionicons
+              name="information-circle-outline"
+              color={colors[themeColor].text}
+              size={width * 0.045}
+            />
+          </TouchableOpacity>
+          <View style={{ flex: 1 }} />
+          <Ionicons
+            name={openDividendsList ? 'chevron-up' : 'chevron-down'}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+
+          {/* <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
+            {item.value}
+          </Text> */}
+        </TouchableOpacity>
+        {openDividendsList ? (
+          <>
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: colors[themeColor].disable,
+              }}
+            />
+            {/* TODO finish dividends */}
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+    )
+
     const depositsBlock = (
       <View
         style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
@@ -471,7 +531,7 @@ export default function PortfolioScreen({ navigation }: any) {
               }}
             />
             {/* TODO finish deposits */}
-            {item.data?.length ? (
+            {/* {item.data?.length ? (
               <FlatList data={item.data} renderItem={RenderUserStockItem} />
             ) : (
               <Text
@@ -479,7 +539,7 @@ export default function PortfolioScreen({ navigation }: any) {
               >
                 No deposits yet
               </Text>
-            )}
+            )} */}
           </>
         ) : (
           <></>
@@ -492,6 +552,7 @@ export default function PortfolioScreen({ navigation }: any) {
       Switch: switchBlock,
       Card: content,
       Stocks: stocksBlock,
+      Dividends: dividendsBlock,
       Deposits: depositsBlock,
     }
 
@@ -566,6 +627,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: width * 0.05,
     marginHorizontal: 10,
+    textAlign: 'left',
   },
   userRatingTitle: { fontSize: width * 0.05, marginRight: 10 },
   cardValue: {

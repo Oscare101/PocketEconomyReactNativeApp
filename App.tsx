@@ -22,6 +22,8 @@ import {
   countElapsedPeriods,
 } from './functions/functions'
 import { MMKV } from 'react-native-mmkv'
+import { User } from './constants/interfaces'
+import { updateUser } from './redux/user'
 export const storage = new MMKV()
 
 export default function App() {
@@ -56,6 +58,7 @@ export default function App() {
     const systemTheme = useColorScheme()
     const theme = useSelector((state: RootState) => state.theme)
     const companies = useSelector((state: RootState) => state.companies)
+    const user = useSelector((state: RootState) => state.user)
 
     const themeColor: any = theme === 'system' ? systemTheme : theme
     const dispatch = useDispatch()
@@ -66,26 +69,40 @@ export default function App() {
         themeColor === 'dark' ? 'light' : 'dark'
       )
     }, [themeColor])
+    function SetUserDividends(dividends: any[]) {
+      const value = dividends.reduce((a: any, b: any) => a + b.value, 0)
+      const lastDividends = user.dividendsHistory || []
+      const newUserData: User = {
+        ...user,
+        cash: +(user.cash + value).toFixed(2),
+        dividendsHistory: [...lastDividends, ...dividends],
+      }
+
+      dispatch(updateUser(newUserData))
+      storage.set('user', JSON.stringify(newUserData))
+      Toast.show({
+        type: 'ToastMessage',
+        props: {
+          title: `You have received your stock dividend`,
+        },
+        position: 'bottom',
+      })
+    }
 
     function SetNewData() {
-      const newCompaniesData = UpdateCompaniesData(companies).slice()
-
-      dispatch(updateCompanies(newCompaniesData))
-      storage.set('companies', JSON.stringify(newCompaniesData))
+      const newCompaniesData = UpdateCompaniesData(user.stocks, companies)
+      const dividends = newCompaniesData.dividends
+      if (dividends.length) {
+        SetUserDividends(dividends)
+      }
+      dispatch(updateCompanies(newCompaniesData.data))
+      storage.set('companies', JSON.stringify(newCompaniesData.data))
     }
 
     const [lastUpdate, setLastUpdate] = useState<number>(0)
 
     useEffect(() => {
       let timer = setTimeout(() => {
-        // if (
-        //   companies?.length &&
-        //   new Date().getSeconds() === 0 &&
-        //   // new Date().getMinutes() % 5 === 0 &&
-        //   companies[0].history[companies[0].history.length - 1].time.split(
-        //     ':'
-        //   )[1] !== new Date().getMinutes().toString().padStart(2, '0')
-        // ) {
         if (
           countElapsedPeriods(
             `${companies[0].history[companies[0].history.length - 1].date}T${
@@ -95,10 +112,9 @@ export default function App() {
         ) {
           SetNewData()
         }
-        // console.log(companies[0].history)
 
         setLastUpdate(new Date().getTime())
-      }, 1000) //TODO check
+      }, 1000)
 
       return () => {
         clearTimeout(timer)

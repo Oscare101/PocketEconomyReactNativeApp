@@ -21,7 +21,7 @@ import {
 import rules from '../../constants/rules'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import StatusItem from '../../components/StatusItem'
-import { User } from '../../constants/interfaces'
+import { Company, User } from '../../constants/interfaces'
 import Button from '../../components/Button'
 import {
   BottomSheetModal,
@@ -121,6 +121,11 @@ export default function StockScreen({ navigation, route }: any) {
       statNumber: GetCompany()?.stat.companySize,
       type: 'companySize',
       statIcon: true,
+    },
+    {
+      title: 'Price',
+      statIcon: false,
+      value: `up to ${GetCompany()?.stat.dividendsRate} %`,
     },
     {
       title: 'Price',

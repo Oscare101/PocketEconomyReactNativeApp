@@ -81,7 +81,7 @@ export function CalculateStock(stock: any) {
 
   price *= 1 + randomPositiveChange
 
-  return price // TODO remove .toFixed(2)
+  return price
 }
 
 export function AddSecondsToDateTime(inputDateTime: string) {
@@ -116,37 +116,80 @@ export function countElapsedPeriods(inputDateTime: any) {
   return elapsedPeriods
 }
 
-export function GetElapsedHistory(company: any) {
+export function GetElapsedHistory(company: any, userStocks: any[]) {
   const arr: any = [...company.history]
   const count = countElapsedPeriods(
     `${company.history[company.history.length - 1].date}T${
       company.history[company.history.length - 1].time
     }`
   )
+  let companyDividends: any = false
 
   for (let i = 0; i < count; i++) {
     const newDateTime = AddSecondsToDateTime(
       `${arr[arr.length - 1].date}T${arr[arr.length - 1].time}`
     )
+    const calculatedStock = CalculateStock({ ...company, history: arr })
+    const date = newDateTime.split('T')[0]
+    const time = newDateTime.split('T')[1]
+
+    if (
+      time === rules.stock.dividendTime &&
+      userStocks.find((s: any) => s.name === company.name)
+    ) {
+      const dividendRateMax: number = company.stat.dividendsRate
+      const dividendRateMin: number = company.stat.dividendsRate / 10
+      const consistency: number = company.stat.dividendsConsistency
+      const dividendChance = Math.floor(Math.random() * 5) < consistency
+      const amountOfStocks = userStocks.find(
+        (s: any) => s.name === company.name
+      ).amount
+      const currentdividendRate: number = dividendChance
+        ? +(
+            Math.random() * (dividendRateMax - dividendRateMin) +
+            dividendRateMin
+          ).toFixed(2)
+        : 0
+      const dividend = +(
+        (currentdividendRate / 100) *
+        calculatedStock *
+        amountOfStocks
+      ).toFixed(2)
+
+      companyDividends = {
+        name: company.name,
+        interest: currentdividendRate,
+        value: dividend,
+        date: date,
+      }
+    }
     arr.push({
-      price: CalculateStock({ ...company, history: arr }),
-      date: newDateTime.split('T')[0],
-      time: newDateTime.split('T')[1],
+      price: calculatedStock,
+      date: date,
+      time: time,
     })
   }
 
-  return arr
+  return { arr: arr, dividend: companyDividends }
 }
 
-export function UpdateCompaniesData(companies: any[]) {
+export function UpdateCompaniesData(userStocks: any[], companies: any[]) {
+  let dividends: any = []
+
   const newCompaniesData = companies.map((c: any) => {
+    const dividend = GetElapsedHistory(c, userStocks).dividend
+    const history = GetElapsedHistory(c, userStocks).arr
+    if (dividend) {
+      dividends.push(dividend)
+    }
+
     return {
       ...c,
-      history: GetElapsedHistory(c).slice(-rules.stock.tactsPerDay),
+      history: history.slice(-rules.stock.tactsPerDay),
     }
   })
 
-  return newCompaniesData
+  return { data: newCompaniesData, dividends: dividends }
 }
 
 export function CreateDefaultHistory(comapanies: any[]) {
@@ -356,7 +399,6 @@ export function GetUserAllTimeProgress(user: User, companies: any[]) {
 export function GetUserRating(user: User, companies: any[]) {
   const economicsProgress = GetEconomicsAllTimeProgress(companies)
   const userProgress = GetUserAllTimeProgress(user, companies)
-
   const rating = (userProgress - 1) / (economicsProgress - 1)
   return +rating
 }
@@ -384,4 +426,20 @@ export function GetPortfolioProgress(
     progressTotal / GetUserStocksCapital(user.stocks, companies) || 0
 
   return result
+}
+
+export function GetRatingPerPeriod(
+  user: User,
+  companies: any[],
+  period: number
+) {
+  const portfolio = GetPortfolioProgress(user, companies, period)
+  return +(portfolio / GetEconomicsProgress(companies, period)).toFixed(2)
+}
+
+export function IsPeriodEnough(companies: any[], period: number) {
+  if (companies[0].history.length < period) {
+    return false
+  }
+  return true
 }

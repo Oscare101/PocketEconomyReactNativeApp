@@ -208,7 +208,7 @@ export default function InvestScreen({ navigation }: any) {
             style={{
               fontSize: 12,
               fontWeight: '300',
-              color: colors[themeColor].text,
+              color: colors[themeColor].comment,
             }}
           >
             {item.industry}
@@ -235,7 +235,7 @@ export default function InvestScreen({ navigation }: any) {
             <Text
               style={[styles.stockStat, { color: colors[themeColor].text }]}
             >
-              Divident rate: {item.stat.dividendsRate} %
+              Dividend rate: up to {item.stat.dividendsRate} %
             </Text>
           </View>
           <View style={styles.rowBetween}>
@@ -347,9 +347,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
-  stockStat: { fontSize: 16, flex: 1, fontWeight: '300' },
+  stockStat: { fontSize: width * 0.035, flex: 1, fontWeight: '300' },
   companyStockPercent: {
-    fontSize: 12,
+    fontSize: width * 0.03,
     fontWeight: '300',
     flex: 1,
   },

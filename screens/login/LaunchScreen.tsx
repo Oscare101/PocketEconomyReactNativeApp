@@ -49,6 +49,7 @@ export default function LaunchScreen({ navigation }: any) {
         stocks: [],
         history: [],
         deposits: [],
+        dividendsHistory: [],
       }
       dispatch(updateUser(defaultUser))
       storage.set('user', JSON.stringify(defaultUser))
@@ -57,14 +58,14 @@ export default function LaunchScreen({ navigation }: any) {
     const companies: any = storage.getString('companies')
     //!!companies && JSON.parse(companies).length
     if (!!companies && JSON.parse(companies).length) {
-      const updatedCompanies = UpdateCompaniesData(JSON.parse(companies))
-      dispatch(updateCompanies(updatedCompanies))
+      dispatch(updateCompanies(JSON.parse(companies)))
     } else {
-      const defaultCompanies: Company[] = UpdateCompaniesData(
+      const defaultCompanies = UpdateCompaniesData(
+        [],
         CreateDefaultHistory(Object.values(defaultData))
       )
-      dispatch(updateCompanies(defaultCompanies))
-      storage.set('companies', JSON.stringify(defaultCompanies))
+      dispatch(updateCompanies(defaultCompanies.data))
+      storage.set('companies', JSON.stringify(defaultCompanies.data))
     }
 
     navigation.reset({
