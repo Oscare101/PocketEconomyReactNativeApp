@@ -26,6 +26,14 @@ export interface UserStock {
   amount: number
 }
 
+export interface UserDeposit {
+  name: string
+  value: number
+  openingDate: string
+  openingTime: string
+  durationHours: string
+}
+
 export interface UserHistory {
   date: string
   time: string
@@ -38,4 +46,5 @@ export interface User {
   cash: number
   stocks: UserStock[]
   history: UserHistory[]
+  deposits: UserDeposit[]
 }

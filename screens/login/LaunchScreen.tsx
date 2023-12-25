@@ -38,7 +38,7 @@ export default function LaunchScreen({ navigation }: any) {
     }
 
     const user: any = storage.getString('user')
-
+    //!!user && JSON.parse(user).name
     if (!!user && JSON.parse(user).name) {
       dispatch(updateUser(JSON.parse(user)))
     } else {
@@ -48,6 +48,7 @@ export default function LaunchScreen({ navigation }: any) {
         cash: rules.user.startCash,
         stocks: [],
         history: [],
+        deposits: [],
       }
       dispatch(updateUser(defaultUser))
       storage.set('user', JSON.stringify(defaultUser))

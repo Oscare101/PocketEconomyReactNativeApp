@@ -14,9 +14,10 @@ import CustomDrawerContent from '../components/CustomDrawerContent'
 import PortfolioScreen from '../screens/application/PortfolioScreen'
 import InvestScreen from '../screens/application/InvestScreen'
 import StockScreen from '../screens/application/StockScreen'
-import StatisticsScreen from '../screens/application/StatisticsScreen'
+
 import CustomBottomTabContent from '../components/CustomBottomTabContent'
 import DepositsScreen from '../screens/application/DepositsScreen'
+import AnalyticsScreen from '../screens/application/AnalyticsScreen'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -69,8 +70,8 @@ export default function MainNavigation() {
         />
         <Drawer.Screen
           options={{ headerShown: false }}
-          name="StatisticsScreen"
-          component={StatisticsScreen}
+          name="AnalyticsScreen"
+          component={AnalyticsScreen}
         />
       </Drawer.Navigator>
     )

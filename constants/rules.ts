@@ -7,6 +7,6 @@ export default {
     tactsPerDay: 24 * 60,
     tactsPerHour: 60,
     compresGrade: 2,
-    companySizeStocksAmount: [20000, 80000, 200000, 500000, 1000000],
+    companySizeStocksAmount: [2, 8, 20, 50, 100],
   },
 }

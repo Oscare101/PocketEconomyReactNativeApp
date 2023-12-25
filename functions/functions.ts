@@ -1,4 +1,4 @@
-import { UserStock } from '../constants/interfaces'
+import { User, UserStock } from '../constants/interfaces'
 import rules from '../constants/rules'
 import defaultData from '../defaultData.json'
 export function GetMoneyAmount(money: number) {
@@ -183,11 +183,14 @@ export function GetProfit(stockArr: any[]) {
   return +result.toFixed(2)
 }
 
-export function GetEconomicsProgress(companies: any[]) {
+export function GetEconomicsProgress(companies: any[], lastHour: boolean) {
   const economicsArr: any = []
 
   companies.map((s: any) => {
-    const start = s.history[0].price
+    const start = lastHour
+      ? s.history[s.history.length - rules.stock.tactsPerHour].price
+      : s.history[0].price
+
     const finish = s.history[s.history.length - 1].price
     const percent = (finish / start - 1) * 100
     economicsArr.push({
@@ -274,6 +277,7 @@ export function GetUserStocksCapital(stocks: UserStock[], companies: any[]) {
     ].price
     capital += s.amount * comapnyPrice
   })
+
   return +capital.toFixed(2)
 }
 
@@ -333,4 +337,43 @@ export function ReduceUserStocks(
   })
 
   return newUserStocks.filter((s: UserStock) => s.amount)
+}
+
+export function GetUserDepositsCapital(deposits: any[]) {
+  const depositsValue: number =
+    deposits?.reduce((a: any, b: any) => a + b.value, 0) || 0
+
+  return depositsValue
+}
+
+export function GetUserAllTimeProgress(user: User, companies: any[]) {
+  const start = rules.user.startCash
+  const finish = GetUserStocksCapital(user.stocks, companies) + user.cash
+  const progress = finish / start
+  return progress
+}
+
+export function GetUserRating(user: User, companies: any[]) {
+  const economicsProgress = GetEconomicsAllTimeProgress(companies)
+
+  const userProgress = GetUserAllTimeProgress(user, companies)
+
+  const rating = (userProgress - 1) / (economicsProgress - 1)
+  return +rating
+}
+
+export function GetPortfolioProgress(user: User, companies: any[]) {
+  let progressTotal = 0
+
+  user.stocks.map((s: UserStock) => {
+    const stockPrice = companies.find((c: any) => c.name === s.name).history[
+      companies.find((c: any) => c.name === s.name).history.length - 1
+    ].price
+
+    const stockProgress = (stockPrice / s.averagePrice - 1) * 100
+
+    progressTotal += s.amount * stockPrice * stockProgress
+  })
+
+  return progressTotal / GetUserStocksCapital(user.stocks, companies) || 0
 }

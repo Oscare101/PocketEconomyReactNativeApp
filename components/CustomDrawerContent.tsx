@@ -35,9 +35,9 @@ export default function CustomDrawerContent(props: any) {
       screen: 'PortfolioScreen',
     },
     {
-      title: 'Statistics',
+      title: 'Analytics',
       icon: 'analytics-outline',
-      screen: 'StatisticsScreen',
+      screen: 'AnalyticsScreen',
     },
   ]
 

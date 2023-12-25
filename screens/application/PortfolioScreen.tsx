@@ -3,6 +3,7 @@ import {
   FlatList,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TouchableOpacity,
   View,
@@ -12,90 +13,76 @@ import HeaderDrawer from '../../components/HeaderDrawer'
 import colors from '../../constants/colors'
 import {
   CountDaysPlayed,
-  GetEconomicsAllTimeProgress,
   GetEconomicsProgress,
   GetMoneyAmount,
+  GetPortfolioProgress,
+  GetUserDepositsCapital,
+  GetUserRating,
   GetUserStocksCapital,
 } from '../../functions/functions'
 import StatusItem from '../../components/StatusItem'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import { User, UserStock } from '../../constants/interfaces'
-import rules from '../../constants/rules'
+import { Ionicons } from '@expo/vector-icons'
+import { useMemo, useRef, useState } from 'react'
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet'
+import BottomModalBlock from '../../components/BottomModalBlock'
 
 const width = Dimensions.get('screen').width
-
-function GetInfoTypeRating(rating: number) {
-  const ratingRange = [
-    { value: 0, type: 'error' },
-    { value: 0.8, type: 'warning' },
-    { value: 1, type: 'success' },
-  ]
-  let resultType: 'success' | 'warning' | 'error' = 'success'
-  ratingRange.forEach((r: any) => {
-    if (rating >= r.value) {
-      resultType = r.type
-    }
-  })
-  return resultType
-}
-
-function GetInfoTypeProgress(rating: number, period: number) {
-  const ratingRange = [
-    { value: -1000, type: 'error' },
-    { value: 0, type: 'warning' },
-    { value: (1.05 ** period - 1) * 100, type: 'success' },
-  ]
-  let resultType: 'success' | 'warning' | 'error' = 'success'
-  ratingRange.forEach((r: any) => {
-    if (rating >= r.value) {
-      resultType = r.type
-    }
-  })
-  return resultType
-}
 
 export default function PortfolioScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const user: User = useSelector((state: RootState) => state.user)
   const companies: any = useSelector((state: RootState) => state.companies)
-
-  function GetUserAllTimeProgress() {
-    const start = rules.user.startCash
-    const finish = GetUserStocksCapital(user.stocks, companies) + user.cash
-    const progress = finish / start
-    return progress
-  }
-
-  function GetPortfolioProgress() {
-    let progressTotal = 0
-
-    user.stocks.map((s: UserStock) => {
-      const stockPrice = companies.find((c: any) => c.name === s.name).history[
-        companies.find((c: any) => c.name === s.name).history.length - 1
-      ].price
-
-      const stockProgress = (stockPrice / s.averagePrice - 1) * 100
-
-      progressTotal += s.amount * stockPrice * stockProgress
-    })
-
-    return progressTotal / GetUserStocksCapital(user.stocks, companies)
-  }
-
-  function GetUserRating() {
-    const economicsProgress = GetEconomicsAllTimeProgress(companies)
-
-    const userProgress = GetUserAllTimeProgress()
-
-    const rating = (userProgress - 1) / (economicsProgress - 1)
-    return +rating
-  }
-
   const themeColor: any = theme === 'system' ? systemTheme : theme
+
+  const [stockShowProgress, setStockShowProgress] = useState<boolean>(false)
+  const [openStocksList, setOpenStocksList] = useState<boolean>(false)
+  const [openDepositsList, setOpenDepositsList] = useState<boolean>(false)
+
+  const [bottomSheetContent, setBottomSheetContent] =
+    useState<any>('RatingInfo')
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const snapPoints = useMemo(() => [360], [])
+
+  const userRatingData = [
+    {
+      title: 'Days played',
+      value: `${CountDaysPlayed(user.loginDate)} d`,
+    },
+    {
+      title: 'Rating (last 1h)',
+      value: `${(+(
+        GetPortfolioProgress(user, companies) /
+        GetEconomicsProgress(companies, true)
+      )).toFixed(2)}`,
+      ratingIcon: true,
+    },
+    {
+      title: 'Rating (last 24h)',
+      value: `${(+(
+        GetPortfolioProgress(user, companies) /
+        GetEconomicsProgress(companies, false)
+      )).toFixed(2)}`,
+      ratingIcon: true,
+    },
+    {
+      title: 'Rating (all time)',
+      value: `${GetUserRating(user, companies).toFixed(2)}`,
+      ratingIcon: true,
+      infoModalData: 'Rating',
+    },
+  ]
+
   const userPortfolioData = [
     {
+      type: 'Card',
+      icon: 'briefcase-outline',
       title: 'Capital',
       value: `$ ${
         GetMoneyAmount(GetUserStocksCapital(user.stocks, companies) + user.cash)
@@ -109,51 +96,84 @@ export default function PortfolioScreen({ navigation }: any) {
       }`,
     },
     {
+      type: 'Card',
+      icon: 'cash-outline',
       title: 'Cash',
       value: `$ ${GetMoneyAmount(user.cash).value}.${
         GetMoneyAmount(user.cash).decimal
       } ${GetMoneyAmount(user.cash).title}`,
     },
     {
-      title: 'In stocks',
+      type: 'Rating',
+      data: userRatingData,
+    },
+    {
+      type: 'Switch',
+      title: 'Value/Progress',
+      infoModalData: 'Progress',
+    },
+    {
+      type: 'Stocks',
+      title: 'Stocks',
+      icon: 'analytics-outline',
       value: `$ ${
         GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).value
       }.${
         GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).decimal
       } ${GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).title}`,
+      progress: GetPortfolioProgress(user, companies).toFixed(2),
+      data: user.stocks,
     },
-    { title: 'Days played', value: `${CountDaysPlayed(user.loginDate)} d` },
-    {
-      title: "Palyer's rating (last 24h)",
-      value: `${+(
-        +GetPortfolioProgress() / GetEconomicsProgress(companies)
-      ).toFixed(2)}`,
-      icon: true,
-    },
-
-    {
-      title: "Palyer's all time rating",
-      value: `${GetUserRating().toFixed(2)}`,
-      icon: true,
-    },
+    // TODO finish deposits
+    // {
+    //   type: 'Deposits',
+    //   title: 'Deposits',
+    //   icon: 'card-outline',
+    //   value: `$ ${
+    //     GetMoneyAmount(GetUserDepositsCapital(user.deposits)).value
+    //   }.${GetMoneyAmount(GetUserDepositsCapital(user.deposits)).decimal} ${
+    //     GetMoneyAmount(GetUserDepositsCapital(user.deposits)).title
+    //   }`,
+    //   data: user.deposits,
+    // },
   ]
 
-  function RenderUserPortfolioItem({ item }: any) {
+  function RenderUserRatingItem({ item }: any) {
+    const iconType =
+      item.value > 1 ? 'success' : item.value < 1 ? 'error' : 'warning'
     return (
-      <View style={styles.rowBetween}>
-        <Text style={[styles.infoText, { color: colors[themeColor].comment }]}>
+      <View style={[styles.rowBetween, { marginVertical: 0 }]}>
+        <Text
+          style={[
+            styles.userRatingTitle,
+            { color: colors[themeColor].comment },
+          ]}
+        >
           {item.title}
         </Text>
-        {item.icon ? (
-          <StatusItem
-            icon=""
-            title={item.value}
-            type={
-              item.value > 1 ? 'success' : item.value < 1 ? 'error' : 'warning'
-            }
-          />
+        {item.infoModalData ? (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              setBottomSheetContent('RatingInfo')
+              bottomSheetModalRef.current?.present()
+            }}
+          >
+            <Ionicons
+              name="information-circle-outline"
+              color={colors[themeColor].text}
+              size={width * 0.045}
+            />
+          </TouchableOpacity>
         ) : (
-          <Text style={[styles.money, { color: colors[themeColor].text }]}>
+          <></>
+        )}
+        {item.ratingIcon ? (
+          <View style={styles.rowEnd}>
+            <StatusItem title={item.value} type={iconType} icon="" />
+          </View>
+        ) : (
+          <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
             {item.value}
           </Text>
         )}
@@ -176,42 +196,281 @@ export default function PortfolioScreen({ navigation }: any) {
         onPress={() => {
           navigation.navigate('StockScreen', { companyName: item.name })
         }}
-        style={styles.rowBetween}
+        style={[
+          styles.rowBetween,
+          { height: width * 0.08, marginVertical: 0, marginTop: 5 },
+        ]}
       >
+        <Ionicons
+          name={'open-outline'}
+          size={width * 0.05}
+          color={colors[themeColor].comment}
+        />
         <Text
           style={[
-            styles.comapnyText,
+            styles.userStockTitle,
             { color: colors[themeColor].comment, flex: 1 },
           ]}
         >
           {item.name}
         </Text>
-
-        <Text style={[styles.money, { color: colors[themeColor].text }]}>
-          $ {GetMoneyAmount(item.amount * currentStockPrice).value}.
-          {GetMoneyAmount(item.amount * currentStockPrice).decimal}{' '}
-          {GetMoneyAmount(item.amount * currentStockPrice).title}
-        </Text>
-        <StatusItem
-          icon=""
-          title={`${stockProgress} %`}
-          type={
-            +stockProgress > 0
-              ? 'success'
-              : +stockProgress < 0
-              ? 'error'
-              : 'warning'
-          }
-        />
+        {stockShowProgress ? (
+          <StatusItem
+            icon=""
+            title={`${stockProgress} %`}
+            type={
+              +stockProgress > 0
+                ? 'success'
+                : +stockProgress < 0
+                ? 'error'
+                : 'warning'
+            }
+          />
+        ) : (
+          <Text style={[styles.money, { color: colors[themeColor].text }]}>
+            $ {GetMoneyAmount(item.amount * currentStockPrice).value}.
+            {GetMoneyAmount(item.amount * currentStockPrice).decimal}{' '}
+            {GetMoneyAmount(item.amount * currentStockPrice).title}
+          </Text>
+        )}
       </TouchableOpacity>
     )
   }
 
+  function RenderUserPortfolioItem({ item }: any) {
+    const content = (
+      <View
+        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      >
+        <View style={styles.rowBetween}>
+          <Ionicons
+            name={item.icon}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+            {item.title}
+          </Text>
+          <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
+            {item.value}
+          </Text>
+        </View>
+      </View>
+    )
+
+    const ratingBlock = (
+      <View
+        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      >
+        <FlatList
+          data={item.data}
+          renderItem={RenderUserRatingItem}
+          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        />
+      </View>
+    )
+
+    const switchBlock = (
+      <View
+        style={[
+          styles.rowBetween,
+          {
+            width: '92%',
+            alignSelf: 'center',
+            marginTop: 10,
+            marginBottom: 0,
+          },
+        ]}
+      >
+        <Text
+          style={[styles.switchTitle, { color: colors[themeColor].comment }]}
+        >
+          {item.title}
+        </Text>
+        {item.infoModalData ? (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              setBottomSheetContent('PersonalStockProgress')
+              bottomSheetModalRef.current?.present()
+            }}
+          >
+            <Ionicons
+              name="information-circle-outline"
+              color={colors[themeColor].text}
+              size={width * 0.045}
+            />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+        <View style={styles.rowEnd}>
+          <Switch
+            style={{ transform: [{ scale: 1.2 }] }}
+            trackColor={{
+              false: colors[themeColor].cardColor,
+              true: colors[themeColor].cardColor,
+            }}
+            thumbColor={
+              stockShowProgress
+                ? colors[themeColor].successText
+                : colors[themeColor].comment
+            }
+            ios_backgroundColor={colors[themeColor].cardColor}
+            onValueChange={() => setStockShowProgress(!stockShowProgress)}
+            value={stockShowProgress}
+          />
+        </View>
+      </View>
+    )
+
+    const stocksBlock = (
+      <View
+        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      >
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setOpenStocksList(!openStocksList)}
+          style={[
+            styles.rowBetween,
+            {
+              height: width * 0.08 + 10,
+              marginVertical: 0,
+            },
+          ]}
+        >
+          <Ionicons
+            name={item.icon}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+            {item.title}
+          </Text>
+          <Ionicons
+            name={openStocksList ? 'chevron-up' : 'chevron-down'}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+          {stockShowProgress ? (
+            <View style={styles.rowEnd}>
+              <StatusItem
+                icon=""
+                title={`${item.progress} %`}
+                type={
+                  +item.progress > 0
+                    ? 'success'
+                    : +item.progress < 0
+                    ? 'error'
+                    : 'warning'
+                }
+              />
+            </View>
+          ) : (
+            <Text
+              style={[styles.cardValue, { color: colors[themeColor].text }]}
+            >
+              {item.value}
+            </Text>
+          )}
+        </TouchableOpacity>
+        {openStocksList ? (
+          <>
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: colors[themeColor].disable,
+              }}
+            />
+            {item.data?.length ? (
+              <FlatList data={item.data} renderItem={RenderUserStockItem} />
+            ) : (
+              <Text
+                style={[styles.comment, { color: colors[themeColor].comment }]}
+              >
+                No stocks yet
+              </Text>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+    )
+
+    const depositsBlock = (
+      <View
+        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      >
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setOpenDepositsList(!openDepositsList)}
+          style={[
+            styles.rowBetween,
+            {
+              height: width * 0.08 + 10,
+              marginVertical: 0,
+            },
+          ]}
+        >
+          <Ionicons
+            name={item.icon}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+            {item.title}
+          </Text>
+          <Ionicons
+            name={openDepositsList ? 'chevron-up' : 'chevron-down'}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+
+          <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
+            {item.value}
+          </Text>
+        </TouchableOpacity>
+        {openDepositsList ? (
+          <>
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: colors[themeColor].disable,
+              }}
+            />
+            {/* TODO finish deposits */}
+            {item.data?.length ? (
+              <FlatList data={item.data} renderItem={RenderUserStockItem} />
+            ) : (
+              <Text
+                style={[styles.comment, { color: colors[themeColor].comment }]}
+              >
+                No deposits yet
+              </Text>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+    )
+
+    const renderType: any = {
+      Rating: ratingBlock,
+      Switch: switchBlock,
+      Card: content,
+      Stocks: stocksBlock,
+      Deposits: depositsBlock,
+    }
+
+    return <>{renderType[item.type]}</>
+  }
+
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{ flex: 1, backgroundColor: colors[themeColor].bgColor }}
-    >
+    <BottomSheetModalProvider>
       <View
         style={[
           styles.container,
@@ -219,71 +478,31 @@ export default function PortfolioScreen({ navigation }: any) {
         ]}
       >
         <HeaderDrawer title="Portfolio" />
-        <View
-          style={[
-            styles.card,
-            { backgroundColor: colors[themeColor].cardColor },
-          ]}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{
+            width: '100%',
+            flex: 1,
+            backgroundColor: colors[themeColor].bgColor,
+          }}
         >
-          {/* <Text style={[styles.userName, { color: colors[themeColor].text }]}>
-          {user.name}
-        </Text> */}
           <FlatList
+            style={{ width: '100%' }}
             data={userPortfolioData}
             renderItem={RenderUserPortfolioItem}
             scrollEnabled={false}
           />
-        </View>
-        <Text style={[styles.comment, { color: colors[themeColor].comment }]}>
-          The rating is a reflection of the growth of the player's capital
-          relative to the economy, the rating will be {'>'} 1 if the capital
-          grows faster than the economy and {'<'} 1 if it is slower
-        </Text>
-        <View style={[styles.rowBetween, { width: '92%' }]}>
-          <Text style={[styles.title, { color: colors[themeColor].text }]}>
-            User Stocks{' '}
-            <Text style={[styles.title, { color: colors[themeColor].comment }]}>
-              (last 24h)
-            </Text>
-          </Text>
-          <StatusItem
-            icon=""
-            title={`${GetPortfolioProgress().toFixed(2)} %`}
-            type={
-              +GetPortfolioProgress() > 0
-                ? 'success'
-                : +GetPortfolioProgress() < 0
-                ? 'error'
-                : 'warning'
-            }
-          />
-        </View>
-
-        <View
-          style={[
-            styles.card,
-            { backgroundColor: colors[themeColor].cardColor },
-          ]}
-        >
-          {user.stocks.length ? (
-            <FlatList
-              data={user.stocks}
-              renderItem={RenderUserStockItem}
-              scrollEnabled={false}
-            />
-          ) : (
-            <Text
-              style={{
-                fontSize: width * 0.05,
-                color: colors[themeColor].comment,
-              }}
-            >
-              No stocks yet
-            </Text>
-          )}
-        </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+      {/* BottomSheet */}
+      <BottomModalBlock
+        bottomSheetModalRef={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        dismiss={() => bottomSheetModalRef.current?.dismiss()}
+        content={bottomSheetContent}
+        onClose={() => bottomSheetModalRef.current?.dismiss()}
+      />
+    </BottomSheetModalProvider>
   )
 }
 
@@ -299,6 +518,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginTop: 10,
+    alignSelf: 'center',
   },
   rowBetween: {
     width: '100%',
@@ -307,14 +527,35 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 5,
   },
-  infoText: { fontSize: width * 0.04 },
-  comapnyText: { fontSize: width * 0.035 },
+  rowEnd: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
 
-  userName: {
-    fontSize: width * 0.04,
+  cardTitle: {
+    fontSize: width * 0.05,
+    marginHorizontal: 10,
+  },
+  userRatingTitle: { fontSize: width * 0.05, marginRight: 10 },
+  cardValue: {
+    fontSize: width * 0.05,
+    flex: 1,
+    textAlign: 'right',
   },
   money: { fontSize: width * 0.04 },
-  decimal: { fontSize: width * 0.035, fontWeight: '400' },
-  comment: { fontSize: width * 0.035, width: '92%', marginVertical: 5 },
-  title: { fontSize: width * 0.05 },
+  switchTitle: {
+    fontSize: width * 0.045,
+    marginRight: 10,
+  },
+  userStockTitle: {
+    fontSize: width * 0.04,
+    marginHorizontal: 10,
+  },
+  comment: {
+    fontSize: width * 0.04,
+    fontWeight: '300',
+    marginVertical: 10,
+  },
 })

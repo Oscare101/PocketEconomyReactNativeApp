@@ -106,7 +106,7 @@ export default function InvestScreen({ navigation }: any) {
           backgroundColor:
             sortBy === item.value
               ? colors[themeColor].comment
-              : colors[themeColor].disable,
+              : colors[themeColor].cardColor,
           borderRadius: 5,
           flexDirection: 'row',
         }}

@@ -20,10 +20,26 @@ import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import ThemeBlockModal from '../components/ThemeBlockModal'
 import TransactionBlockModal from '../components/TransactionBlockModal'
+import RatingInfoModal from './RatingInfoModal'
+import PersonalStocksProgressModal from './PersonalStocksProgressModal'
+import EconomicsGrowsInfoModal from './EconomicsGrowsInfoModal'
 export default function BottomModalBlock(props: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+
+  const contentData: any = {
+    themeBlock: <ThemeBlockModal />,
+    transactionBlock: (
+      <TransactionBlockModal
+        transactionStockName={props.transactionStockName}
+        onClose={() => props.onClose()}
+      />
+    ),
+    RatingInfo: <RatingInfoModal />,
+    PersonalStockProgress: <PersonalStocksProgressModal />,
+    EconomicsGrowsInfo: <EconomicsGrowsInfoModal />,
+  }
 
   return (
     <BottomSheetModal
@@ -62,16 +78,7 @@ export default function BottomModalBlock(props: any) {
           borderColor: colors[themeColor].disable,
         }}
       >
-        {props.content === 'themeBlock' ? (
-          <ThemeBlockModal />
-        ) : props.content === 'transactionBlock' ? (
-          <TransactionBlockModal
-            transactionStockName={props.transactionStockName}
-            onClose={() => props.onClose()}
-          />
-        ) : (
-          <></>
-        )}
+        {contentData[props.content]}
       </View>
     </BottomSheetModal>
   )
