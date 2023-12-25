@@ -47,7 +47,7 @@ export default function AnalyticsScreen({ navigation }: any) {
       icon: 'analytics-outline',
       title: 'Economics growth',
       comment: 'Best companies',
-      value: GetEconomicsProgress(companies, false).toFixed(2),
+      value: GetEconomicsProgress(companies, 0).toFixed(2),
       infoModalData: '',
       data: GetSortedCompaniesByProgress(companies),
     },

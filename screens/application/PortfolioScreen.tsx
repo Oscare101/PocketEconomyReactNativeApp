@@ -31,6 +31,7 @@ import {
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet'
 import BottomModalBlock from '../../components/BottomModalBlock'
+import rules from '../../constants/rules'
 
 const width = Dimensions.get('screen').width
 
@@ -50,29 +51,45 @@ export default function PortfolioScreen({ navigation }: any) {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => [360], [])
 
+  function GetRatingPerPeriod(period: number) {
+    const portfolio = GetPortfolioProgress(user, companies, period)
+    console.log(portfolio)
+
+    return +(portfolio / GetEconomicsProgress(companies, period)).toFixed(2)
+  }
+
+  function IsPeriodEnough(period: number) {
+    if (companies[0].history.length < period) {
+      return false
+    }
+    return true
+  }
+
   const userRatingData = [
     {
       title: 'Days played',
+      valueAvailable: true,
       value: `${CountDaysPlayed(user.loginDate)} d`,
     },
     {
       title: 'Rating (last 1h)',
-      value: `${(+(
-        GetPortfolioProgress(user, companies) /
-        GetEconomicsProgress(companies, true)
-      )).toFixed(2)}`,
+      valueAvailable: IsPeriodEnough(rules.stock.tactsPerHour),
+      value: IsPeriodEnough(rules.stock.tactsPerHour)
+        ? `${GetRatingPerPeriod(rules.stock.tactsPerHour)}`
+        : '',
       ratingIcon: true,
     },
     {
       title: 'Rating (last 24h)',
-      value: `${(+(
-        GetPortfolioProgress(user, companies) /
-        GetEconomicsProgress(companies, false)
-      )).toFixed(2)}`,
+      valueAvailable: IsPeriodEnough(rules.stock.tactsPerDay),
+      value: IsPeriodEnough(rules.stock.tactsPerDay)
+        ? `${GetRatingPerPeriod(rules.stock.tactsPerDay)}`
+        : '',
       ratingIcon: true,
     },
     {
       title: 'Rating (all time)',
+      valueAvailable: true,
       value: `${GetUserRating(user, companies).toFixed(2)}`,
       ratingIcon: true,
       infoModalData: 'Rating',
@@ -121,7 +138,7 @@ export default function PortfolioScreen({ navigation }: any) {
       }.${
         GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).decimal
       } ${GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).title}`,
-      progress: GetPortfolioProgress(user, companies).toFixed(2),
+      progress: GetPortfolioProgress(user, companies, 0).toFixed(2),
       data: user.stocks,
     },
     // TODO finish deposits
@@ -168,13 +185,25 @@ export default function PortfolioScreen({ navigation }: any) {
         ) : (
           <></>
         )}
-        {item.ratingIcon ? (
-          <View style={styles.rowEnd}>
-            <StatusItem title={item.value} type={iconType} icon="" />
-          </View>
+        {item.valueAvailable ? (
+          <>
+            {item.ratingIcon ? (
+              <View style={styles.rowEnd}>
+                <StatusItem title={item.value} type={iconType} icon="" />
+              </View>
+            ) : (
+              <Text
+                style={[styles.cardValue, { color: colors[themeColor].text }]}
+              >
+                {item.value}
+              </Text>
+            )}
+          </>
         ) : (
-          <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
-            {item.value}
+          <Text
+            style={[styles.cardValue, { color: colors[themeColor].comment }]}
+          >
+            -
           </Text>
         )}
       </View>

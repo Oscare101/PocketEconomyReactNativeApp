@@ -183,12 +183,12 @@ export function GetProfit(stockArr: any[]) {
   return +result.toFixed(2)
 }
 
-export function GetEconomicsProgress(companies: any[], lastHour: boolean) {
+export function GetEconomicsProgress(companies: any[], lastPeriod: number) {
   const economicsArr: any = []
 
   companies.map((s: any) => {
-    const start = lastHour
-      ? s.history[s.history.length - rules.stock.tactsPerHour].price
+    const start = lastPeriod
+      ? s.history[s.history.length - lastPeriod].price
       : s.history[0].price
 
     const finish = s.history[s.history.length - 1].price
@@ -355,25 +355,33 @@ export function GetUserAllTimeProgress(user: User, companies: any[]) {
 
 export function GetUserRating(user: User, companies: any[]) {
   const economicsProgress = GetEconomicsAllTimeProgress(companies)
-
   const userProgress = GetUserAllTimeProgress(user, companies)
 
   const rating = (userProgress - 1) / (economicsProgress - 1)
   return +rating
 }
 
-export function GetPortfolioProgress(user: User, companies: any[]) {
+export function GetPortfolioProgress(
+  user: User,
+  companies: any[],
+  lastPeriod: number
+) {
   let progressTotal = 0
 
   user.stocks.map((s: UserStock) => {
-    const stockPrice = companies.find((c: any) => c.name === s.name).history[
-      companies.find((c: any) => c.name === s.name).history.length - 1
-    ].price
+    const company = companies.find((c: any) => c.name === s.name)
 
-    const stockProgress = (stockPrice / s.averagePrice - 1) * 100
+    const stockPrice = company.history[company.history.length - 1].price
+    const previousStockPrice = lastPeriod
+      ? company.history[company.history.length - lastPeriod].price
+      : s.averagePrice
+
+    const stockProgress = (stockPrice / previousStockPrice - 1) * 100
 
     progressTotal += s.amount * stockPrice * stockProgress
   })
+  const result =
+    progressTotal / GetUserStocksCapital(user.stocks, companies) || 0
 
-  return progressTotal / GetUserStocksCapital(user.stocks, companies) || 0
+  return result
 }

@@ -22,6 +22,7 @@ import {
 } from '../functions/functions'
 import { useState } from 'react'
 import { updateUser } from '../redux/user'
+import Toast from 'react-native-toast-message'
 export const storage = new MMKV()
 
 export default function TransactionBlockModal(props: any) {
@@ -110,7 +111,13 @@ export default function TransactionBlockModal(props: any) {
     }
     dispatch(updateUser(newUserData))
     storage.set('user', JSON.stringify(newUserData))
-
+    Toast.show({
+      type: 'ToastMessage',
+      props: {
+        title: `A share of ${amount} stocks of ${props.transactionStockName} was purchased`,
+      },
+      position: 'bottom',
+    })
     props.onClose()
   }
 
@@ -124,7 +131,13 @@ export default function TransactionBlockModal(props: any) {
     }
     dispatch(updateUser(newUserData))
     storage.set('user', JSON.stringify(newUserData))
-
+    Toast.show({
+      type: 'ToastMessage',
+      props: {
+        title: `A share of ${amount} stocks of ${props.transactionStockName} was sold`,
+      },
+      position: 'bottom',
+    })
     props.onClose()
   }
 

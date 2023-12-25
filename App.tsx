@@ -35,14 +35,14 @@ export default function App() {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: 40,
+          marginBottom: 20,
           borderRadius: 4,
         }}
       >
         <Text
           style={{
             fontSize: 16,
-            color: colors.White,
+            color: colors.white,
             textAlign: 'left',
           }}
         >
