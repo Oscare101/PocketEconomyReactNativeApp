@@ -105,12 +105,13 @@ export default function InvestScreen({ navigation }: any) {
           marginRight: (width * 0.05) / 2,
           marginLeft: index ? 0 : (width * 0.05) / 2,
           height: width * 0.07,
-          marginVertical: 5,
+          // marginVertical: 5,
+          alignSelf: 'center',
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor:
             sortBy === item.value
-              ? colors[themeColor].comment
+              ? colors[themeColor].infoBg
               : colors[themeColor].cardColor,
           borderRadius: 5,
           flexDirection: 'row',
@@ -127,7 +128,7 @@ export default function InvestScreen({ navigation }: any) {
         <Text
           style={[
             {
-              marginHorizontal: 5,
+              marginRight: 3,
               color:
                 sortBy === item.value
                   ? colors[themeColor].text
@@ -142,6 +143,7 @@ export default function InvestScreen({ navigation }: any) {
           size={14}
           color={sortBy === item.value ? colors[themeColor].text : '#00000000'}
         />
+        <View style={{ width: 3 }} />
 
         {item.text ? (
           <Text
@@ -339,7 +341,15 @@ export default function InvestScreen({ navigation }: any) {
         horizontal
         scrollEnabled={true}
         showsHorizontalScrollIndicator={false}
-        style={{ width: '100%' }}
+        style={{
+          width: '100%',
+          height: width * 0.12,
+          borderBottomWidth: 1,
+          borderColor: colors[themeColor].disable,
+          elevation: 5,
+          backgroundColor: colors[themeColor].bgColor,
+          zIndex: 5,
+        }}
         data={filterButtons}
         renderItem={RenderFilterButton}
       />
