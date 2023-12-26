@@ -8,6 +8,7 @@ export default {
     tactsPerHour: 60,
     compresGrade: 2,
     companySizeStocksAmount: [2, 8, 20, 50, 100],
-    dividendTime: '9^00',
+    dividendTime: '9:00',
+    dividendsHistoryDays: 7,
   },
 }

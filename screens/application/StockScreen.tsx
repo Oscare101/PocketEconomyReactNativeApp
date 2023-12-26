@@ -28,6 +28,8 @@ import {
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet'
 import BottomModalBlock from '../../components/BottomModalBlock'
+import HeaderDrawer from '../../components/HeaderDrawer'
+import { runOnJS } from 'react-native-reanimated'
 
 const width = Dimensions.get('screen').width
 const stockWidth = width * 0.92 - 20
@@ -123,7 +125,7 @@ export default function StockScreen({ navigation, route }: any) {
       statIcon: true,
     },
     {
-      title: 'Price',
+      title: 'Dividend',
       statIcon: false,
       value: `up to ${GetCompany()?.stat.dividendsRate} %`,
     },
@@ -152,7 +154,13 @@ export default function StockScreen({ navigation, route }: any) {
     {
       title: `Last ${periodToRender.toLocaleLowerCase()} progress`,
       stockStatIcon: true,
-      value: `${GetProfit(stocksToRender)} %`,
+      value: `${GetProfit(
+        GetCompany().history.slice(
+          periodToRender === 'Hour'
+            ? -rules.stock.tactsPerHour
+            : -rules.stock.tactsPerDay
+        )
+      )} %`,
     },
   ]
 
@@ -439,156 +447,157 @@ export default function StockScreen({ navigation, route }: any) {
 
   return (
     <BottomSheetModalProvider>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1, backgroundColor: colors[themeColor].bgColor }}
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: colors[themeColor].bgColor },
+        ]}
       >
-        <View
-          style={[
-            styles.container,
-            { backgroundColor: colors[themeColor].bgColor },
-          ]}
+        <HeaderDrawer
+          title={route.params.companyName}
+          onAction={() => {
+            navigation.goBack()
+          }}
+        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{
+            flex: 1,
+            backgroundColor: colors[themeColor].bgColor,
+            width: '100%',
+          }}
         >
-          <View style={styles.companyHeader}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => navigation.goBack()}
-              style={styles.backButton}
-            >
-              <Ionicons
-                name="chevron-back"
-                size={width * 0.07}
-                color={colors[themeColor].text}
-              />
-            </TouchableOpacity>
-
-            <Text
-              numberOfLines={1}
-              style={[styles.headerTitle, { color: colors[themeColor].text }]}
-            >
-              {route.params.companyName}
-            </Text>
-          </View>
-          <Text
-            style={[styles.description, { color: colors[themeColor].comment }]}
-          >
-            {GetCompany()?.description}
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '92%',
-            }}
-          >
-            {periodButtonsData.map((item: any, index: number) => (
-              <RenderPeriodButtonItem item={item} key={index} />
-            ))}
-          </View>
-          {/* STOCK CHART */}
           <View
             style={[
-              styles.card,
-              { backgroundColor: colors[themeColor].cardColor },
+              styles.container,
+              { backgroundColor: colors[themeColor].bgColor },
             ]}
           >
-            <FlatList
-              horizontal
-              scrollEnabled={false}
-              showsHorizontalScrollIndicator={false}
-              data={stocksToRender}
-              scrollsToTop
-              renderItem={RenderItem}
-              initialNumToRender={numToRender}
-              removeClippedSubviews={true}
-              getItemLayout={(_: any, index: number) => ({
-                length: stockWidth / numToRender,
-                offset: (stockWidth / numToRender) * index,
-                index,
-              })}
-            />
+            <Text
+              style={[
+                styles.description,
+                { color: colors[themeColor].comment },
+              ]}
+            >
+              {GetCompany()?.description}
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                width: '100%',
+                width: '92%',
               }}
             >
-              <Text style={{ color: colors[themeColor].comment }}>
-                {stocksToRender[0].time}
-              </Text>
-              <Text style={{ color: colors[themeColor].comment }}>
-                {stocksToRender[stocksToRender.length - 1].time}
-              </Text>
+              {periodButtonsData.map((item: any, index: number) => (
+                <RenderPeriodButtonItem item={item} key={index} />
+              ))}
             </View>
-          </View>
-          {/* PRESSED PRICE */}
-          {pressedPrice?.price ? (
+            {/* STOCK CHART */}
             <View
               style={[
                 styles.card,
-                {
-                  backgroundColor: colors[themeColor].cardColor,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                },
+                { backgroundColor: colors[themeColor].cardColor },
               ]}
             >
-              <Text style={{ color: colors[themeColor].text }}>
-                {pressedPrice?.date} {pressedPrice?.time}
-              </Text>
-              <Text style={{ color: colors[themeColor].text }}>
-                $ {GetMoneyAmount(pressedPrice?.price).value}.
-                {GetMoneyAmount(pressedPrice?.price).decimal}{' '}
-                {GetMoneyAmount(pressedPrice?.price).title}
-              </Text>
+              <FlatList
+                horizontal
+                scrollEnabled={false}
+                showsHorizontalScrollIndicator={false}
+                data={stocksToRender}
+                scrollsToTop
+                renderItem={RenderItem}
+                initialNumToRender={numToRender}
+                removeClippedSubviews={true}
+                getItemLayout={(_: any, index: number) => ({
+                  length: stockWidth / numToRender,
+                  offset: (stockWidth / numToRender) * index,
+                  index,
+                })}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                }}
+              >
+                <Text style={{ color: colors[themeColor].comment }}>
+                  {stocksToRender[0].time}
+                </Text>
+                <Text style={{ color: colors[themeColor].comment }}>
+                  {stocksToRender[stocksToRender.length - 1].time}
+                </Text>
+              </View>
             </View>
-          ) : (
-            <></>
-          )}
-          {/* STAT */}
-          <View
-            style={[
-              styles.card,
-              { backgroundColor: colors[themeColor].cardColor },
-            ]}
-          >
-            <FlatList
-              scrollEnabled={false}
-              data={companyStatData}
-              renderItem={RenderStat}
-              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            />
-          </View>
-          {/* TRANSACTION */}
-          <View
-            style={[
-              styles.card,
-              { backgroundColor: colors[themeColor].cardColor },
-            ]}
-          >
-            <FlatList
-              scrollEnabled={false}
-              data={userStockData}
-              renderItem={RenderUserStat}
-              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            />
+            {/* PRESSED PRICE */}
+            {pressedPrice?.price ? (
+              <View
+                style={[
+                  styles.card,
+                  {
+                    backgroundColor: colors[themeColor].cardColor,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  },
+                ]}
+              >
+                <Text style={{ color: colors[themeColor].text }}>
+                  {pressedPrice?.date} {pressedPrice?.time}
+                </Text>
+                <Text style={{ color: colors[themeColor].text }}>
+                  $ {GetMoneyAmount(pressedPrice?.price).value}.
+                  {GetMoneyAmount(pressedPrice?.price).decimal}{' '}
+                  {GetMoneyAmount(pressedPrice?.price).title}
+                </Text>
+              </View>
+            ) : (
+              <></>
+            )}
+            {/* STAT */}
+            <View
+              style={[
+                styles.card,
+                { backgroundColor: colors[themeColor].cardColor },
+              ]}
+            >
+              <FlatList
+                scrollEnabled={false}
+                data={companyStatData}
+                renderItem={RenderStat}
+                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+              />
+            </View>
+            {/* TRANSACTION */}
+            <View
+              style={[
+                styles.card,
+                { backgroundColor: colors[themeColor].cardColor },
+              ]}
+            >
+              <FlatList
+                scrollEnabled={false}
+                data={userStockData}
+                renderItem={RenderUserStat}
+                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+              />
 
-            <Button
-              style={{ width: '100%', marginTop: 10 }}
-              title="Transaction"
-              disable={false}
-              type="info"
-              action={() => {
-                setBottomSheetContent('transactionBlock')
-                bottomSheetModalRef.current?.present()
-              }}
-            />
+              <Button
+                style={{ width: '100%', marginTop: 10 }}
+                title="Transaction"
+                disable={false}
+                type="info"
+                action={() => {
+                  setBottomSheetContent('transactionBlock')
+                  bottomSheetModalRef.current?.present()
+                }}
+              />
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
+
       {/* BottomSheet */}
       <BottomModalBlock
         bottomSheetModalRef={bottomSheetModalRef}

@@ -2,6 +2,7 @@ import {
   Dimensions,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   useColorScheme,
 } from 'react-native'
@@ -9,11 +10,13 @@ import colors from '../constants/colors'
 import DrawerButton from './DrawerButton'
 import { RootState } from '../redux'
 import { useSelector } from 'react-redux'
+import { Ionicons } from '@expo/vector-icons'
 
 const width = Dimensions.get('screen').width
 
 interface HeaderDrawerProps {
   title: string
+  onAction?: any
 }
 
 export default function HeaderDrawer(props: HeaderDrawerProps) {
@@ -31,7 +34,28 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
         },
       ]}
     >
-      <DrawerButton />
+      {props.onAction ? (
+        <TouchableOpacity
+          style={{
+            flexDirection: 'column',
+            height: '100%',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            aspectRatio: 1.15,
+            padding: 22,
+          }}
+          activeOpacity={0.8}
+          onPress={props.onAction}
+        >
+          <Ionicons
+            name="chevron-back"
+            size={width * 0.07}
+            color={colors[themeColor].text}
+          />
+        </TouchableOpacity>
+      ) : (
+        <DrawerButton />
+      )}
       <Text style={[styles.headerTitle, { color: colors[themeColor].text }]}>
         {props.title}
       </Text>

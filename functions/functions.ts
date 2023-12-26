@@ -443,3 +443,30 @@ export function IsPeriodEnough(companies: any[], period: number) {
   }
   return true
 }
+
+export function FilterRecentDividendsHistory(data: any) {
+  const tenDaysAgo = new Date()
+  tenDaysAgo.setDate(tenDaysAgo.getDate() - rules.stock.dividendsHistoryDays)
+  const filteredData = data.filter(
+    (item: any) => new Date(item.date) >= tenDaysAgo
+  )
+  return filteredData
+}
+
+export function GenerateDividendsDates() {
+  const dateArray = []
+  const currentDate = new Date()
+
+  for (let i = 0; i < rules.stock.dividendsHistoryDays; i++) {
+    const date = new Date()
+    date.setDate(currentDate.getDate() - i)
+    dateArray.push(date.toISOString().split('T')[0])
+  }
+
+  return dateArray
+}
+
+export function GetUserDividendsValue(dividends: any[]) {
+  const sum = dividends.reduce((a: any, b: any) => a + b.value, 0)
+  return sum
+}

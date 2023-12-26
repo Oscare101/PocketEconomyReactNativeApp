@@ -54,5 +54,5 @@ export interface User {
   stocks: UserStock[]
   history: UserHistory[]
   deposits: UserDeposit[]
-  dividendsHistory?: DividendHistory[] // TODO remove ?
+  dividendsHistory: DividendHistory[]
 }

@@ -13,11 +13,13 @@ import HeaderDrawer from '../../components/HeaderDrawer'
 import colors from '../../constants/colors'
 import {
   CountDaysPlayed,
+  GenerateDividendsDates,
   GetEconomicsProgress,
   GetMoneyAmount,
   GetPortfolioProgress,
   GetRatingPerPeriod,
   GetUserDepositsCapital,
+  GetUserDividendsValue,
   GetUserRating,
   GetUserStocksCapital,
   IsPeriodEnough,
@@ -78,7 +80,7 @@ export default function PortfolioScreen({ navigation }: any) {
     },
     {
       title: 'Rating (all time)',
-      valueAvailable: true,
+      valueAvailable: IsPeriodEnough(companies, rules.stock.tactsPerDay),
       value: `${GetUserRating(user, companies).toFixed(2)}`,
       ratingIcon: true,
       infoModalData: 'Rating',
@@ -236,6 +238,7 @@ export default function PortfolioScreen({ navigation }: any) {
             styles.userStockTitle,
             { color: colors[themeColor].comment, flex: 1 },
           ]}
+          numberOfLines={1}
         >
           {item.name}
         </Text>
@@ -256,6 +259,54 @@ export default function PortfolioScreen({ navigation }: any) {
             $ {GetMoneyAmount(item.amount * currentStockPrice).value}.
             {GetMoneyAmount(item.amount * currentStockPrice).decimal}{' '}
             {GetMoneyAmount(item.amount * currentStockPrice).title}
+          </Text>
+        )}
+      </TouchableOpacity>
+    )
+  }
+
+  function RenderUserDividendItem({ item }: any) {
+    const dividends = user.dividendsHistory.filter((d: any) => d.date === item)
+    const dividendsSum = GetUserDividendsValue(dividends)
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          navigation.navigate('DividendsScreen', { dividends: dividends })
+        }}
+        disabled={!dividends.length}
+        style={[
+          styles.rowBetween,
+          {
+            height: width * 0.08,
+            marginVertical: 0,
+            marginTop: 5,
+          },
+        ]}
+      >
+        <Ionicons
+          name={'open-outline'}
+          size={width * 0.05}
+          color={colors[themeColor].comment}
+        />
+        <Text
+          style={[
+            styles.userStockTitle,
+            { color: colors[themeColor].comment, flex: 1 },
+          ]}
+        >
+          {item}
+        </Text>
+        {dividends.length ? (
+          <Text style={[styles.money, { color: colors[themeColor].text }]}>
+            $ {GetMoneyAmount(dividendsSum).value}.
+            {GetMoneyAmount(dividendsSum).decimal}{' '}
+            {GetMoneyAmount(dividendsSum).title}
+          </Text>
+        ) : (
+          <Text style={[styles.money, { color: colors[themeColor].comment }]}>
+            -
           </Text>
         )}
       </TouchableOpacity>
@@ -453,6 +504,7 @@ export default function PortfolioScreen({ navigation }: any) {
               setBottomSheetContent('DividendsInfo')
               bottomSheetModalRef.current?.present()
             }}
+            style={{ marginRight: 5 }}
           >
             <Ionicons
               name="information-circle-outline"
@@ -460,16 +512,38 @@ export default function PortfolioScreen({ navigation }: any) {
               size={width * 0.045}
             />
           </TouchableOpacity>
-          <View style={{ flex: 1 }} />
           <Ionicons
             name={openDividendsList ? 'chevron-up' : 'chevron-down'}
             size={width * 0.05}
             color={colors[themeColor].text}
           />
-
-          {/* <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
-            {item.value}
-          </Text> */}
+          <View style={{ flex: 1 }} />
+          <View style={styles.collumnEnd}>
+            <Text style={[styles.money, { color: colors[themeColor].text }]}>
+              ${' '}
+              {
+                GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
+                  .value
+              }
+              .
+              {
+                GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
+                  .decimal
+              }{' '}
+              {
+                GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
+                  .title
+              }
+            </Text>
+            <Text
+              style={[
+                styles.comment,
+                { color: colors[themeColor].comment, marginVertical: 0 },
+              ]}
+            >
+              last 7 days
+            </Text>
+          </View>
         </TouchableOpacity>
         {openDividendsList ? (
           <>
@@ -480,7 +554,10 @@ export default function PortfolioScreen({ navigation }: any) {
                 backgroundColor: colors[themeColor].disable,
               }}
             />
-            {/* TODO finish dividends */}
+            <FlatList
+              data={GenerateDividendsDates()}
+              renderItem={RenderUserDividendItem}
+            />
           </>
         ) : (
           <></>
@@ -648,5 +725,10 @@ const styles = StyleSheet.create({
     fontSize: width * 0.04,
     fontWeight: '300',
     marginVertical: 10,
+  },
+  collumnEnd: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
   },
 })

@@ -22,12 +22,16 @@ import { useState } from 'react'
 
 const width = Dimensions.get('screen').width
 const filterButtons = [
-  { text: 'Aa', value: 'Name' },
-  { text: '%', value: 'DividendsRate' },
-  { text: '$', value: 'Price' },
-  { icon: 'trending-up-outline', value: 'Volatility' },
-  { icon: 'time-outline', value: 'DividendsConsistency' },
-  { icon: 'business-outline', value: 'CompanySize' },
+  { title: 'Name', text: 'Aa', value: 'Name' },
+  { title: 'DividendsRate', text: '%', value: 'DividendsRate' },
+  { title: 'Price', text: '$', value: 'Price' },
+  { title: 'Volatility', icon: 'trending-up-outline', value: 'Volatility' },
+  {
+    title: 'Dividends consistency',
+    icon: 'time-outline',
+    value: 'DividendsConsistency',
+  },
+  { title: 'Company size', icon: 'business-outline', value: 'CompanySize' },
 ]
 
 export default function InvestScreen({ navigation }: any) {
@@ -93,13 +97,14 @@ export default function InvestScreen({ navigation }: any) {
     return sort[`${sortBy}From${sortFrom}`]
   }
 
-  function RenderFilterButton({ item }: any) {
+  function RenderFilterButton({ item, index }: any) {
     return (
       <TouchableOpacity
         style={{
-          width: width / 7,
-          marginHorizontal: width / 7 / 12,
-          height: 30,
+          paddingHorizontal: 10,
+          marginRight: (width * 0.05) / 2,
+          marginLeft: index ? 0 : (width * 0.05) / 2,
+          height: width * 0.07,
           marginVertical: 5,
           alignItems: 'center',
           justifyContent: 'center',
@@ -119,19 +124,24 @@ export default function InvestScreen({ navigation }: any) {
           }
         }}
       >
-        {sortBy === item.value ? (
-          <Ionicons
-            name={sortFrom === 'Low' ? 'caret-up' : 'caret-down'}
-            size={14}
-            color={
-              sortBy === item.value
-                ? colors[themeColor].text
-                : colors[themeColor].comment
-            }
-          />
-        ) : (
-          <></>
-        )}
+        <Text
+          style={[
+            {
+              marginHorizontal: 5,
+              color:
+                sortBy === item.value
+                  ? colors[themeColor].text
+                  : colors[themeColor].comment,
+            },
+          ]}
+        >
+          {item.title}
+        </Text>
+        <Ionicons
+          name={sortFrom === 'Low' ? 'caret-up' : 'caret-down'}
+          size={14}
+          color={sortBy === item.value ? colors[themeColor].text : '#00000000'}
+        />
 
         {item.text ? (
           <Text
@@ -195,7 +205,7 @@ export default function InvestScreen({ navigation }: any) {
               alignItems: 'flex-start',
               justifyContent: 'flex-start',
               borderBottomWidth: 1,
-              borderBlockColor: colors[themeColor].comment,
+              borderBlockColor: colors[themeColor].disable,
               width: '100%',
             }}
           >
@@ -215,7 +225,10 @@ export default function InvestScreen({ navigation }: any) {
           </Text>
           <View style={styles.rowBetween}>
             <Text
-              style={[styles.stockStat, { color: colors[themeColor].text }]}
+              style={[
+                styles.stockStat,
+                { color: colors[themeColor].text, width: '40%' },
+              ]}
             >
               Price: ${' '}
               {
@@ -233,16 +246,20 @@ export default function InvestScreen({ navigation }: any) {
               }
             </Text>
             <Text
-              style={[styles.stockStat, { color: colors[themeColor].text }]}
+              style={[
+                styles.stockStat,
+                { color: colors[themeColor].text, width: '60%' },
+              ]}
             >
-              Dividend rate: up to {item.stat.dividendsRate} %
+              Dividend: up to {item.stat.dividendsRate} %{' '}
+              <Text style={styles.stockStatMini}>(ped day)</Text>
             </Text>
           </View>
           <View style={styles.rowBetween}>
             <Text
               style={[
                 styles.companyStockPercent,
-                { color: colors[themeColor].comment },
+                { color: colors[themeColor].comment, width: '40%' },
               ]}
             >
               Hour:{' '}
@@ -262,7 +279,7 @@ export default function InvestScreen({ navigation }: any) {
             <Text
               style={[
                 styles.companyStockPercent,
-                { color: colors[themeColor].comment },
+                { color: colors[themeColor].comment, width: '60%' },
               ]}
             >
               Day:{' '}
@@ -320,7 +337,8 @@ export default function InvestScreen({ navigation }: any) {
       <HeaderDrawer title="Stocks" />
       <FlatList
         horizontal
-        scrollEnabled={false}
+        scrollEnabled={true}
+        showsHorizontalScrollIndicator={false}
         style={{ width: '100%' }}
         data={filterButtons}
         renderItem={RenderFilterButton}
@@ -347,10 +365,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
-  stockStat: { fontSize: width * 0.035, flex: 1, fontWeight: '300' },
+  stockStat: { fontSize: width * 0.035, fontWeight: '300' },
+  stockStatMini: { fontSize: width * 0.025, fontWeight: '300' },
+
   companyStockPercent: {
     fontSize: width * 0.03,
     fontWeight: '300',
-    flex: 1,
   },
 })

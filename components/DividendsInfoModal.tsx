@@ -48,7 +48,8 @@ export default function DividendsInfoModal() {
           investors, each company has statistics on the regularity of dividend
           payments, and the amount of interest to which payments are made{'\n'}
           Dividends are paid at 9:00 a.m. each day automatically
-          {'\n'}Some companies may skip paying dividends altogether
+          {'\n'}Some companies may skip paying dividends altogether{'\n'}If your
+          dividend payment is less than $0.01, you get nothing
         </Text>
       </View>
     </>

@@ -18,6 +18,7 @@ import rules from './constants/rules'
 import { updateCompanies } from './redux/companies'
 import {
   CalculateStock,
+  FilterRecentDividendsHistory,
   UpdateCompaniesData,
   countElapsedPeriods,
 } from './functions/functions'
@@ -69,13 +70,17 @@ export default function App() {
         themeColor === 'dark' ? 'light' : 'dark'
       )
     }, [themeColor])
+
     function SetUserDividends(dividends: any[]) {
       const value = dividends.reduce((a: any, b: any) => a + b.value, 0)
       const lastDividends = user.dividendsHistory || []
       const newUserData: User = {
         ...user,
         cash: +(user.cash + value).toFixed(2),
-        dividendsHistory: [...lastDividends, ...dividends],
+        dividendsHistory: FilterRecentDividendsHistory([
+          ...lastDividends,
+          ...dividends,
+        ]),
       }
 
       dispatch(updateUser(newUserData))

@@ -63,12 +63,12 @@ export default function TransactionBlockModal(props: any) {
 
   const transactionUserData = [
     {
-      title: 'Tour stocks amount',
+      title: 'Your stocks amount',
       icon: 'briefcase-outline',
       value: GetUserStocksAmount().stockAmount,
     },
     {
-      title: 'Tour stocks worth',
+      title: 'Your stocks worth',
       icon: 'cash-outline',
       value: `$ ${GetMoneyAmount(GetUserStocksAmount().averagePrice).value}.${
         GetMoneyAmount(GetUserStocksAmount().averagePrice).decimal
@@ -148,7 +148,7 @@ export default function TransactionBlockModal(props: any) {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: 60,
+          height: 50,
           width: '100%',
           paddingHorizontal: 20,
           opacity: theme === item.state ? 1 : 0.5,

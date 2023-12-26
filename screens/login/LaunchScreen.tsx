@@ -13,6 +13,7 @@ import {
   AddSecondsToDateTime,
   CalculateStock,
   CreateDefaultHistory,
+  FilterRecentDividendsHistory,
   GetElapsedHistory,
   UpdateCompaniesData,
   countElapsedPeriods,
@@ -20,12 +21,37 @@ import {
 import defaultData from '../../defaultData.json'
 import { MMKV } from 'react-native-mmkv'
 import rules from '../../constants/rules'
+import Toast from 'react-native-toast-message'
+
 export const storage = new MMKV()
 
 const width = Dimensions.get('screen').width
 
 export default function LaunchScreen({ navigation }: any) {
   const dispatch = useDispatch()
+
+  function SetUserDividends(dividends: any[], user: User) {
+    const value = dividends.reduce((a: any, b: any) => a + b.value, 0)
+    const lastDividends = user.dividendsHistory || []
+    const newUserData: User = {
+      ...user,
+      cash: +(user.cash + value).toFixed(2),
+      dividendsHistory: FilterRecentDividendsHistory([
+        ...lastDividends,
+        ...dividends,
+      ]),
+    }
+
+    dispatch(updateUser(newUserData))
+    storage.set('user', JSON.stringify(newUserData))
+    Toast.show({
+      type: 'ToastMessage',
+      props: {
+        title: `You have received your stock dividend`,
+      },
+      position: 'bottom',
+    })
+  }
 
   function GetStorage() {
     const theme: any = storage.getString('theme')
@@ -56,9 +82,23 @@ export default function LaunchScreen({ navigation }: any) {
     }
 
     const companies: any = storage.getString('companies')
-    //!!companies && JSON.parse(companies).length
-    if (!!companies && JSON.parse(companies).length) {
-      dispatch(updateCompanies(JSON.parse(companies)))
+    //!!companies && JSON.parse(companies).length && JSON.parse(user).name
+    if (
+      !!companies &&
+      JSON.parse(companies).length &&
+      !!user &&
+      JSON.parse(user).name
+    ) {
+      const newCompaniesData = UpdateCompaniesData(
+        JSON.parse(user).stocks,
+        JSON.parse(companies)
+      )
+      const dividends = newCompaniesData.dividends
+      if (dividends.length && JSON.parse(user).name) {
+        SetUserDividends(dividends, JSON.parse(user))
+      }
+      dispatch(updateCompanies(newCompaniesData.data))
+      storage.set('companies', JSON.stringify(newCompaniesData.data))
     } else {
       const defaultCompanies = UpdateCompaniesData(
         [],
