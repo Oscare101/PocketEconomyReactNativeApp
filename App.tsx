@@ -23,9 +23,13 @@ import {
   countElapsedPeriods,
 } from './functions/functions'
 import { MMKV } from 'react-native-mmkv'
-import { User } from './constants/interfaces'
+import { User, UserDeposit } from './constants/interfaces'
 import { updateUser } from './redux/user'
 import * as Notifications from 'expo-notifications'
+import {
+  CheckMatureDeposits,
+  GetDepositReturn,
+} from './functions/depositFunctions'
 
 export const storage = new MMKV()
 
@@ -123,6 +127,34 @@ export default function App() {
       })
     }
 
+    function RemoveMatureDeposits() {
+      const matureDeposits = CheckMatureDeposits(user.deposits)
+      const matureDepositsSum = matureDeposits.reduce(
+        (a: number, b: UserDeposit) =>
+          a + GetDepositReturn(b.value, b.durationHours, b.interest),
+        0
+      )
+      const newDepositsArr = user.deposits.filter(
+        (d: UserDeposit) => !matureDeposits.find(d.name)
+      )
+      const newUserData: User = {
+        ...user,
+        cash: +(user.cash + matureDepositsSum).toFixed(2),
+        deposits: newDepositsArr,
+      }
+      console.log(newUserData) // TODO check deposit return
+
+      // dispatch(updateUser(newUserData))
+      // storage.set('user', JSON.stringify(newUserData))
+      Toast.show({
+        type: 'ToastMessage',
+        props: {
+          title: `The deposit has been repaid`,
+        },
+        position: 'bottom',
+      })
+    }
+
     function SetNewData() {
       const newCompaniesData = UpdateCompaniesData(user.stocks, companies)
       const dividends = newCompaniesData.dividends
@@ -145,6 +177,10 @@ export default function App() {
           )
         ) {
           SetNewData()
+        }
+
+        if (CheckMatureDeposits(user.deposits).length) {
+          RemoveMatureDeposits()
         }
 
         setLastUpdate(new Date().getTime())

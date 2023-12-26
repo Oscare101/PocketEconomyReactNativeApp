@@ -24,6 +24,7 @@ import RatingInfoModal from './RatingInfoModal'
 import PersonalStocksProgressModal from './PersonalStocksProgressModal'
 import EconomicsGrowsInfoModal from './EconomicsGrowsInfoModal'
 import DividendsInfoModal from './DividendsInfoModal'
+import DepositInfoModal from './DepositInfoModal'
 export default function BottomModalBlock(props: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
@@ -41,6 +42,7 @@ export default function BottomModalBlock(props: any) {
     PersonalStockProgress: <PersonalStocksProgressModal />,
     EconomicsGrowsInfo: <EconomicsGrowsInfoModal />,
     DividendsInfo: <DividendsInfoModal />,
+    DepositInfo: <DepositInfoModal />,
   }
 
   return (

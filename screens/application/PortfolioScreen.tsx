@@ -18,7 +18,6 @@ import {
   GetMoneyAmount,
   GetPortfolioProgress,
   GetRatingPerPeriod,
-  GetUserDepositsCapital,
   GetUserDividendsValue,
   GetUserRating,
   GetUserStocksCapital,
@@ -36,6 +35,7 @@ import {
 } from '@gorhom/bottom-sheet'
 import BottomModalBlock from '../../components/BottomModalBlock'
 import rules from '../../constants/rules'
+import { GetUserDepositsCapital } from '../../functions/depositFunctions'
 
 const width = Dimensions.get('screen').width
 
@@ -93,14 +93,23 @@ export default function PortfolioScreen({ navigation }: any) {
       icon: 'briefcase-outline',
       title: 'Capital',
       value: `$ ${
-        GetMoneyAmount(GetUserStocksCapital(user.stocks, companies) + user.cash)
-          .value
+        GetMoneyAmount(
+          GetUserStocksCapital(user.stocks, companies) +
+            user.cash +
+            GetUserDepositsCapital(user.deposits)
+        ).value
       }.${
-        GetMoneyAmount(GetUserStocksCapital(user.stocks, companies) + user.cash)
-          .decimal
+        GetMoneyAmount(
+          GetUserStocksCapital(user.stocks, companies) +
+            user.cash +
+            GetUserDepositsCapital(user.deposits)
+        ).decimal
       } ${
-        GetMoneyAmount(GetUserStocksCapital(user.stocks, companies) + user.cash)
-          .title
+        GetMoneyAmount(
+          GetUserStocksCapital(user.stocks, companies) +
+            user.cash +
+            GetUserDepositsCapital(user.deposits)
+        ).title
       }`,
     },
     {
@@ -310,6 +319,38 @@ export default function PortfolioScreen({ navigation }: any) {
           </Text>
         )}
       </TouchableOpacity>
+    )
+  }
+
+  function RenderUserDepositItem({ item }: any) {
+    return (
+      <View
+        style={[
+          styles.rowBetween,
+          { height: width * 0.08, marginVertical: 0, marginTop: 5 },
+        ]}
+      >
+        <Ionicons
+          name={'open-outline'}
+          size={width * 0.05}
+          color={colors[themeColor].comment}
+        />
+        <Text
+          style={[
+            styles.userStockTitle,
+            { color: colors[themeColor].comment, flex: 1 },
+          ]}
+          numberOfLines={1}
+        >
+          {item.name}
+        </Text>
+
+        <Text style={[styles.money, { color: colors[themeColor].text }]}>
+          $ {GetMoneyAmount(item.value).value}.
+          {GetMoneyAmount(item.value).decimal}{' '}
+          {GetMoneyAmount(item.value).title}
+        </Text>
+      </View>
     )
   }
 
@@ -608,15 +649,15 @@ export default function PortfolioScreen({ navigation }: any) {
               }}
             />
             {/* TODO finish deposits */}
-            {/* {item.data?.length ? (
-              <FlatList data={item.data} renderItem={RenderUserStockItem} />
+            {item.data?.length ? (
+              <FlatList data={item.data} renderItem={RenderUserDepositItem} />
             ) : (
               <Text
                 style={[styles.comment, { color: colors[themeColor].comment }]}
               >
                 No deposits yet
               </Text>
-            )} */}
+            )}
           </>
         ) : (
           <></>

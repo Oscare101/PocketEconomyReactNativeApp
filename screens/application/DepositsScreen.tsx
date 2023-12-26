@@ -71,13 +71,9 @@ export default function DepositsScreen({ navigation }: any) {
       { title: 'Duration', value: `${item.durationHours} h` },
       {
         title: 'Value',
-        value: `$ ${GetMoneyAmount(item.minValue).value}.${
-          GetMoneyAmount(item.minValue).decimal
-        } ${GetMoneyAmount(item.minValue).title} - $ ${
-          GetMoneyAmount(item.maxValue).value
-        }.${GetMoneyAmount(item.maxValue).decimal} ${
-          GetMoneyAmount(item.maxValue).title
-        }`,
+        value: `$ ${GetMoneyAmount(item.value).value}.${
+          GetMoneyAmount(item.value).decimal
+        } ${GetMoneyAmount(item.value).title}`,
       },
     ]
 
@@ -164,19 +160,29 @@ export default function DepositsScreen({ navigation }: any) {
         showsVerticalScrollIndicator={false}
         style={{ flex: 1, width: '100%' }}
       >
-        <View
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            navigation.navigate('CreateDepositScreen')
+          }}
           style={[
-            styles.card,
+            styles.button,
             { backgroundColor: colors[themeColor].cardColor },
           ]}
-        ></View>
+        >
+          <Text
+            style={[styles.buttonTitle, { color: colors[themeColor].text }]}
+          >
+            New Deposit
+          </Text>
+        </TouchableOpacity>
         <Text style={[styles.title, { color: colors[themeColor].comment }]}>
           Available deposits:
         </Text>
         <FlatList
           scrollEnabled={false}
           style={{ width: '100%' }}
-          data={depositsData}
+          data={user.deposits}
           renderItem={RenderDepositItem}
         />
       </ScrollView>
@@ -199,6 +205,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: 'center',
   },
+  button: {
+    width: '92%',
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 10,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   title: {
     fontSize: width * 0.05,
     width: '92%',
@@ -207,4 +222,5 @@ const styles = StyleSheet.create({
   depositName: {
     fontSize: width * 0.04,
   },
+  buttonTitle: { fontSize: width * 0.07 },
 })

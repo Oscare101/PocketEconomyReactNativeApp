@@ -382,13 +382,6 @@ export function ReduceUserStocks(
   return newUserStocks.filter((s: UserStock) => s.amount)
 }
 
-export function GetUserDepositsCapital(deposits: any[]) {
-  const depositsValue: number =
-    deposits?.reduce((a: any, b: any) => a + b.value, 0) || 0
-
-  return depositsValue
-}
-
 export function GetUserAllTimeProgress(user: User, companies: any[]) {
   const start = rules.user.startCash
   const finish = GetUserStocksCapital(user.stocks, companies) + user.cash

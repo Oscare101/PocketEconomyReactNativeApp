@@ -19,6 +19,7 @@ import CustomBottomTabContent from '../components/CustomBottomTabContent'
 import DepositsScreen from '../screens/application/DepositsScreen'
 import AnalyticsScreen from '../screens/application/AnalyticsScreen'
 import DividendsScreen from '../screens/application/DividendsScreen'
+import CreateDepositScreen from '../screens/application/CreateDepositScreen'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -119,6 +120,18 @@ export default function MainNavigation() {
         }}
         name="DividendsScreen"
         component={DividendsScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="CreateDepositScreen"
+        component={CreateDepositScreen}
       />
     </Stack.Navigator>
   )

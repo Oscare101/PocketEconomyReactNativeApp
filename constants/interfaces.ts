@@ -29,9 +29,10 @@ export interface UserStock {
 export interface UserDeposit {
   name: string
   value: number
+  interest: number
   openingDate: string
   openingTime: string
-  durationHours: string
+  durationHours: number
 }
 
 export interface UserHistory {
