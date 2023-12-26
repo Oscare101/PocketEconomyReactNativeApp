@@ -2,6 +2,7 @@ import { Dimensions, Text, View, useColorScheme } from 'react-native'
 import colors from '../constants/colors'
 import { RootState } from '../redux'
 import { useSelector } from 'react-redux'
+import rules from '../constants/rules'
 
 const width = Dimensions.get('screen').width
 
@@ -47,7 +48,8 @@ export default function DividendsInfoModal() {
           Dividends are part of the profit that the company pays to its
           investors, each company has statistics on the regularity of dividend
           payments, and the amount of interest to which payments are made{'\n'}
-          Dividends are paid at 9:00 a.m. each day automatically
+          Dividends are paid at {rules.stock.dividendTime} a.m. each day
+          automatically
           {'\n'}Some companies may skip paying dividends altogether{'\n'}If your
           dividend payment is less than $0.01, you get nothing
         </Text>

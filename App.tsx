@@ -25,6 +25,8 @@ import {
 import { MMKV } from 'react-native-mmkv'
 import { User } from './constants/interfaces'
 import { updateUser } from './redux/user'
+import * as Notifications from 'expo-notifications'
+
 export const storage = new MMKV()
 
 export default function App() {
@@ -63,6 +65,33 @@ export default function App() {
 
     const themeColor: any = theme === 'system' ? systemTheme : theme
     const dispatch = useDispatch()
+
+    useEffect(() => {
+      // Забезпечте права для повідомлень
+      Notifications.requestPermissionsAsync()
+
+      // Встановлення щоденного повідомлення о 9:00
+      const scheduleNotification = async () => {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Check your dividends',
+            subtitle: 'Sub',
+            body: 'You may have already received dividends',
+            color: '#000000',
+            badge: 1,
+          },
+          trigger: {
+            hour: 9,
+            minute: 0,
+            repeats: true,
+          },
+        })
+
+        // await Notifications.cancelAllScheduledNotificationsAsync()
+      }
+
+      scheduleNotification()
+    }, [])
 
     useEffect(() => {
       NavigationBar.setBackgroundColorAsync(colors[themeColor].bgColor)

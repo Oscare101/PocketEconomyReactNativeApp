@@ -123,7 +123,7 @@ export default function PortfolioScreen({ navigation }: any) {
     {
       type: 'Stocks',
       title: 'Stocks',
-      icon: 'analytics-outline',
+      icon: 'trending-up-outline',
       value: `$ ${
         GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).value
       }.${
