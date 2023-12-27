@@ -173,7 +173,7 @@ export default function CustomDrawerContent(props: any) {
                 $ {GetMoneyAmount(user.cash).value}.
                 <Text style={styles.moneyDecimal}>
                   {GetMoneyAmount(user.cash).decimal}
-                </Text>{' '}
+                </Text>
                 {GetMoneyAmount(user.cash).title}
               </Text>
             </View>

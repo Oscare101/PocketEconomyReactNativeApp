@@ -33,7 +33,7 @@ export interface UserDeposit {
   openingDate: string
   openingTime: string
   durationHours: number
-  autoRenewal?: boolean // TODO remove ?
+  autoRenewal: boolean
 }
 
 export interface UserHistory {
@@ -49,6 +49,22 @@ export interface DividendHistory {
   date: string
 }
 
+export interface RealEstate {
+  region: string
+  name: string
+  value: number
+  popularity: number
+}
+
+export interface UserRealEstate {
+  region: string
+  name: string
+  value: number
+  popularity: number
+  price: number
+  occupancyRate: number
+}
+
 export interface User {
   name: string
   loginDate: string
@@ -57,4 +73,5 @@ export interface User {
   history: UserHistory[]
   deposits: UserDeposit[]
   dividendsHistory: DividendHistory[]
+  realEstate?: UserRealEstate[]
 }

@@ -241,7 +241,7 @@ export default function InvestScreen({ navigation }: any) {
               {
                 GetMoneyAmount(item.history[item.history.length - 1].price)
                   .decimal
-              }{' '}
+              }
               {
                 GetMoneyAmount(item.history[item.history.length - 1].price)
                   .title

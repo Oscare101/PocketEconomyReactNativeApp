@@ -84,7 +84,7 @@ export default function PortfolioScreen({ navigation }: any) {
     },
     {
       title: 'Rating (all time)',
-      valueAvailable: true, //IsPeriodEnough(companies, rules.stock.tactsPerDay), // TODO check
+      valueAvailable: true,
       value: `${GetUserRating(user, companies).toFixed(2)}`,
       ratingIcon: true,
       infoModalData: 'RatingInfo',
@@ -108,7 +108,7 @@ export default function PortfolioScreen({ navigation }: any) {
             user.cash +
             GetUserDepositsCapital(user.deposits)
         ).decimal
-      } ${
+      }${
         GetMoneyAmount(
           GetUserStocksCapital(user.stocks, companies) +
             user.cash +
@@ -122,7 +122,7 @@ export default function PortfolioScreen({ navigation }: any) {
       title: 'Cash',
       value: `$ ${GetMoneyAmount(user.cash).value}.${
         GetMoneyAmount(user.cash).decimal
-      } ${GetMoneyAmount(user.cash).title}`,
+      }${GetMoneyAmount(user.cash).title}`,
     },
     {
       type: 'Rating',
@@ -141,7 +141,7 @@ export default function PortfolioScreen({ navigation }: any) {
         GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).value
       }.${
         GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).decimal
-      } ${GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).title}`,
+      }${GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).title}`,
       progress: GetPortfolioProgress(user, companies, 0).toFixed(2),
       data: user.stocks,
     },
@@ -155,10 +155,10 @@ export default function PortfolioScreen({ navigation }: any) {
     {
       type: 'Deposits',
       title: 'Deposits',
-      icon: 'card-outline',
+      icon: 'wallet-outline',
       value: `$ ${
         GetMoneyAmount(GetUserDepositsCapital(user.deposits)).value
-      }.${GetMoneyAmount(GetUserDepositsCapital(user.deposits)).decimal} ${
+      }.${GetMoneyAmount(GetUserDepositsCapital(user.deposits)).decimal}${
         GetMoneyAmount(GetUserDepositsCapital(user.deposits)).title
       }`,
       data: user.deposits,
@@ -269,7 +269,7 @@ export default function PortfolioScreen({ navigation }: any) {
         ) : (
           <Text style={[styles.money, { color: colors[themeColor].text }]}>
             $ {GetMoneyAmount(item.amount * currentStockPrice).value}.
-            {GetMoneyAmount(item.amount * currentStockPrice).decimal}{' '}
+            {GetMoneyAmount(item.amount * currentStockPrice).decimal}
             {GetMoneyAmount(item.amount * currentStockPrice).title}
           </Text>
         )}
@@ -313,7 +313,7 @@ export default function PortfolioScreen({ navigation }: any) {
         {dividends.length ? (
           <Text style={[styles.money, { color: colors[themeColor].text }]}>
             $ {GetMoneyAmount(dividendsSum).value}.
-            {GetMoneyAmount(dividendsSum).decimal}{' '}
+            {GetMoneyAmount(dividendsSum).decimal}
             {GetMoneyAmount(dividendsSum).title}
           </Text>
         ) : (
@@ -369,7 +369,7 @@ export default function PortfolioScreen({ navigation }: any) {
               ]}
             >
               $ {GetMoneyAmount(item.value).value}.
-              {GetMoneyAmount(item.value).decimal}{' '}
+              {GetMoneyAmount(item.value).decimal}
               {GetMoneyAmount(item.value).title}
             </Text>
           </View>
@@ -636,7 +636,7 @@ export default function PortfolioScreen({ navigation }: any) {
               {
                 GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
                   .decimal
-              }{' '}
+              }
               {
                 GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
                   .title

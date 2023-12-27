@@ -32,6 +32,7 @@ import Toast from 'react-native-toast-message'
 import { updateUser } from '../../redux/user'
 import { MMKV } from 'react-native-mmkv'
 import rules from '../../constants/rules'
+import { FlatList } from 'react-native-gesture-handler'
 
 export const storage = new MMKV()
 
@@ -192,7 +193,7 @@ export default function CreateDepositScreen({ navigation }: any) {
             }}
           >
             $ {GetMoneyAmount(user.cash).value}.
-            {GetMoneyAmount(user.cash).decimal}{' '}
+            {GetMoneyAmount(user.cash).decimal}
             {GetMoneyAmount(user.cash).title}
           </Text>
         </View>
@@ -208,7 +209,7 @@ export default function CreateDepositScreen({ navigation }: any) {
           {
             backgroundColor: colors[themeColor].cardColor,
             flexDirection: 'row',
-            justifyContent: 'space-around',
+            justifyContent: 'space-between',
           },
         ]}
       >
@@ -269,11 +270,13 @@ export default function CreateDepositScreen({ navigation }: any) {
                 color: autoRenewal
                   ? colors[themeColor].text
                   : colors[themeColor].comment,
+                fontWeight: '300',
               },
             ]}
           >
             Auto Renewal
           </Text>
+
           <Switch
             style={{ transform: [{ scale: 1.2 }] }}
             trackColor={{
@@ -331,7 +334,7 @@ export default function CreateDepositScreen({ navigation }: any) {
                   )
                 ).decimal
               }
-            </Text>{' '}
+            </Text>
             {
               GetMoneyAmount(
                 GetDepositInterestReturn(+depositValue, durationHours, interest)

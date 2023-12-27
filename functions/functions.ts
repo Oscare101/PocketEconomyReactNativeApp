@@ -5,12 +5,12 @@ import { GetUserDepositsCapital } from './depositFunctions'
 
 export function GetMoneyAmount(money: number) {
   const grades = [
-    { value: 10 ** 6, title: 'M' },
-    { value: 10 ** 9, title: 'B' },
-    { value: 10 ** 12, title: 'T' },
-    { value: 10 ** 15, title: 'Q' },
-    { value: 10 ** 18, title: 'Qn' },
-    { value: 10 ** 21, title: 'S' },
+    { value: 10 ** 6, title: ' M' },
+    { value: 10 ** 9, title: ' B' },
+    { value: 10 ** 12, title: ' T' },
+    { value: 10 ** 15, title: ' Q' },
+    { value: 10 ** 18, title: ' Qn' },
+    { value: 10 ** 21, title: ' S' },
   ]
   let moneyGrade: any = {}
   grades.forEach((g: any) => {

@@ -23,6 +23,7 @@ import {
 import { useState } from 'react'
 import { updateUser } from '../redux/user'
 import Toast from 'react-native-toast-message'
+import rules from '../constants/rules'
 export const storage = new MMKV()
 
 export default function TransactionBlockModal(props: any) {
@@ -46,9 +47,24 @@ export default function TransactionBlockModal(props: any) {
     return currentCompany.history[currentCompany.history.length - 1].price
   }
 
+  function GetCompanyStocksAmountLeft() {
+    const currentCompany: any = companies.find(
+      (c: any) => c.name === props.transactionStockName
+    )
+    const userStockAmount = GetUserStocksAmount().stockAmount
+
+    return (
+      rules.stock.companySizeStocksAmount[currentCompany.stat.companySize - 1] -
+      userStockAmount
+    )
+  }
+
   function GetAmountOfStocksCanBuy() {
+    const amounOfStocks = GetCompanyStocksAmountLeft()
     const amountOfStocksCanBuy = Math.floor(user.cash / GetCompanyPrice())
-    return amountOfStocksCanBuy
+    return amountOfStocksCanBuy > amounOfStocks
+      ? amounOfStocks
+      : amountOfStocksCanBuy
   }
 
   function GetUserStocksAmount() {
@@ -72,14 +88,14 @@ export default function TransactionBlockModal(props: any) {
       icon: 'cash-outline',
       value: `$ ${GetMoneyAmount(GetUserStocksAmount().averagePrice).value}.${
         GetMoneyAmount(GetUserStocksAmount().averagePrice).decimal
-      } ${GetMoneyAmount(GetUserStocksAmount().averagePrice).title}`,
+      }${GetMoneyAmount(GetUserStocksAmount().averagePrice).title}`,
     },
     {
       title: 'Current stocks price',
       icon: 'receipt-outline',
       value: `$ ${GetMoneyAmount(GetCompanyPrice()).value}.${
         GetMoneyAmount(GetCompanyPrice()).decimal
-      } ${GetMoneyAmount(GetCompanyPrice()).title}`,
+      }${GetMoneyAmount(GetCompanyPrice()).title}`,
     },
     // {
     //   state: 'light',
@@ -279,7 +295,7 @@ export default function TransactionBlockModal(props: any) {
             }}
           >
             $ {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).value}.
-            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).decimal}{' '}
+            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).decimal}
             {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).title}
           </Text>
         </View>
@@ -410,7 +426,7 @@ export default function TransactionBlockModal(props: any) {
             }}
           >
             $ {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).value}.
-            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).decimal}{' '}
+            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).decimal}
             {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).title}
           </Text>
         </View>

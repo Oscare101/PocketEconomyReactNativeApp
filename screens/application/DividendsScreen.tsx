@@ -62,7 +62,7 @@ export default function DividendsScreen({ navigation, route }: any) {
             {item.interest} % =
           </Text>{' '}
           $ {GetMoneyAmount(item.value).value}.
-          {GetMoneyAmount(item.value).decimal}{' '}
+          {GetMoneyAmount(item.value).decimal}
           {GetMoneyAmount(item.value).title}
         </Text>
       </TouchableOpacity>
@@ -114,7 +114,7 @@ export default function DividendsScreen({ navigation, route }: any) {
               {
                 GetMoneyAmount(GetUserDividendsValue(route.params.dividends))
                   .decimal
-              }{' '}
+              }
               {
                 GetMoneyAmount(GetUserDividendsValue(route.params.dividends))
                   .title

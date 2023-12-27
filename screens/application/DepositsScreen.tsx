@@ -78,7 +78,7 @@ export default function DepositsScreen({ navigation }: any) {
         title: 'Value',
         value: `$ ${GetMoneyAmount(item.value).value}.${
           GetMoneyAmount(item.value).decimal
-        } ${GetMoneyAmount(item.value).title}`,
+        }${GetMoneyAmount(item.value).title}`,
       },
       {
         title: 'Next payment',

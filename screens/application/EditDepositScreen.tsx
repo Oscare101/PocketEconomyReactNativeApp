@@ -85,7 +85,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
       title: '$',
       value: `${GetMoneyAmount(route.params.deposit.value).value}.${
         GetMoneyAmount(route.params.deposit.value).decimal
-      } ${GetMoneyAmount(route.params.deposit.value).title}`,
+      }${GetMoneyAmount(route.params.deposit.value).title}`,
     },
     {
       title: 'Interest',
@@ -244,7 +244,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
                       )
                     ).decimal
                   }
-                </Text>{' '}
+                </Text>
                 {
                   GetMoneyAmount(
                     GetDepositInterestReturn(

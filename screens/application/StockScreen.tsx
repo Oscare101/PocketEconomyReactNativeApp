@@ -102,7 +102,14 @@ export default function StockScreen({ navigation, route }: any) {
     //   ?.averagePrice || 0
     return `$ ${GetMoneyAmount(amount * price).value}.${
       GetMoneyAmount(amount * price).decimal
-    } ${GetMoneyAmount(amount * price).title}`
+    }${GetMoneyAmount(amount * price).title}`
+  }
+
+  function GetUserStockAmount() {
+    const stockAmount =
+      user.stocks.find((s: any) => s.name === route.params.companyName)
+        ?.amount || 0
+    return stockAmount
   }
 
   const companyStatData = [
@@ -140,11 +147,20 @@ export default function StockScreen({ navigation, route }: any) {
         GetMoneyAmount(
           GetCompany().history[GetCompany().history.length - 1].price
         ).decimal
-      } ${
+      }${
         GetMoneyAmount(
           GetCompany().history[GetCompany().history.length - 1].price
         ).title
       }`,
+    },
+    {
+      title: 'Public stocks amount',
+      statIcon: false,
+      value: rules.stock.companySizeStocksAmount[
+        GetCompany().stat.companySize - 1
+      ]
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     },
     {
       title: 'Last update',
@@ -170,10 +186,16 @@ export default function StockScreen({ navigation, route }: any) {
       value:
         user.stocks.find((s: any) => s.name === route.params.companyName)
           ?.amount || 0,
+      disable: !user.stocks.find(
+        (s: any) => s.name === route.params.companyName
+      ),
     },
     {
       title: 'Your stocks price',
       value: GetUserStockPrice(),
+      disable: !user.stocks.find(
+        (s: any) => s.name === route.params.companyName
+      ),
     },
     {
       title: 'Your stocks growth',
@@ -540,15 +562,38 @@ export default function StockScreen({ navigation, route }: any) {
                     backgroundColor: colors[themeColor].cardColor,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
+                    alignItems: 'center',
                   },
                 ]}
               >
-                <Text style={{ color: colors[themeColor].text }}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => setPressedPrice(null)}
+                >
+                  <Ionicons
+                    name="close-outline"
+                    size={width * 0.05}
+                    color={colors[themeColor].text}
+                  />
+                </TouchableOpacity>
+                <Text
+                  style={{
+                    color: colors[themeColor].text,
+                    flex: 1,
+                    marginLeft: 10,
+                    fontSize: width * 0.04,
+                  }}
+                >
                   {pressedPrice?.date} {pressedPrice?.time}
                 </Text>
-                <Text style={{ color: colors[themeColor].text }}>
+                <Text
+                  style={{
+                    color: colors[themeColor].text,
+                    fontSize: width * 0.04,
+                  }}
+                >
                   $ {GetMoneyAmount(pressedPrice?.price).value}.
-                  {GetMoneyAmount(pressedPrice?.price).decimal}{' '}
+                  {GetMoneyAmount(pressedPrice?.price).decimal}
                   {GetMoneyAmount(pressedPrice?.price).title}
                 </Text>
               </View>
