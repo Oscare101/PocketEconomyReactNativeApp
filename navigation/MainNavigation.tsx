@@ -21,6 +21,7 @@ import AnalyticsScreen from '../screens/application/AnalyticsScreen'
 import DividendsScreen from '../screens/application/DividendsScreen'
 import CreateDepositScreen from '../screens/application/CreateDepositScreen'
 import EditDepositScreen from '../screens/application/EditDepositScreen'
+import RealEstateScreen from '../screens/application/RealEstateScreen'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -75,6 +76,11 @@ export default function MainNavigation() {
           options={{ headerShown: false }}
           name="AnalyticsScreen"
           component={AnalyticsScreen}
+        />
+        <Drawer.Screen
+          options={{ headerShown: false }}
+          name="RealEstateScreen"
+          component={RealEstateScreen}
         />
       </Drawer.Navigator>
     )

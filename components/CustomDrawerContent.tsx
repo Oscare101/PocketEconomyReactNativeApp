@@ -40,6 +40,7 @@ export default function CustomDrawerContent(props: any) {
       icon: 'analytics-outline',
       screen: 'AnalyticsScreen',
     },
+    { title: 'Real Estate', icon: '', screen: 'RealEstateScreen' },
   ]
 
   function RenderScreenButtonItem({ item }: any) {
