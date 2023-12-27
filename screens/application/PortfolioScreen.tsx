@@ -35,7 +35,10 @@ import {
 } from '@gorhom/bottom-sheet'
 import BottomModalBlock from '../../components/BottomModalBlock'
 import rules from '../../constants/rules'
-import { GetUserDepositsCapital } from '../../functions/depositFunctions'
+import {
+  GetDepositMatureDateTime,
+  GetUserDepositsCapital,
+} from '../../functions/depositFunctions'
 
 const width = Dimensions.get('screen').width
 
@@ -63,7 +66,7 @@ export default function PortfolioScreen({ navigation }: any) {
       value: `${CountDaysPlayed(user.loginDate)} d`,
     },
     {
-      title: 'Rating (last 1h)',
+      title: 'Stocks overtake (last 1h)',
       valueAvailable: IsPeriodEnough(companies, rules.stock.tactsPerHour),
       value: IsPeriodEnough(companies, rules.stock.tactsPerHour)
         ? `${GetRatingPerPeriod(user, companies, rules.stock.tactsPerHour)}`
@@ -71,19 +74,20 @@ export default function PortfolioScreen({ navigation }: any) {
       ratingIcon: true,
     },
     {
-      title: 'Rating (last 24h)',
+      title: 'Stocks overtake (last 24h)',
       valueAvailable: IsPeriodEnough(companies, rules.stock.tactsPerDay),
       value: IsPeriodEnough(companies, rules.stock.tactsPerDay)
         ? `${GetRatingPerPeriod(user, companies, rules.stock.tactsPerDay)}`
         : '',
       ratingIcon: true,
+      infoModalData: 'StocksOvertakeInfo',
     },
     {
       title: 'Rating (all time)',
-      valueAvailable: IsPeriodEnough(companies, rules.stock.tactsPerDay),
+      valueAvailable: true, //IsPeriodEnough(companies, rules.stock.tactsPerDay), // TODO check
       value: `${GetUserRating(user, companies).toFixed(2)}`,
       ratingIcon: true,
-      infoModalData: 'Rating',
+      infoModalData: 'RatingInfo',
     },
   ]
 
@@ -148,7 +152,6 @@ export default function PortfolioScreen({ navigation }: any) {
       // value: `$ 000`,
       data: user.dividendsHistory,
     },
-    // TODO finish deposits
     {
       type: 'Deposits',
       title: 'Deposits',
@@ -179,7 +182,7 @@ export default function PortfolioScreen({ navigation }: any) {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              setBottomSheetContent('RatingInfo')
+              setBottomSheetContent(item.infoModalData)
               bottomSheetModalRef.current?.present()
             }}
           >
@@ -239,7 +242,7 @@ export default function PortfolioScreen({ navigation }: any) {
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.05}
+          size={width * 0.04}
           color={colors[themeColor].comment}
         />
         <Text
@@ -296,7 +299,7 @@ export default function PortfolioScreen({ navigation }: any) {
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.05}
+          size={width * 0.04}
           color={colors[themeColor].comment}
         />
         <Text
@@ -324,33 +327,96 @@ export default function PortfolioScreen({ navigation }: any) {
 
   function RenderUserDepositItem({ item }: any) {
     return (
-      <View
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() =>
+          navigation.navigate('EditDepositScreen', { deposit: item })
+        }
         style={[
           styles.rowBetween,
-          { height: width * 0.08, marginVertical: 0, marginTop: 5 },
+          // { height: width * 0.08, marginVertical: 0, marginTop: 5 },
         ]}
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.05}
+          size={width * 0.04}
           color={colors[themeColor].comment}
         />
-        <Text
-          style={[
-            styles.userStockTitle,
-            { color: colors[themeColor].comment, flex: 1 },
-          ]}
-          numberOfLines={1}
-        >
-          {item.name}
-        </Text>
+        <View style={styles.collumnEnd}>
+          <View style={[styles.rowBetween, { marginVertical: 1 }]}>
+            <Text
+              style={[
+                styles.userStockTitle,
+                { color: colors[themeColor].text },
+              ]}
+              numberOfLines={1}
+            >
+              {item.name}
+            </Text>
+            {item.autoRenewal ? (
+              <Ionicons
+                name="repeat-outline"
+                size={width * 0.04}
+                color={colors[themeColor].successText}
+              />
+            ) : (
+              <></>
+            )}
+            <Text
+              style={[
+                styles.money,
+                { color: colors[themeColor].text, flex: 1, textAlign: 'right' },
+              ]}
+            >
+              $ {GetMoneyAmount(item.value).value}.
+              {GetMoneyAmount(item.value).decimal}{' '}
+              {GetMoneyAmount(item.value).title}
+            </Text>
+          </View>
+          <View style={[styles.rowBetween, { marginVertical: 1 }]}>
+            <Text
+              style={[
+                styles.userStockTitle,
+                {
+                  color: colors[themeColor].comment,
+                  flex: 1,
+                  fontSize: width * 0.03,
+                },
+              ]}
+              numberOfLines={1}
+            >
+              Payment{' '}
+              {
+                GetDepositMatureDateTime(
+                  item.openingDate,
+                  item.openingTime,
+                  item.durationHours
+                ).date
+              }{' '}
+              {
+                GetDepositMatureDateTime(
+                  item.openingDate,
+                  item.openingTime,
+                  item.durationHours
+                ).time
+              }
+            </Text>
+            <Text
+              style={[
+                {
+                  color: colors[themeColor].comment,
+                  // flex: 1,
+                  fontSize: width * 0.03,
+                },
+              ]}
+            >
+              {item.interest} %
+            </Text>
+          </View>
+        </View>
 
-        <Text style={[styles.money, { color: colors[themeColor].text }]}>
-          $ {GetMoneyAmount(item.value).value}.
-          {GetMoneyAmount(item.value).decimal}{' '}
-          {GetMoneyAmount(item.value).title}
-        </Text>
-      </View>
+        {/*  */}
+      </TouchableOpacity>
     )
   }
 
@@ -648,8 +714,7 @@ export default function PortfolioScreen({ navigation }: any) {
                 backgroundColor: colors[themeColor].disable,
               }}
             />
-            {/* TODO finish deposits */}
-            {item.data?.length ? (
+            {user.deposits.length ? (
               <FlatList data={item.data} renderItem={RenderUserDepositItem} />
             ) : (
               <Text
@@ -771,5 +836,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-end',
     justifyContent: 'center',
+    flex: 1,
   },
 })

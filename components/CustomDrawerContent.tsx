@@ -105,10 +105,10 @@ export default function CustomDrawerContent(props: any) {
             themeColor === 'dark'
               ? [
                   `${colors[themeColor].infoBg}`,
-                  `${colors[themeColor].infoBg}66`,
+                  `${colors[themeColor].infoBg}99`,
                 ]
               : [
-                  `${colors[themeColor].infoBg}66`,
+                  `${colors[themeColor].infoBg}99`,
                   `${colors[themeColor].infoBg}`,
                 ]
           }

@@ -1,11 +1,11 @@
 import { UserDeposit } from '../constants/interfaces'
 
-export function GetDepositReturn(
+export function GetDepositInterestReturn(
   value: number,
   durating: number,
   interest: number
 ) {
-  const result = value * (1 + (interest * (durating / 24)) / 100)
+  const result = value * ((interest * (durating / 24)) / 100)
   return +result.toFixed(2)
 }
 
@@ -52,4 +52,38 @@ export function GetUserDepositsCapital(deposits: any[]) {
     deposits?.reduce((a: any, b: any) => a + b.value, 0) || 0
 
   return depositsValue
+}
+
+export function GetDepositsReturnAmount(deposits: any[]) {
+  const sum: number = deposits.reduce(
+    (a: number, b: UserDeposit) =>
+      a +
+      GetDepositInterestReturn(b.value, b.durationHours, b.interest) +
+      (b.autoRenewal ? 0 : b.value),
+    0
+  )
+  return sum
+}
+
+export function GetDepositsRenewalLeft(userDeposits: any, matureDeposits: any) {
+  let renewalDeposits: UserDeposit[] = []
+  userDeposits.forEach((d: UserDeposit) => {
+    if (matureDeposits.find((m: UserDeposit) => m.name === d.name)) {
+      if (d.autoRenewal) {
+        const mature = GetDepositMatureDateTime(
+          d.openingDate,
+          d.openingTime,
+          d.durationHours
+        )
+        renewalDeposits.push({
+          ...d,
+          openingDate: mature.date,
+          openingTime: mature.time,
+        })
+      }
+    } else {
+      renewalDeposits.push(d)
+    }
+  })
+  return renewalDeposits
 }

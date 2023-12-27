@@ -28,7 +28,9 @@ import { updateUser } from './redux/user'
 import * as Notifications from 'expo-notifications'
 import {
   CheckMatureDeposits,
-  GetDepositReturn,
+  GetDepositInterestReturn,
+  GetDepositsRenewalLeft,
+  GetDepositsReturnAmount,
 } from './functions/depositFunctions'
 
 export const storage = new MMKV()
@@ -65,36 +67,36 @@ export default function App() {
     const systemTheme = useColorScheme()
     const theme = useSelector((state: RootState) => state.theme)
     const companies = useSelector((state: RootState) => state.companies)
-    const user = useSelector((state: RootState) => state.user)
+    const user: User = useSelector((state: RootState) => state.user)
 
     const themeColor: any = theme === 'system' ? systemTheme : theme
     const dispatch = useDispatch()
 
     useEffect(() => {
-      // Забезпечте права для повідомлень
       Notifications.requestPermissionsAsync()
 
-      // Встановлення щоденного повідомлення о 9:00
-      const scheduleNotification = async () => {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: 'Check your dividends',
-            subtitle: 'Sub',
-            body: 'You may have already received dividends',
-            color: '#000000',
-            badge: 1,
-          },
-          trigger: {
-            hour: 9,
-            minute: 0,
-            repeats: true,
-          },
-        })
+      if (user.stocks.length) {
+        const scheduleNotification = async () => {
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: 'Check your dividends',
+              subtitle: 'Sub',
+              body: 'You may have already received dividends',
+              color: '#000000',
+              badge: 1,
+            },
+            trigger: {
+              hour: 9,
+              minute: 0,
+              repeats: true,
+            },
+          })
 
-        // await Notifications.cancelAllScheduledNotificationsAsync()
+          // await Notifications.cancelAllScheduledNotificationsAsync()
+        }
+
+        scheduleNotification()
       }
-
-      scheduleNotification()
     }, [])
 
     useEffect(() => {
@@ -128,31 +130,32 @@ export default function App() {
     }
 
     function RemoveMatureDeposits() {
-      const matureDeposits = CheckMatureDeposits(user.deposits)
-      const matureDepositsSum = matureDeposits.reduce(
-        (a: number, b: UserDeposit) =>
-          a + GetDepositReturn(b.value, b.durationHours, b.interest),
-        0
-      )
-      const newDepositsArr = user.deposits.filter(
-        (d: UserDeposit) => !matureDeposits.find(d.name)
-      )
-      const newUserData: User = {
-        ...user,
-        cash: +(user.cash + matureDepositsSum).toFixed(2),
-        deposits: newDepositsArr,
-      }
-      console.log(newUserData) // TODO check deposit return
+      let newUserData: User = user
+      while (true) {
+        const isMatureDeposits = CheckMatureDeposits(
+          newUserData.deposits
+        ).length
 
-      // dispatch(updateUser(newUserData))
-      // storage.set('user', JSON.stringify(newUserData))
-      Toast.show({
-        type: 'ToastMessage',
-        props: {
-          title: `The deposit has been repaid`,
-        },
-        position: 'bottom',
-      })
+        const matureDeposits = CheckMatureDeposits(newUserData.deposits)
+        const matureDepositsSum = GetDepositsReturnAmount(matureDeposits)
+
+        const matureDepositsWithRenewal = GetDepositsRenewalLeft(
+          newUserData.deposits,
+          matureDeposits
+        )
+
+        newUserData = {
+          ...newUserData,
+          cash: +(newUserData.cash + matureDepositsSum).toFixed(2),
+          deposits: matureDepositsWithRenewal,
+        }
+
+        if (isMatureDeposits === 0) {
+          dispatch(updateUser(newUserData))
+          storage.set('user', JSON.stringify(newUserData))
+          break
+        }
+      }
     }
 
     function SetNewData() {
@@ -180,7 +183,21 @@ export default function App() {
         }
 
         if (CheckMatureDeposits(user.deposits).length) {
+          // while (true) {
+          //   const isMatureDeposits = CheckMatureDeposits(user.deposits).length
+          //   if (isMatureDeposits === 0) {
+          //     break
+          //   }
           RemoveMatureDeposits()
+          // }
+
+          Toast.show({
+            type: 'ToastMessage',
+            props: {
+              title: `The deposit has been repaid`,
+            },
+            position: 'bottom',
+          })
         }
 
         setLastUpdate(new Date().getTime())

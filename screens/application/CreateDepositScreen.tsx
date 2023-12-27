@@ -17,8 +17,8 @@ import { User, UserDeposit } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useMemo, useRef, useState } from 'react'
 import {
+  GetDepositInterestReturn,
   GetDepositMatureDateTime,
-  GetDepositReturn,
 } from '../../functions/depositFunctions'
 import { GetMoneyAmount } from '../../functions/functions'
 import Button from '../../components/Button'
@@ -31,6 +31,7 @@ import { Ionicons } from '@expo/vector-icons'
 import Toast from 'react-native-toast-message'
 import { updateUser } from '../../redux/user'
 import { MMKV } from 'react-native-mmkv'
+import rules from '../../constants/rules'
 
 export const storage = new MMKV()
 
@@ -46,8 +47,10 @@ export default function CreateDepositScreen({ navigation }: any) {
   const dispatch = useDispatch()
 
   const [depositValue, setDepositValue] = useState<string>('')
-  const [durationHours, setDurationHours] = useState<number>(12)
-  const [interest, setInterest] = useState<number>(4)
+  const [durationHours, setDurationHours] = useState<number>(
+    rules.deposits[0].hours
+  )
+  const [interest, setInterest] = useState<number>(rules.deposits[0].interest)
   const [autoRenewal, setAutoRenewal] = useState<boolean>(false)
 
   const [bottomSheetContent, setBottomSheetContent] =
@@ -69,6 +72,7 @@ export default function CreateDepositScreen({ navigation }: any) {
         .toString()
         .padStart(2, '0')}`,
       durationHours: durationHours,
+      autoRenewal: autoRenewal,
     }
     const newUserData: User = {
       ...user,
@@ -197,12 +201,6 @@ export default function CreateDepositScreen({ navigation }: any) {
   }
 
   function DurationBlock() {
-    const data = [
-      { hours: 12, interest: 4 },
-      { hours: 24, interest: 5 },
-      { hours: 48, interest: 5.5 },
-      { hours: 72, interest: 6 },
-    ]
     return (
       <View
         style={[
@@ -214,8 +212,9 @@ export default function CreateDepositScreen({ navigation }: any) {
           },
         ]}
       >
-        {data.map((item: any, index: number) => (
+        {rules.deposits.map((item: any, index: number) => (
           <TouchableOpacity
+            key={index}
             activeOpacity={0.8}
             onPress={() => {
               setInterest(item.interest)
@@ -318,20 +317,24 @@ export default function CreateDepositScreen({ navigation }: any) {
             ${' '}
             {
               GetMoneyAmount(
-                GetDepositReturn(+depositValue, durationHours, interest)
+                GetDepositInterestReturn(+depositValue, durationHours, interest)
               ).value
             }
             .
             <Text style={{ fontSize: width * 0.07 }}>
               {
                 GetMoneyAmount(
-                  GetDepositReturn(+depositValue, durationHours, interest)
+                  GetDepositInterestReturn(
+                    +depositValue,
+                    durationHours,
+                    interest
+                  )
                 ).decimal
               }
             </Text>{' '}
             {
               GetMoneyAmount(
-                GetDepositReturn(+depositValue, durationHours, interest)
+                GetDepositInterestReturn(+depositValue, durationHours, interest)
               ).title
             }
           </Text>
@@ -341,7 +344,7 @@ export default function CreateDepositScreen({ navigation }: any) {
               { color: colors[themeColor].comment, marginBottom: width * 0.01 },
             ]}
           >
-            estimated return{' '}
+            estimated yield{' '}
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {

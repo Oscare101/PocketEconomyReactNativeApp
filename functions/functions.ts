@@ -1,6 +1,8 @@
 import { User, UserStock } from '../constants/interfaces'
 import rules from '../constants/rules'
 import defaultData from '../defaultData.json'
+import { GetUserDepositsCapital } from './depositFunctions'
+
 export function GetMoneyAmount(money: number) {
   const grades = [
     { value: 10 ** 6, title: 'M' },
@@ -132,7 +134,6 @@ export function GetElapsedHistory(company: any, userStocks: any[]) {
     const calculatedStock = CalculateStock({ ...company, history: arr })
     const date = newDateTime.split('T')[0]
     const time = newDateTime.split('T')[1]
-
     if (
       time === rules.stock.dividendTime &&
       userStocks.find((s: any) => s.name === company.name)
@@ -384,7 +385,10 @@ export function ReduceUserStocks(
 
 export function GetUserAllTimeProgress(user: User, companies: any[]) {
   const start = rules.user.startCash
-  const finish = GetUserStocksCapital(user.stocks, companies) + user.cash
+  const finish =
+    GetUserStocksCapital(user.stocks, companies) +
+    user.cash +
+    GetUserDepositsCapital(user.deposits)
   const progress = finish / start
   return progress
 }
@@ -426,8 +430,19 @@ export function GetRatingPerPeriod(
   companies: any[],
   period: number
 ) {
+  let result = 0
   const portfolio = GetPortfolioProgress(user, companies, period)
-  return +(portfolio / GetEconomicsProgress(companies, period)).toFixed(2)
+  const economy = GetEconomicsProgress(companies, period)
+  if (economy < 0 && portfolio > 0) {
+    result = (portfolio - economy) / -economy
+  } else if (economy > 0 && portfolio < 0) {
+    result = portfolio / economy
+  } else if (economy < 0 && portfolio < 0) {
+    result = economy / portfolio
+  } else {
+    result = portfolio / economy
+  }
+  return +result.toFixed(2)
 }
 
 export function IsPeriodEnough(companies: any[], period: number) {

@@ -33,6 +33,7 @@ export interface UserDeposit {
   openingDate: string
   openingTime: string
   durationHours: number
+  autoRenewal?: boolean // TODO remove ?
 }
 
 export interface UserHistory {

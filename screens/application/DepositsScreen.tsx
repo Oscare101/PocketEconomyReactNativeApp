@@ -17,6 +17,7 @@ import { RootState } from '../../redux'
 import HeaderDrawer from '../../components/HeaderDrawer'
 import { GetMoneyAmount } from '../../functions/functions'
 import { Ionicons } from '@expo/vector-icons'
+import { GetDepositMatureDateTime } from '../../functions/depositFunctions'
 
 const width = Dimensions.get('screen').width
 
@@ -68,12 +69,32 @@ export default function DepositsScreen({ navigation }: any) {
   function RenderDepositItem({ item }: any) {
     const depositInfo = [
       { title: 'Interest (per 24h)', value: `${item.interest} %` },
-      { title: 'Duration', value: `${item.durationHours} h` },
+      {
+        title: 'Duration',
+        autoRenewalIcon: item.autoRenewal,
+        value: `${item.durationHours} h`,
+      },
       {
         title: 'Value',
         value: `$ ${GetMoneyAmount(item.value).value}.${
           GetMoneyAmount(item.value).decimal
         } ${GetMoneyAmount(item.value).title}`,
+      },
+      {
+        title: 'Next payment',
+        value: `${
+          GetDepositMatureDateTime(
+            item.openingDate,
+            item.openingTime,
+            item.durationHours
+          ).date
+        } ${
+          GetDepositMatureDateTime(
+            item.openingDate,
+            item.openingTime,
+            item.durationHours
+          ).time
+        }`,
       },
     ]
 
@@ -95,10 +116,24 @@ export default function DepositsScreen({ navigation }: any) {
           >
             {item.title}
           </Text>
+          <View style={{ flex: 1 }} />
+          {item.autoRenewalIcon ? (
+            <Ionicons
+              name="repeat-outline"
+              size={width * 0.04}
+              color={colors[themeColor].successText}
+            />
+          ) : (
+            <></>
+          )}
           <Text
             style={[
               styles.depositName,
-              { color: colors[themeColor].text, fontWeight: '300' },
+              {
+                color: colors[themeColor].text,
+                fontWeight: '300',
+                marginLeft: 10,
+              },
             ]}
           >
             {item.value}
@@ -109,7 +144,9 @@ export default function DepositsScreen({ navigation }: any) {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => {}}
+        onPress={() => {
+          navigation.navigate('EditDepositScreen', { deposit: item })
+        }}
         style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
       >
         <View
@@ -202,7 +239,7 @@ const styles = StyleSheet.create({
     width: '92%',
     padding: 10,
     borderRadius: 10,
-    marginTop: 10,
+    marginVertical: 5,
     alignSelf: 'center',
   },
   button: {
