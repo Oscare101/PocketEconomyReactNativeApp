@@ -54,7 +54,7 @@ export default function MainNavigation() {
   function DrawerNavigation() {
     return (
       <Drawer.Navigator
-        initialRouteName="InvestScreen"
+        initialRouteName="RealEstateScreen" // TODO PortfolioScreen
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen
