@@ -458,7 +458,7 @@ export default function PortfolioScreen({ navigation }: any) {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
-          // navigation.navigate('StockScreen', { companyName: item.name })
+          navigation.navigate('RealEstateScreen', { region: item.region })
         }}
         style={[
           styles.rowBetween,
@@ -512,7 +512,7 @@ export default function PortfolioScreen({ navigation }: any) {
         ]}
       >
         <Ionicons
-          name={'open-outline'}
+          name={'time-outline'}
           size={width * 0.04}
           color={colors[themeColor].comment}
         />

@@ -33,12 +33,12 @@ import BottomModalBlock from '../../components/BottomModalBlock'
 
 const width = Dimensions.get('screen').width
 
-export default function RealEstateScreen({ navigation }: any) {
+export default function RealEstateScreen({ navigation, route }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const user = useSelector((state: RootState) => state.user)
   const themeColor: any = theme === 'system' ? systemTheme : theme
-  const [region, setRegion] = useState<number>(0)
+  const [region, setRegion] = useState<number>(route.params?.region || 0)
   const [userProperty, setUserProperty] = useState<boolean>(false)
 
   const [bottomSheetContent, setBottomSheetContent] = useState<any>(
