@@ -25,7 +25,6 @@ import {
 import { MMKV } from 'react-native-mmkv'
 import { User, UserDeposit, UserRealEstate } from './constants/interfaces'
 import { updateUser } from './redux/user'
-import * as Notifications from 'expo-notifications'
 import {
   CheckMatureDeposits,
   GetDepositInterestReturn,
@@ -76,33 +75,6 @@ export default function App() {
 
     const themeColor: any = theme === 'system' ? systemTheme : theme
     const dispatch = useDispatch()
-
-    useEffect(() => {
-      Notifications.requestPermissionsAsync()
-
-      if (user.stocks.length) {
-        const scheduleNotification = async () => {
-          await Notifications.scheduleNotificationAsync({
-            content: {
-              title: 'Check your dividends',
-              subtitle: 'Sub',
-              body: 'You may have already received dividends',
-              color: '#000000',
-              badge: 1,
-            },
-            trigger: {
-              hour: 9,
-              minute: 0,
-              repeats: true,
-            },
-          })
-
-          // await Notifications.cancelAllScheduledNotificationsAsync()
-        }
-
-        scheduleNotification()
-      }
-    }, [])
 
     useEffect(() => {
       NavigationBar.setBackgroundColorAsync(colors[themeColor].bgColor)
@@ -199,7 +171,6 @@ export default function App() {
           (userRealEstateValue * (rules.realEstate.incomePerDayPercent / 100)) /
           rules.realEstate.paymentTimes.length
         ).toFixed(2)
-        console.log(userRealEstatePayment)
 
         const newRealEstateHistory = GetNewUserRealEstateHistory(user)
 
@@ -210,7 +181,6 @@ export default function App() {
           ),
           realEstateHistory: newRealEstateHistory,
         }
-        console.log(newUserData)
         dispatch(updateUser(newUserData))
         storage.set('user', JSON.stringify(newUserData))
       }
@@ -229,9 +199,10 @@ export default function App() {
         ) {
           SetNewData()
         }
+
         if (
           IsRealEstatePaymentTime(user.realEstateHistory) &&
-          user.realEstate.length
+          (user.realEstate.length || user.realEstateHistory.length)
         ) {
           SetRealEstatePayment()
         }

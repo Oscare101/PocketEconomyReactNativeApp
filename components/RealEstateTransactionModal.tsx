@@ -71,7 +71,7 @@ export default function RealEstateTransactionModal(props: any) {
 
   const sellData = [
     {
-      title: 'Property sell cost',
+      title: `Property sell cost (${rules.realEstate.sellValue * 100} %)`,
       icon: 'briefcase-outline',
       value: `$ ${
         GetMoneyAmount(
@@ -193,7 +193,7 @@ export default function RealEstateTransactionModal(props: any) {
               color: colors[themeColor].text,
             }}
           >
-            {item.title} ({rules.realEstate.sellValue * 100} %)
+            {item.title}
           </Text>
           <Text
             style={{

@@ -71,7 +71,7 @@ export default function LaunchScreen({ navigation }: any) {
       const defaultUser: User = {
         name: 'Oscare',
         loginDate: new Date().toISOString().split('T')[0],
-        cash: rules.user.startCash * 100, // TODO remove * 100
+        cash: rules.user.startCash,
         stocks: [],
         history: [],
         deposits: [],
