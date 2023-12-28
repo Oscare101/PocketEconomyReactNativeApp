@@ -3,10 +3,8 @@ export default {
   stock: {
     percentPerDay: 5,
     secondsPerTact: 60,
-    // tactsPerWeek: 7 * 24 * 60,
     tactsPerDay: 24 * 60,
     tactsPerHour: 60,
-    compresGrade: 2,
     companySizeStocksAmount: [
       2000000, 10000000, 40000000, 250000000, 1000000000,
     ],
@@ -14,11 +12,11 @@ export default {
     dividendsHistoryDays: 7,
   },
   deposits: [
-    { hours: 6, interest: 3 },
-    { hours: 12, interest: 4 },
-    { hours: 24, interest: 5 },
-    { hours: 48, interest: 5.5 },
-    { hours: 72, interest: 6 },
+    { hours: 6, interest: 4 },
+    { hours: 12, interest: 5 },
+    { hours: 24, interest: 6 },
+    { hours: 48, interest: 7 },
+    { hours: 72, interest: 8 },
   ],
   realEstate: {
     amount: [
@@ -30,7 +28,7 @@ export default {
       19000, 9000, 5000,
     ],
 
-    percentPerDay: 1,
+    percentPerDay: 2,
     incomePerDayPercent: 5,
     sellValue: 0.8,
     paymentTimes: [

@@ -1031,7 +1031,6 @@ export default function RealEstateScreen({ navigation }: any) {
               <Text
                 style={[styles.regionValue, { color: colors[themeColor].text }]}
               >
-                {/* TODO count user properties */}
                 {user.realEstate?.find((r: any) => r.region === region)
                   ?.amount || 0}
                 /{rules.realEstate.amount[region - 1]}

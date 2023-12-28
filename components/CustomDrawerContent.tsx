@@ -29,18 +29,24 @@ export default function CustomDrawerContent(props: any) {
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
   const screensButtonData = [
-    { title: 'Invest', icon: 'bar-chart-outline', screen: 'InvestNavigation' },
     {
       title: 'Portfolio',
       icon: 'briefcase-outline',
       screen: 'PortfolioScreen',
     },
     {
+      title: 'Stock market',
+      icon: 'bar-chart-outline',
+      screen: 'InvestScreen',
+    },
+    {
       title: 'Analytics',
       icon: 'analytics-outline',
       screen: 'AnalyticsScreen',
     },
-    { title: 'Real Estate', icon: '', screen: 'RealEstateScreen' },
+    { title: 'Deposit', icon: 'wallet-outline', screen: 'DepositsScreen' },
+
+    { title: 'Real Estate', icon: 'home-outline', screen: 'RealEstateScreen' },
   ]
 
   function RenderScreenButtonItem({ item }: any) {

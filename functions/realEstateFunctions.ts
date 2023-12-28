@@ -93,3 +93,20 @@ export function GetNewUserRealEstateHistory(user: User) {
   }
   return newPaymentHistory.slice(-rules.realEstate.paymentTimes.length)
 }
+
+export function GetPropertiesValuePerRegion(user: User, region: number) {
+  const userRegion =
+    user.realEstate.find((r: UserRealEstate) => r.region === region)?.amount ||
+    0
+  const sum = userRegion * GetPropertyCost(user.loginDate, region)
+
+  return sum
+}
+
+export function GetAllRentalPaymentValue(history: UserRealEstateHistory[]) {
+  const sum: number = history.reduce(
+    (a: number, b: UserRealEstateHistory) => a + b.value,
+    0
+  )
+  return sum
+}

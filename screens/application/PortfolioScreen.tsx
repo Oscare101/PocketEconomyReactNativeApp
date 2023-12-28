@@ -18,6 +18,7 @@ import {
   GetMoneyAmount,
   GetPortfolioProgress,
   GetRatingPerPeriod,
+  GetReversedArr,
   GetUserDividendsValue,
   GetUserRating,
   GetUserStocksCapital,
@@ -26,7 +27,7 @@ import {
 import StatusItem from '../../components/StatusItem'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
-import { User, UserStock } from '../../constants/interfaces'
+import { User, UserRealEstate, UserStock } from '../../constants/interfaces'
 import { Ionicons } from '@expo/vector-icons'
 import { useMemo, useRef, useState } from 'react'
 import {
@@ -39,6 +40,11 @@ import {
   GetDepositMatureDateTime,
   GetUserDepositsCapital,
 } from '../../functions/depositFunctions'
+import {
+  GetAllRentalPaymentValue,
+  GetPropertiesValuePerRegion,
+  GetUserAllPropertiesCost,
+} from '../../functions/realEstateFunctions'
 
 const width = Dimensions.get('screen').width
 
@@ -53,6 +59,9 @@ export default function PortfolioScreen({ navigation }: any) {
   const [openStocksList, setOpenStocksList] = useState<boolean>(false)
   const [openDepositsList, setOpenDepositsList] = useState<boolean>(false)
   const [openDividendsList, setOpenDividendsList] = useState<boolean>(false)
+  const [openRealEstateList, setOpenRealEstateList] = useState<boolean>(false)
+  const [openRentalPaymentList, setOpenRentalPaymentList] =
+    useState<boolean>(false)
 
   const [bottomSheetContent, setBottomSheetContent] =
     useState<any>('RatingInfo')
@@ -100,19 +109,22 @@ export default function PortfolioScreen({ navigation }: any) {
         GetMoneyAmount(
           GetUserStocksCapital(user.stocks, companies) +
             user.cash +
-            GetUserDepositsCapital(user.deposits)
+            GetUserDepositsCapital(user.deposits) +
+            GetUserAllPropertiesCost(user)
         ).value
       }.${
         GetMoneyAmount(
           GetUserStocksCapital(user.stocks, companies) +
             user.cash +
-            GetUserDepositsCapital(user.deposits)
+            GetUserDepositsCapital(user.deposits) +
+            GetUserAllPropertiesCost(user)
         ).decimal
       }${
         GetMoneyAmount(
           GetUserStocksCapital(user.stocks, companies) +
             user.cash +
-            GetUserDepositsCapital(user.deposits)
+            GetUserDepositsCapital(user.deposits) +
+            GetUserAllPropertiesCost(user)
         ).title
       }`,
     },
@@ -149,7 +161,6 @@ export default function PortfolioScreen({ navigation }: any) {
       type: 'Dividends',
       title: 'Dividends',
       icon: 'download-outline',
-      // value: `$ 000`,
       data: user.dividendsHistory,
     },
     {
@@ -162,6 +173,28 @@ export default function PortfolioScreen({ navigation }: any) {
         GetMoneyAmount(GetUserDepositsCapital(user.deposits)).title
       }`,
       data: user.deposits,
+    },
+    {
+      type: 'RealEstate',
+      title: 'Real Estate',
+      icon: 'home-outline',
+      value: `$ ${GetMoneyAmount(GetUserAllPropertiesCost(user)).value}.${
+        GetMoneyAmount(GetUserAllPropertiesCost(user)).decimal
+      }${GetMoneyAmount(GetUserAllPropertiesCost(user)).title}`,
+      data: user.realEstate,
+    },
+    {
+      type: 'RentalPayment',
+      title: 'Rental Payment',
+      icon: 'download-outline',
+      value: `$ ${
+        GetMoneyAmount(GetAllRentalPaymentValue(user.realEstateHistory)).value
+      }.${
+        GetMoneyAmount(GetAllRentalPaymentValue(user.realEstateHistory)).decimal
+      }${
+        GetMoneyAmount(GetAllRentalPaymentValue(user.realEstateHistory)).title
+      }`,
+      data: user.realEstateHistory,
     },
   ]
 
@@ -416,6 +449,86 @@ export default function PortfolioScreen({ navigation }: any) {
         </View>
 
         {/*  */}
+      </TouchableOpacity>
+    )
+  }
+
+  function RenderUserRealEstateItem({ item }: any) {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          // navigation.navigate('StockScreen', { companyName: item.name })
+        }}
+        style={[
+          styles.rowBetween,
+          { height: width * 0.08, marginVertical: 0, marginTop: 5 },
+        ]}
+      >
+        <Ionicons
+          name={'open-outline'}
+          size={width * 0.04}
+          color={colors[themeColor].comment}
+        />
+        <Text
+          style={[
+            styles.userStockTitle,
+            { color: colors[themeColor].comment, flex: 1 },
+          ]}
+          numberOfLines={1}
+        >
+          Tier {item.region} region
+        </Text>
+
+        <Text style={[styles.money, { color: colors[themeColor].text }]}>
+          ${' '}
+          {GetMoneyAmount(GetPropertiesValuePerRegion(user, item.region)).value}
+          .
+          {
+            GetMoneyAmount(GetPropertiesValuePerRegion(user, item.region))
+              .decimal
+          }
+          {GetMoneyAmount(GetPropertiesValuePerRegion(user, item.region)).title}
+        </Text>
+      </TouchableOpacity>
+    )
+  }
+
+  function RenderUserRentalPaymentItem({ item }: any) {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          // navigation.navigate('DividendsScreen', { dividends: dividends })
+        }}
+        // disabled={!dividends.length}
+        style={[
+          styles.rowBetween,
+          {
+            height: width * 0.08,
+            marginVertical: 0,
+            marginTop: 5,
+          },
+        ]}
+      >
+        <Ionicons
+          name={'open-outline'}
+          size={width * 0.04}
+          color={colors[themeColor].comment}
+        />
+        <Text
+          style={[
+            styles.userStockTitle,
+            { color: colors[themeColor].comment, flex: 1 },
+          ]}
+        >
+          {item.time}
+        </Text>
+        <Text style={[styles.money, { color: colors[themeColor].text }]}>
+          $ {GetMoneyAmount(item.value).value}.
+          {GetMoneyAmount(item.value).decimal}
+          {GetMoneyAmount(item.value).title}
+        </Text>
       </TouchableOpacity>
     )
   }
@@ -730,6 +843,143 @@ export default function PortfolioScreen({ navigation }: any) {
       </View>
     )
 
+    const realEstateBlock = (
+      <View
+        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      >
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setOpenRealEstateList(!openRealEstateList)}
+          style={[
+            styles.rowBetween,
+            {
+              height: width * 0.08 + 10,
+              marginVertical: 0,
+            },
+          ]}
+        >
+          <Ionicons
+            name={item.icon}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+            {item.title}
+          </Text>
+          <Ionicons
+            name={openRealEstateList ? 'chevron-up' : 'chevron-down'}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+
+          <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
+            {item.value}
+          </Text>
+        </TouchableOpacity>
+        {openRealEstateList ? (
+          <>
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: colors[themeColor].disable,
+              }}
+            />
+            {user.realEstate.length ? (
+              <FlatList
+                data={user.realEstate.filter((r: UserRealEstate) => r.amount)}
+                renderItem={RenderUserRealEstateItem}
+              />
+            ) : (
+              <Text
+                style={[styles.comment, { color: colors[themeColor].comment }]}
+              >
+                No deposits yet
+              </Text>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+    )
+
+    const rentalPaymentBlock = (
+      <View
+        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      >
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setOpenRentalPaymentList(!openRentalPaymentList)}
+          style={[
+            styles.rowBetween,
+            {
+              height: width * 0.08 + 10,
+              marginVertical: 0,
+            },
+          ]}
+        >
+          <Ionicons
+            name={item.icon}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+            {item.title}
+          </Text>
+          {/* <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              // setBottomSheetContent('DividendsInfo')
+              // bottomSheetModalRef.current?.present()
+            }}
+            style={{ marginRight: 5 }}
+          >
+            <Ionicons
+              name="information-circle-outline"
+              color={colors[themeColor].text}
+              size={width * 0.045}
+            />
+          </TouchableOpacity> */}
+          <Ionicons
+            name={openRentalPaymentList ? 'chevron-up' : 'chevron-down'}
+            size={width * 0.05}
+            color={colors[themeColor].text}
+          />
+          <View style={styles.collumnEnd}>
+            <Text style={[styles.money, { color: colors[themeColor].text }]}>
+              {item.value}
+            </Text>
+            <Text
+              style={[
+                styles.comment,
+                { color: colors[themeColor].comment, marginVertical: 0 },
+              ]}
+            >
+              last 24 hours
+            </Text>
+          </View>
+        </TouchableOpacity>
+        {openRentalPaymentList ? (
+          <>
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: colors[themeColor].disable,
+              }}
+            />
+            <FlatList
+              data={GetReversedArr(user.realEstateHistory)}
+              renderItem={RenderUserRentalPaymentItem}
+            />
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+    )
+
     const renderType: any = {
       Rating: ratingBlock,
       Switch: switchBlock,
@@ -737,6 +987,8 @@ export default function PortfolioScreen({ navigation }: any) {
       Stocks: stocksBlock,
       Dividends: dividendsBlock,
       Deposits: depositsBlock,
+      RealEstate: realEstateBlock,
+      RentalPayment: rentalPaymentBlock,
     }
 
     return <>{renderType[item.type]}</>

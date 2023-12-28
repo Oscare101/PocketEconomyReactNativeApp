@@ -28,33 +28,33 @@ const Tab = createBottomTabNavigator()
 const Drawer = createDrawerNavigator()
 
 export default function MainNavigation() {
-  function InvestNavigation() {
-    return (
-      <Tab.Navigator
-        tabBar={(props: any) => <CustomBottomTabContent {...props} />}
-      >
-        <Tab.Screen
-          name="InvestScreen"
-          component={InvestScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Tab.Screen
-          name="DepositsScreen"
-          component={DepositsScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Tab.Navigator>
-    )
-  }
+  // function InvestNavigation() {
+  //   return (
+  //     <Tab.Navigator
+  //       tabBar={(props: any) => <CustomBottomTabContent {...props} />}
+  //     >
+  //       <Tab.Screen
+  //         name="InvestScreen"
+  //         component={InvestScreen}
+  //         options={{
+  //           headerShown: false,
+  //         }}
+  //       />
+  //       <Tab.Screen
+  //         name="DepositsScreen"
+  //         component={DepositsScreen}
+  //         options={{
+  //           headerShown: false,
+  //         }}
+  //       />
+  //     </Tab.Navigator>
+  //   )
+  // }
 
   function DrawerNavigation() {
     return (
       <Drawer.Navigator
-        initialRouteName="RealEstateScreen" // TODO PortfolioScreen
+        initialRouteName="PortfolioScreen"
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen
@@ -67,11 +67,11 @@ export default function MainNavigation() {
           name="SettingsScreen"
           component={SettingsScreen}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           options={{ headerShown: false }}
           name="InvestNavigation"
           component={InvestNavigation}
-        />
+        /> */}
         <Drawer.Screen
           options={{ headerShown: false }}
           name="AnalyticsScreen"
@@ -81,6 +81,16 @@ export default function MainNavigation() {
           options={{ headerShown: false }}
           name="RealEstateScreen"
           component={RealEstateScreen}
+        />
+        <Drawer.Screen
+          options={{ headerShown: false }}
+          name="InvestScreen"
+          component={InvestScreen}
+        />
+        <Drawer.Screen
+          options={{ headerShown: false }}
+          name="DepositsScreen"
+          component={DepositsScreen}
         />
       </Drawer.Navigator>
     )

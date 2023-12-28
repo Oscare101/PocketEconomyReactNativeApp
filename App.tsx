@@ -211,6 +211,8 @@ export default function App() {
           realEstateHistory: newRealEstateHistory,
         }
         console.log(newUserData)
+        dispatch(updateUser(newUserData))
+        storage.set('user', JSON.stringify(newUserData))
       }
     }
 

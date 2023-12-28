@@ -2,6 +2,7 @@ import { User, UserStock } from '../constants/interfaces'
 import rules from '../constants/rules'
 import defaultData from '../defaultData.json'
 import { GetUserDepositsCapital } from './depositFunctions'
+import { GetUserAllPropertiesCost } from './realEstateFunctions'
 
 export function GetMoneyAmount(money: number) {
   const grades = [
@@ -388,7 +389,8 @@ export function GetUserAllTimeProgress(user: User, companies: any[]) {
   const finish =
     GetUserStocksCapital(user.stocks, companies) +
     user.cash +
-    GetUserDepositsCapital(user.deposits)
+    GetUserDepositsCapital(user.deposits) +
+    GetUserAllPropertiesCost(user)
   const progress = finish / start
   return progress
 }
@@ -477,4 +479,8 @@ export function GenerateDividendsDates() {
 export function GetUserDividendsValue(dividends: any[]) {
   const sum = dividends.reduce((a: any, b: any) => a + b.value, 0)
   return sum
+}
+
+export function GetReversedArr(arr: any[]) {
+  return [...arr].reverse()
 }
