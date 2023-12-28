@@ -40,6 +40,7 @@ import Map16Light from './map16Light.svg'
 import Map17Light from './map17Light.svg'
 import Map18Light from './map18Light.svg'
 import Map19Light from './map19Light.svg'
+
 export {
   MapEmptyDark,
   MapEmptyLight,

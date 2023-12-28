@@ -23,7 +23,7 @@ import {
   countElapsedPeriods,
 } from './functions/functions'
 import { MMKV } from 'react-native-mmkv'
-import { User, UserDeposit } from './constants/interfaces'
+import { User, UserDeposit, UserRealEstate } from './constants/interfaces'
 import { updateUser } from './redux/user'
 import * as Notifications from 'expo-notifications'
 import {
@@ -32,6 +32,11 @@ import {
   GetDepositsRenewalLeft,
   GetDepositsReturnAmount,
 } from './functions/depositFunctions'
+import {
+  GetNewUserRealEstateHistory,
+  GetPropertyCost,
+  IsRealEstatePaymentTime,
+} from './functions/realEstateFunctions'
 
 export const storage = new MMKV()
 
@@ -167,6 +172,47 @@ export default function App() {
       dispatch(updateCompanies(newCompaniesData.data))
       storage.set('companies', JSON.stringify(newCompaniesData.data))
     }
+    function SetRealEstatePayment() {
+      if (!user.realEstateHistory.length) {
+        const newUserData: User = {
+          ...user,
+          realEstateHistory: [
+            {
+              date: new Date().toISOString().split('T')[0],
+              time: `${new Date().getHours()}:00`,
+              value: 0,
+            },
+          ],
+        }
+        dispatch(updateUser(newUserData))
+        storage.set('user', JSON.stringify(newUserData))
+      } else {
+        const elapsedPeriods: number = IsRealEstatePaymentTime(
+          user.realEstateHistory
+        )
+        const userRealEstateValue = user.realEstate.reduce(
+          (a: number, b: UserRealEstate) =>
+            a + b.amount * GetPropertyCost(user.loginDate, b.region),
+          0
+        )
+        const userRealEstatePayment = +(
+          (userRealEstateValue * (rules.realEstate.incomePerDayPercent / 100)) /
+          rules.realEstate.paymentTimes.length
+        ).toFixed(2)
+        console.log(userRealEstatePayment)
+
+        const newRealEstateHistory = GetNewUserRealEstateHistory(user)
+
+        const newUserData: User = {
+          ...user,
+          cash: +(user.cash + userRealEstatePayment * elapsedPeriods).toFixed(
+            2
+          ),
+          realEstateHistory: newRealEstateHistory,
+        }
+        console.log(newUserData)
+      }
+    }
 
     const [lastUpdate, setLastUpdate] = useState<number>(0)
 
@@ -181,16 +227,14 @@ export default function App() {
         ) {
           SetNewData()
         }
-
+        if (
+          IsRealEstatePaymentTime(user.realEstateHistory) &&
+          user.realEstate.length
+        ) {
+          SetRealEstatePayment()
+        }
         if (CheckMatureDeposits(user.deposits).length) {
-          // while (true) {
-          //   const isMatureDeposits = CheckMatureDeposits(user.deposits).length
-          //   if (isMatureDeposits === 0) {
-          //     break
-          //   }
           RemoveMatureDeposits()
-          // }
-
           Toast.show({
             type: 'ToastMessage',
             props: {
@@ -201,7 +245,7 @@ export default function App() {
         }
 
         setLastUpdate(new Date().getTime())
-      }, 1000)
+      }, 5000)
 
       return () => {
         clearTimeout(timer)

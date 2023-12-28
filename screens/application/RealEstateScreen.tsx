@@ -1,6 +1,7 @@
 import {
   Dimensions,
   FlatList,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -15,15 +16,36 @@ import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import IconBlock from '../../components/IconBlock'
 import rules from '../../constants/rules'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { GetMoneyAmount } from '../../functions/functions'
+import { Ionicons } from '@expo/vector-icons'
+import Button from '../../components/Button'
+import {
+  GetDaysFromDate,
+  GetPropertyCost,
+  GetPropertyIncome,
+} from '../../functions/realEstateFunctions'
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet'
+import BottomModalBlock from '../../components/BottomModalBlock'
 
 const width = Dimensions.get('screen').width
 
 export default function RealEstateScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
+  const user = useSelector((state: RootState) => state.user)
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const [region, setRegion] = useState<number>(0)
+  const [userProperty, setUserProperty] = useState<boolean>(false)
+
+  const [bottomSheetContent, setBottomSheetContent] = useState<any>(
+    'RealEstateTransaction'
+  )
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const snapPoints = useMemo(() => [300], [])
 
   const region1 = (
     <TouchableOpacity
@@ -570,10 +592,108 @@ export default function RealEstateScreen({ navigation }: any) {
     </>
   )
   // TITLES
+  const title1 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 1 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '30%',
+        right: '22%',
+      }}
+    >
+      1
+    </Text>
+  )
+  const title2 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 2 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '22%',
+        right: '33%',
+      }}
+    >
+      2
+    </Text>
+  )
+  const title3 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 3 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '8%',
+        right: '28%',
+      }}
+    >
+      3
+    </Text>
+  )
+  const title4 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 4 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '20%',
+        right: '13%',
+      }}
+    >
+      4
+    </Text>
+  )
+  const title5 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 5 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '31%',
+        right: '42%',
+      }}
+    >
+      5
+    </Text>
+  )
+  const title6 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 6 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '63%',
+        right: '10%',
+      }}
+    >
+      6
+    </Text>
+  )
+  const title7 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 7 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '42%',
+        right: '45%',
+      }}
+    >
+      7
+    </Text>
+  )
   const title8 = (
     <Text
       style={{
-        fontSize: width * 0.07,
+        fontSize: width * 0.06,
         color:
           region === 8 ? colors[themeColor].text : colors[themeColor].comment,
         position: 'absolute',
@@ -587,7 +707,7 @@ export default function RealEstateScreen({ navigation }: any) {
   const title9 = (
     <Text
       style={{
-        fontSize: width * 0.07,
+        fontSize: width * 0.06,
         color:
           region === 9 ? colors[themeColor].text : colors[themeColor].comment,
         position: 'absolute',
@@ -601,7 +721,7 @@ export default function RealEstateScreen({ navigation }: any) {
   const title10 = (
     <Text
       style={{
-        fontSize: width * 0.07,
+        fontSize: width * 0.06,
         color:
           region === 10 ? colors[themeColor].text : colors[themeColor].comment,
         position: 'absolute',
@@ -615,7 +735,7 @@ export default function RealEstateScreen({ navigation }: any) {
   const title11 = (
     <Text
       style={{
-        fontSize: width * 0.07,
+        fontSize: width * 0.06,
         color:
           region === 11 ? colors[themeColor].text : colors[themeColor].comment,
         position: 'absolute',
@@ -626,49 +746,382 @@ export default function RealEstateScreen({ navigation }: any) {
       11
     </Text>
   )
-
-  return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: colors[themeColor].bgColor },
-      ]}
+  const title12 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 12 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '55%',
+        right: '64%',
+      }}
     >
-      <HeaderDrawer title="Real estate" />
-      <View
+      12
+    </Text>
+  )
+  const title13 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 13 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '66%',
+        right: '48%',
+      }}
+    >
+      13
+    </Text>
+  )
+  const title14 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 14 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '19%',
+        right: '76%',
+      }}
+    >
+      14
+    </Text>
+  )
+  const title15 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 15 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '72%',
+        right: '20%',
+      }}
+    >
+      15
+    </Text>
+  )
+  const title16 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 16 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '35%',
+        right: '80%',
+      }}
+    >
+      16
+    </Text>
+  )
+  const title17 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 17 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '62%',
+        right: '79%',
+      }}
+    >
+      17
+    </Text>
+  )
+  const title18 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 18 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '78%',
+        right: '63%',
+      }}
+    >
+      18
+    </Text>
+  )
+  const title19 = (
+    <Text
+      style={{
+        fontSize: width * 0.06,
+        color:
+          region === 19 ? colors[themeColor].text : colors[themeColor].comment,
+        position: 'absolute',
+        top: '83%',
+        right: '38%',
+      }}
+    >
+      19
+    </Text>
+  )
+  const mapBlock = (
+    <View
+      style={{
+        width: width,
+        height: (width * 278) / 266,
+      }}
+    >
+      <IconBlock width={width} theme={themeColor} type={region} />
+      {/* TOUCHABLE */}
+      {region1}
+      {region2}
+      {region3}
+      {region4}
+      {region5}
+      {region6}
+      {region7}
+      {region8}
+      {region9}
+      {region10}
+      {region11}
+      {region12}
+      {region13}
+      {region14}
+      {region15}
+      {region16}
+      {region17}
+      {region18}
+      {region19}
+      {/* TITLES */}
+      {title1}
+      {title2}
+      {title3}
+      {title4}
+      {title5}
+      {title6}
+      {title7}
+      {title8}
+      {title9}
+      {title10}
+      {title11}
+      {title12}
+      {title13}
+      {title14}
+      {title15}
+      {title16}
+      {title17}
+      {title18}
+      {title19}
+    </View>
+  )
+  const chooseBlock = (
+    <>
+      <Text style={[styles.regionTitle, { color: colors[themeColor].comment }]}>
+        Choose a region{' '}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            setBottomSheetContent('RealEstateInfo')
+            bottomSheetModalRef.current?.present()
+          }}
+        >
+          <Ionicons
+            name="information-circle-outline"
+            color={colors[themeColor].text}
+            size={width * 0.045}
+          />
+        </TouchableOpacity>
+      </Text>
+    </>
+  )
+  const regionBlock = (
+    <>
+      <Text style={[styles.regionTitle, { color: colors[themeColor].text }]}>
+        Tier {region} region{' '}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            setBottomSheetContent('RealEstateInfo')
+            bottomSheetModalRef.current?.present()
+          }}
+        >
+          <Ionicons
+            name="information-circle-outline"
+            color={colors[themeColor].text}
+            size={width * 0.045}
+          />
+        </TouchableOpacity>
+      </Text>
+      {region ? (
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            }}
+          >
+            <View
+              style={[
+                styles.cardColumn,
+                { backgroundColor: colors[themeColor].cardColor },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.regionValue,
+                  { color: colors[themeColor].comment },
+                ]}
+              >
+                Property cost
+              </Text>
+              <Text
+                style={[styles.regionValue, { color: colors[themeColor].text }]}
+              >
+                ${' '}
+                {GetMoneyAmount(GetPropertyCost(user.loginDate, region)).value}.
+                {
+                  GetMoneyAmount(GetPropertyCost(user.loginDate, region))
+                    .decimal
+                }
+                {GetMoneyAmount(GetPropertyCost(user.loginDate, region)).title}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.cardColumn,
+                { backgroundColor: colors[themeColor].cardColor },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.regionValue,
+                  { color: colors[themeColor].comment },
+                ]}
+              >
+                Income per day
+              </Text>
+              <Text
+                style={[styles.regionValue, { color: colors[themeColor].text }]}
+              >
+                ${' '}
+                {
+                  GetMoneyAmount(GetPropertyIncome(user.loginDate, region))
+                    .value
+                }
+                .
+                {
+                  GetMoneyAmount(GetPropertyIncome(user.loginDate, region))
+                    .decimal
+                }
+                {
+                  GetMoneyAmount(GetPropertyIncome(user.loginDate, region))
+                    .title
+                }
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.cardColumn,
+                { backgroundColor: colors[themeColor].cardColor },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.regionValue,
+                  { color: colors[themeColor].comment },
+                ]}
+              >
+                Your ptoperties
+              </Text>
+              <Text
+                style={[styles.regionValue, { color: colors[themeColor].text }]}
+              >
+                {/* TODO count user properties */}
+                {user.realEstate?.find((r: any) => r.region === region)
+                  ?.amount || 0}
+                /{rules.realEstate.amount[region - 1]}
+              </Text>
+            </View>
+          </View>
+          <FlatList
+            data={[...Array(rules.realEstate.amount[region - 1])]}
+            scrollEnabled={false}
+            renderItem={RenderPropertyItem}
+            numColumns={7}
+            style={{ marginVertical: 10 }}
+          />
+        </>
+      ) : (
+        <></>
+      )}
+    </>
+  )
+  function RenderPropertyItem({ item, index }: any) {
+    const isUserProperty: boolean =
+      (user.realEstate.find((r: any) => r.region === region)?.amount || 0) >
+      index
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          setBottomSheetContent('RealEstateTransaction')
+          setUserProperty(isUserProperty)
+          bottomSheetModalRef.current?.present()
+        }}
         style={{
-          width: width,
-          height: (width * 278) / 266,
+          width: width * 0.1,
+          height: width * 0.1,
+          backgroundColor: colors[themeColor].infoBg,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: 5,
+          margin: 5,
         }}
       >
-        <IconBlock width={width} theme={themeColor} type={region} />
-        {/* TOUCHABLE */}
-        {region1}
-        {region2}
-        {region3}
-        {region4}
-        {region5}
-        {region6}
-        {region7}
-        {region8}
-        {region9}
-        {region10}
-        {region11}
-        {region12}
-        {region13}
-        {region14}
-        {region15}
-        {region16}
-        {region17}
-        {region18}
-        {region19}
-        {/* TITLES */}
-        {title8}
-        {title9}
-        {title10}
-        {title11}
+        <Ionicons
+          name="home-outline"
+          size={width * 0.08}
+          color={
+            isUserProperty
+              ? colors[themeColor].infoText
+              : colors[themeColor].cardColor
+          }
+        />
+      </TouchableOpacity>
+    )
+  }
+
+  return (
+    <BottomSheetModalProvider>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: colors[themeColor].bgColor },
+        ]}
+      >
+        <HeaderDrawer title="Real estate" />
+        <ScrollView
+          style={{ flex: 1, width: '100%' }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View
+            style={[
+              styles.container,
+              { backgroundColor: colors[themeColor].bgColor },
+            ]}
+          >
+            {mapBlock}
+            {region ? regionBlock : chooseBlock}
+          </View>
+        </ScrollView>
       </View>
-    </View>
+      {/* BottomSheet */}
+      <BottomModalBlock
+        bottomSheetModalRef={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        dismiss={() => bottomSheetModalRef.current?.dismiss()}
+        content={bottomSheetContent}
+        onClose={() => bottomSheetModalRef.current?.dismiss()}
+        userProperty={userProperty}
+        region={region}
+      />
+    </BottomSheetModalProvider>
   )
 }
 
@@ -678,5 +1131,24 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  cardColumn: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    width: width * 0.3,
+    marginHorizontal: (width * 0.1) / 6,
+    paddingVertical: width * 0.03,
+  },
+  regionTitle: {
+    fontSize: width * 0.07,
+    marginVertical: 10,
+  },
+  regionValue: {
+    fontSize: width * 0.035,
+  },
+  regionComment: {
+    fontSize: width * 0.04,
   },
 })

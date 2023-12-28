@@ -43,15 +43,6 @@ import {
 } from '../constants/icons'
 
 export default function IconBlock(props: any) {
-  // const cup1 = <Map />
-  // const cup2 = <SpringCup />
-  // const cup3 = <WorldCupQualification />
-  // const cup4 = <SummerCup />
-  // const cup5 = <AutumnCup />
-  // const cup6 = <WorldCupChampionship />
-  // const cup7 = <MajorCup />
-  // const cup8 = <TheGrandSlamCup />
-
   const maps: any = {
     dark: {
       0: (

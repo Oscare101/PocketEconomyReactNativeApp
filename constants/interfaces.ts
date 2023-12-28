@@ -49,20 +49,15 @@ export interface DividendHistory {
   date: string
 }
 
-export interface RealEstate {
-  region: string
-  name: string
-  value: number
-  popularity: number
+export interface UserRealEstate {
+  region: number
+  amount: number
 }
 
-export interface UserRealEstate {
-  region: string
-  name: string
+export interface UserRealEstateHistory {
+  date: string
+  time: string
   value: number
-  popularity: number
-  price: number
-  occupancyRate: number
 }
 
 export interface User {
@@ -73,5 +68,6 @@ export interface User {
   history: UserHistory[]
   deposits: UserDeposit[]
   dividendsHistory: DividendHistory[]
-  realEstate?: UserRealEstate[]
+  realEstate: UserRealEstate[]
+  realEstateHistory: UserRealEstateHistory[]
 }

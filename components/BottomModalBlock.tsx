@@ -26,6 +26,8 @@ import EconomicsGrowsInfoModal from './EconomicsGrowsInfoModal'
 import DividendsInfoModal from './DividendsInfoModal'
 import DepositInfoModal from './DepositInfoModal'
 import StocksOvertakeInfoModal from './StocksOvertakeInfoModal'
+import RealEstateTransactionModal from './RealEstateTransactionModal'
+import RealEstateInfoModal from './RealEstateInfoModal'
 export default function BottomModalBlock(props: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
@@ -45,6 +47,14 @@ export default function BottomModalBlock(props: any) {
     DividendsInfo: <DividendsInfoModal />,
     DepositInfo: <DepositInfoModal />,
     StocksOvertakeInfo: <StocksOvertakeInfoModal />,
+    RealEstateTransaction: (
+      <RealEstateTransactionModal
+        userProperty={props.userProperty}
+        region={props.region}
+        onClose={() => props.onClose()}
+      />
+    ),
+    RealEstateInfo: <RealEstateInfoModal />,
   }
 
   return (
