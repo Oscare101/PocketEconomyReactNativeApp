@@ -49,9 +49,11 @@ export default function CreateDepositScreen({ navigation }: any) {
 
   const [depositValue, setDepositValue] = useState<string>('')
   const [durationHours, setDurationHours] = useState<number>(
-    rules.deposits[0].hours
+    rules.deposit.options[0].hours
   )
-  const [interest, setInterest] = useState<number>(rules.deposits[0].interest)
+  const [interest, setInterest] = useState<number>(
+    rules.deposit.options[0].interest
+  )
   const [autoRenewal, setAutoRenewal] = useState<boolean>(false)
 
   const [bottomSheetContent, setBottomSheetContent] =
@@ -110,7 +112,8 @@ export default function CreateDepositScreen({ navigation }: any) {
           onChangeText={(value: string) => {
             if (
               amountCheck.test(value.replace(',', '.')) &&
-              +value.replace(',', '.') <= user.cash
+              +value.replace(',', '.') <= user.cash &&
+              +value.replace(',', '.') <= rules.deposit.maxValue
             ) {
               let num = value.replace(',', '.')
               setDepositValue(num)
@@ -213,7 +216,7 @@ export default function CreateDepositScreen({ navigation }: any) {
           },
         ]}
       >
-        {rules.deposits.map((item: any, index: number) => (
+        {rules.deposit.options.map((item: any, index: number) => (
           <TouchableOpacity
             key={index}
             activeOpacity={0.8}
@@ -394,6 +397,20 @@ export default function CreateDepositScreen({ navigation }: any) {
                 durationHours
               ).time
             }
+          </Text>
+          <Text
+            style={[
+              styles.cartComment,
+              {
+                color: colors[themeColor].comment,
+                textAlign: 'right',
+                width: '92%',
+              },
+            ]}
+          >
+            Max $ {GetMoneyAmount(rules.deposit.maxValue).value}.
+            {GetMoneyAmount(rules.deposit.maxValue).decimal}
+            {GetMoneyAmount(rules.deposit.maxValue).title}
           </Text>
           {inputBlock}
           <CahsBlock />

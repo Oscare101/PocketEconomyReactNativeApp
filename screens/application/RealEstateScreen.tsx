@@ -16,7 +16,7 @@ import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import IconBlock from '../../components/IconBlock'
 import rules from '../../constants/rules'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { GetMoneyAmount } from '../../functions/functions'
 import { Ionicons } from '@expo/vector-icons'
 import Button from '../../components/Button'
@@ -40,6 +40,10 @@ export default function RealEstateScreen({ navigation, route }: any) {
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const [region, setRegion] = useState<number>(route.params?.region || 0)
   const [userProperty, setUserProperty] = useState<boolean>(false)
+
+  useEffect(() => {
+    setRegion(route.params?.region || 0)
+  }, [route.params?.region])
 
   const [bottomSheetContent, setBottomSheetContent] = useState<any>(
     'RealEstateTransaction'

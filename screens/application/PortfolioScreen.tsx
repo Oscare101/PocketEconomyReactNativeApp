@@ -496,12 +496,7 @@ export default function PortfolioScreen({ navigation }: any) {
 
   function RenderUserRentalPaymentItem({ item }: any) {
     return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {
-          // navigation.navigate('DividendsScreen', { dividends: dividends })
-        }}
-        // disabled={!dividends.length}
+      <View
         style={[
           styles.rowBetween,
           {
@@ -529,7 +524,7 @@ export default function PortfolioScreen({ navigation }: any) {
           {GetMoneyAmount(item.value).decimal}
           {GetMoneyAmount(item.value).title}
         </Text>
-      </TouchableOpacity>
+      </View>
     )
   }
 
@@ -894,7 +889,7 @@ export default function PortfolioScreen({ navigation }: any) {
               <Text
                 style={[styles.comment, { color: colors[themeColor].comment }]}
               >
-                No deposits yet
+                No properties yet
               </Text>
             )}
           </>
@@ -975,7 +970,9 @@ export default function PortfolioScreen({ navigation }: any) {
             />
           </>
         ) : (
-          <></>
+          <Text style={[styles.comment, { color: colors[themeColor].comment }]}>
+            No playments yet
+          </Text>
         )}
       </View>
     )
