@@ -964,15 +964,21 @@ export default function PortfolioScreen({ navigation }: any) {
                 backgroundColor: colors[themeColor].disable,
               }}
             />
-            <FlatList
-              data={GetReversedArr(user.realEstateHistory)}
-              renderItem={RenderUserRentalPaymentItem}
-            />
+            {user.realEstateHistory.length ? (
+              <FlatList
+                data={GetReversedArr(user.realEstateHistory)}
+                renderItem={RenderUserRentalPaymentItem}
+              />
+            ) : (
+              <Text
+                style={[styles.comment, { color: colors[themeColor].comment }]}
+              >
+                No playments yet
+              </Text>
+            )}
           </>
         ) : (
-          <Text style={[styles.comment, { color: colors[themeColor].comment }]}>
-            No playments yet
-          </Text>
+          <></>
         )}
       </View>
     )
