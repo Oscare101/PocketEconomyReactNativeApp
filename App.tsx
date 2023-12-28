@@ -102,7 +102,7 @@ export default function App() {
         props: {
           title: `You have received your stock dividend`,
         },
-        position: 'bottom',
+        position: rules.toast.position,
       })
     }
 
@@ -213,7 +213,7 @@ export default function App() {
             props: {
               title: `The deposit has been repaid`,
             },
-            position: 'bottom',
+            position: rules.toast.position,
           })
         }
 

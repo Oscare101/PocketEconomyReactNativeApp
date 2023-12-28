@@ -38,7 +38,7 @@ export const storage = new MMKV()
 
 const width = Dimensions.get('screen').width
 
-const amountCheck = /^(?!0\d)\d{0,20}(\.\d{0,2})?$/
+const amountCheck = /^(?!0\d)\d{0,99}(\.\d{0,2})?$/
 
 export default function CreateDepositScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
@@ -46,7 +46,7 @@ export default function CreateDepositScreen({ navigation }: any) {
   const user: User = useSelector((state: RootState) => state.user)
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const dispatch = useDispatch()
-
+  const [request, setRequest] = useState<boolean>(false)
   const [depositValue, setDepositValue] = useState<string>('')
   const [durationHours, setDurationHours] = useState<number>(
     rules.deposit.options[0].hours
@@ -90,7 +90,7 @@ export default function CreateDepositScreen({ navigation }: any) {
       props: {
         title: `A deposit of $ ${depositValue} has been made`,
       },
-      position: 'bottom',
+      position: rules.toast.position,
     })
     navigation.goBack()
   }
@@ -104,18 +104,19 @@ export default function CreateDepositScreen({ navigation }: any) {
           $
         </Text>
         <TextInput
-          value={depositValue}
+          value={depositValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
           keyboardType="numeric"
           placeholder="100"
           placeholderTextColor={colors[themeColor].disable}
           style={[styles.input, { color: colors[themeColor].text }]}
           onChangeText={(value: string) => {
             if (
-              amountCheck.test(value.replace(',', '.')) &&
-              +value.replace(',', '.') <= user.cash &&
-              +value.replace(',', '.') <= rules.deposit.maxValue
+              amountCheck.test(value.replace(',', '.').replaceAll(' ', '')) &&
+              +value.replace(',', '.').replaceAll(' ', '') <= user.cash &&
+              +value.replace(',', '.').replaceAll(' ', '') <=
+                rules.deposit.maxValue
             ) {
-              let num = value.replace(',', '.')
+              let num = value.replace(',', '.').replaceAll(' ', '')
               setDepositValue(num)
             } else {
               return false
@@ -420,10 +421,11 @@ export default function CreateDepositScreen({ navigation }: any) {
           <Button
             title="Comfirm"
             action={() => {
+              setRequest(true)
               SetNewDeposit()
             }}
             type="info"
-            disable={!(+depositValue && durationHours)}
+            disable={!(+depositValue && durationHours) || request}
           />
         </View>
       </TouchableWithoutFeedback>

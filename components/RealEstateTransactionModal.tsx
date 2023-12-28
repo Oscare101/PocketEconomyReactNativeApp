@@ -41,6 +41,8 @@ export default function RealEstateTransactionModal(props: any) {
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const [page, setPage] = useState<string>('Info')
   const [amounOfStocks, setAmounOfStocks] = useState<string>('')
+  const [request, setRequest] = useState<boolean>(false)
+
   const [amountOfStocksToBuyError, setAmountOfStocksToBuyError] =
     useState<boolean>(false)
 
@@ -128,7 +130,7 @@ export default function RealEstateTransactionModal(props: any) {
       props: {
         title: `The property was purchased`,
       },
-      position: 'bottom',
+      position: rules.toast.position,
     })
     props.onClose()
   }
@@ -158,7 +160,7 @@ export default function RealEstateTransactionModal(props: any) {
       props: {
         title: `A property was sold`,
       },
-      position: 'bottom',
+      position: rules.toast.position,
     })
     props.onClose()
   }
@@ -228,8 +230,13 @@ export default function RealEstateTransactionModal(props: any) {
       <Button
         title="Buy"
         type="success"
-        disable={user.cash < GetPropertyCost(user.loginDate, props.region)}
-        action={BuyProperty}
+        disable={
+          user.cash < GetPropertyCost(user.loginDate, props.region) || request
+        }
+        action={() => {
+          setRequest(true)
+          BuyProperty()
+        }}
       />
     </>
   )
@@ -251,7 +258,15 @@ export default function RealEstateTransactionModal(props: any) {
           ? 'Not enough cash'
           : ''}
       </Text>
-      <Button title="Sell" type="error" disable={false} action={SellProperty} />
+      <Button
+        title="Sell"
+        type="error"
+        disable={request}
+        action={() => {
+          setRequest(true)
+          SellProperty()
+        }}
+      />
     </>
   )
 

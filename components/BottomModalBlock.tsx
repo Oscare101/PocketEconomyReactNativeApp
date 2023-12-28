@@ -28,6 +28,7 @@ import DepositInfoModal from './DepositInfoModal'
 import StocksOvertakeInfoModal from './StocksOvertakeInfoModal'
 import RealEstateTransactionModal from './RealEstateTransactionModal'
 import RealEstateInfoModal from './RealEstateInfoModal'
+import PromoCodeModal from './PromoCodeModal'
 export default function BottomModalBlock(props: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
@@ -55,6 +56,7 @@ export default function BottomModalBlock(props: any) {
       />
     ),
     RealEstateInfo: <RealEstateInfoModal />,
+    promoCodeBlock: <PromoCodeModal onClose={() => props.onClose()} />,
   }
 
   return (

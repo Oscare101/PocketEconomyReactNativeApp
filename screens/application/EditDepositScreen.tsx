@@ -33,12 +33,11 @@ import { Ionicons } from '@expo/vector-icons'
 import Toast from 'react-native-toast-message'
 import { updateUser } from '../../redux/user'
 import { MMKV } from 'react-native-mmkv'
+import rules from '../../constants/rules'
 
 export const storage = new MMKV()
 
 const width = Dimensions.get('screen').width
-
-const amountCheck = /^(?!0\d)\d{0,20}(\.\d{0,2})?$/
 
 export default function EditDepositScreen({ navigation, route }: any) {
   const systemTheme = useColorScheme()
@@ -47,6 +46,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const dispatch = useDispatch()
 
+  const [request, setRequest] = useState<boolean>(false)
   const [autoRenewal, setAutoRenewal] = useState<boolean>(
     route.params.deposit ? route.params.deposit.autoRenewal : false
   )
@@ -75,7 +75,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
       props: {
         title: `A deposit of has been edited`,
       },
-      position: 'bottom',
+      position: rules.toast.position,
     })
     navigation.goBack()
   }
@@ -287,6 +287,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
               <Button
                 title={'Edit'}
                 action={() => {
+                  setRequest(true)
                   EditDeposit()
                 }}
                 type="info"
@@ -294,7 +295,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
                   !(
                     +route.params.deposit.value &&
                     route.params.deposit.durationHours
-                  )
+                  ) || request
                 }
               />
             </View>

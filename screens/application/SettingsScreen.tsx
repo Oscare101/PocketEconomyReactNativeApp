@@ -45,6 +45,16 @@ export default function SettingsScreen({ navigation }: any) {
         bottomSheetModalRef.current?.present()
       },
     },
+    {
+      type: 'button',
+      title: 'Promo code',
+      icon: 'code-working-outline',
+      color: colors[themeColor].text,
+      action: () => {
+        setBottomSheetContent('promoCodeBlock')
+        bottomSheetModalRef.current?.present()
+      },
+    },
   ]
 
   function RenderSettingsItem({ item }: any) {
@@ -85,11 +95,7 @@ export default function SettingsScreen({ navigation }: any) {
         ]}
       >
         <HeaderDrawer title="Settings" />
-        <TouchableOpacity
-          onPress={() => bottomSheetModalRef.current?.present()}
-        >
-          <Text>Theme</Text>
-        </TouchableOpacity>
+
         <FlatList
           style={{ width: '100%' }}
           data={settingsData}
@@ -102,6 +108,7 @@ export default function SettingsScreen({ navigation }: any) {
         snapPoints={snapPoints}
         dismiss={() => bottomSheetModalRef.current?.dismiss()}
         content={bottomSheetContent}
+        onClose={() => bottomSheetModalRef.current?.dismiss()}
       />
     </BottomSheetModalProvider>
   )

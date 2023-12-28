@@ -33,6 +33,8 @@ export default function TransactionBlockModal(props: any) {
   const companies = useSelector((state: RootState) => state.companies)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
+
+  const [request, setRequest] = useState<boolean>(false)
   const [page, setPage] = useState<string>('Info')
   const [amounOfStocks, setAmounOfStocks] = useState<string>('')
   const [amountOfStocksToBuyError, setAmountOfStocksToBuyError] =
@@ -81,7 +83,9 @@ export default function TransactionBlockModal(props: any) {
     {
       title: 'Your stocks amount',
       icon: 'briefcase-outline',
-      value: GetUserStocksAmount().stockAmount,
+      value: GetUserStocksAmount()
+        .stockAmount.toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
     },
     {
       title: 'Your stocks worth',
@@ -132,7 +136,7 @@ export default function TransactionBlockModal(props: any) {
       props: {
         title: `A share of ${amount} stocks of ${props.transactionStockName} was purchased`,
       },
-      position: 'bottom',
+      position: rules.toast.position,
     })
     props.onClose()
   }
@@ -152,7 +156,7 @@ export default function TransactionBlockModal(props: any) {
       props: {
         title: `A share of ${amount} stocks of ${props.transactionStockName} was sold`,
       },
-      position: 'bottom',
+      position: rules.toast.position,
     })
     props.onClose()
   }
@@ -224,7 +228,9 @@ export default function TransactionBlockModal(props: any) {
             setPage('Buy')
           }}
           type="success"
-          disable={user.cash < GetCompanyPrice()}
+          disable={
+            user.cash < GetCompanyPrice() || GetCompanyStocksAmountLeft() === 0
+          }
           style={{ width: '48%' }}
         />
         <Button
@@ -377,12 +383,18 @@ export default function TransactionBlockModal(props: any) {
         title="Buy"
         type="info"
         action={() => {
+          setRequest(true)
           BuyStocks()
         }}
-        disable={!amounOfStocks || +amounOfStocks > GetAmountOfStocksCanBuy()}
+        disable={
+          !amounOfStocks ||
+          +amounOfStocks > GetAmountOfStocksCanBuy() ||
+          request
+        }
       />
     </>
   )
+
   const sellBlock = (
     <>
       <View
@@ -508,14 +520,18 @@ export default function TransactionBlockModal(props: any) {
         title="Sell"
         type="info"
         action={() => {
+          setRequest(true)
           SellStocks()
         }}
         disable={
-          !amounOfStocks || +amounOfStocks > GetUserStocksAmount().stockAmount
+          !amounOfStocks ||
+          +amounOfStocks > GetUserStocksAmount().stockAmount ||
+          request
         }
       />
     </>
   )
+
   return (
     <>
       <View

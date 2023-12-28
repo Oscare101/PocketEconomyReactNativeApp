@@ -1,3 +1,5 @@
+import { ToastPosition } from 'react-native-toast-message'
+
 export default {
   user: { startCash: 100000 },
   stock: {
@@ -21,7 +23,6 @@ export default {
       { hours: 72, interest: 7 },
     ],
   },
-
   realEstate: {
     amount: [
       2, 3, 5, 7, 10, 11, 12, 12, 12, 13, 15, 15, 16, 17, 17, 18, 19, 20, 20,
@@ -39,5 +40,20 @@ export default {
       0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
       21, 22, 23,
     ],
+  },
+  promoCode: {
+    CASH1K: {
+      id: 'CASH1K',
+      type: 'cash',
+      value: 1000,
+    },
+    CASH1KK: {
+      id: 'CASH1KK',
+      type: 'cash',
+      value: 1000000,
+    },
+  },
+  toast: {
+    position: 'top' as ToastPosition,
   },
 }

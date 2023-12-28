@@ -21,44 +21,6 @@ import { GetDepositMatureDateTime } from '../../functions/depositFunctions'
 
 const width = Dimensions.get('screen').width
 
-const depositsData = [
-  {
-    name: 'Local deposit',
-    minValue: 100,
-    maxValue: 100000,
-    interest: 5,
-    durationHours: 24,
-  },
-  {
-    name: 'Deposit 2.0',
-    minValue: 200000,
-    maxValue: 10000000,
-    interest: 4,
-    durationHours: 48,
-  },
-  {
-    name: 'Star deposit',
-    minValue: 100000,
-    maxValue: 20000000,
-    interest: 4,
-    durationHours: 24,
-  },
-  {
-    name: 'Go Karpaty',
-    minValue: 5000000,
-    maxValue: 2000000000,
-    interest: 4,
-    durationHours: 48,
-  },
-  {
-    name: "Father's deposit",
-    minValue: 1000000000,
-    maxValue: 50000000000,
-    interest: 5,
-    durationHours: 72,
-  },
-]
-
 export default function DepositsScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
@@ -141,6 +103,7 @@ export default function DepositsScreen({ navigation }: any) {
         </View>
       )
     }
+
     return (
       <TouchableOpacity
         activeOpacity={0.8}

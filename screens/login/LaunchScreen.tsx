@@ -6,7 +6,7 @@ import { updateTheme } from '../../redux/theme'
 import colors from '../../constants/colors'
 import * as NavigationBar from 'expo-navigation-bar'
 import Button from '../../components/Button'
-import { Company, User } from '../../constants/interfaces'
+import { Company, User, UserRealEstate } from '../../constants/interfaces'
 import { updateUser } from '../../redux/user'
 import { updateCompanies } from '../../redux/companies'
 import {
@@ -22,6 +22,11 @@ import defaultData from '../../defaultData.json'
 import { MMKV } from 'react-native-mmkv'
 import rules from '../../constants/rules'
 import Toast from 'react-native-toast-message'
+import {
+  GetNewUserRealEstateHistory,
+  GetPropertyCost,
+  IsRealEstatePaymentTime,
+} from '../../functions/realEstateFunctions'
 
 export const storage = new MMKV()
 
@@ -49,8 +54,48 @@ export default function LaunchScreen({ navigation }: any) {
       props: {
         title: `You have received your stock dividend`,
       },
-      position: 'bottom',
+      position: rules.toast.position,
     })
+  }
+
+  function SetRealEstatePayment(user: User) {
+    if (!user.realEstateHistory.length) {
+      const newUserData: User = {
+        ...user,
+        realEstateHistory: [
+          {
+            date: new Date().toISOString().split('T')[0],
+            time: `${new Date().getHours()}:00`,
+            value: 0,
+          },
+        ],
+      }
+      dispatch(updateUser(newUserData))
+      storage.set('user', JSON.stringify(newUserData))
+    } else {
+      const elapsedPeriods: number = IsRealEstatePaymentTime(
+        user.realEstateHistory
+      )
+      const userRealEstateValue = user.realEstate.reduce(
+        (a: number, b: UserRealEstate) =>
+          a + b.amount * GetPropertyCost(user.loginDate, b.region),
+        0
+      )
+      const userRealEstatePayment = +(
+        (userRealEstateValue * (rules.realEstate.incomePerDayPercent / 100)) /
+        rules.realEstate.paymentTimes.length
+      ).toFixed(2)
+
+      const newRealEstateHistory = GetNewUserRealEstateHistory(user)
+
+      const newUserData: User = {
+        ...user,
+        cash: +(user.cash + userRealEstatePayment * elapsedPeriods).toFixed(2),
+        realEstateHistory: newRealEstateHistory,
+      }
+      dispatch(updateUser(newUserData))
+      storage.set('user', JSON.stringify(newUserData))
+    }
   }
 
   function GetStorage() {
@@ -67,6 +112,14 @@ export default function LaunchScreen({ navigation }: any) {
     //!!user && JSON.parse(user).name
     if (!!user && JSON.parse(user).name) {
       dispatch(updateUser(JSON.parse(user)))
+
+      if (
+        IsRealEstatePaymentTime(JSON.parse(user).realEstateHistory) &&
+        (JSON.parse(user).realEstate.length ||
+          JSON.parse(user).realEstateHistory.length)
+      ) {
+        SetRealEstatePayment(JSON.parse(user))
+      }
     } else {
       const defaultUser: User = {
         name: 'Oscare',

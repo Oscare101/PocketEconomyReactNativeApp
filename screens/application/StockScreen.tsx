@@ -184,8 +184,10 @@ export default function StockScreen({ navigation, route }: any) {
     {
       title: 'Your stocks amount',
       value:
-        user.stocks.find((s: any) => s.name === route.params.companyName)
-          ?.amount || 0,
+        user.stocks
+          .find((s: any) => s.name === route.params.companyName)
+          ?.amount.toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0,
       disable: !user.stocks.find(
         (s: any) => s.name === route.params.companyName
       ),
@@ -549,7 +551,7 @@ export default function StockScreen({ navigation, route }: any) {
                   {stocksToRender[0].time}
                 </Text>
                 <Text style={{ color: colors[themeColor].comment }}>
-                  {stocksToRender[stocksToRender.length - 1].time}
+                  {GetCompany().history[GetCompany().history.length - 1].time}
                 </Text>
               </View>
             </View>
