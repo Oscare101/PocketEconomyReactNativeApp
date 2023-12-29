@@ -12,6 +12,19 @@ export default {
     ],
     dividendTime: '09:00',
     dividendsHistoryDays: 7,
+    industries: [
+      'healthcare',
+      'information technology',
+      'financial',
+      'oil & gas',
+      'agriculture',
+      'construction',
+      'military',
+      'foodservice',
+      'power & utilities',
+      'media',
+      'consumer',
+    ],
   },
   deposit: {
     maxValue: 1000000000,
@@ -55,5 +68,41 @@ export default {
   },
   toast: {
     position: 'top' as ToastPosition,
+  },
+  log: {
+    start: {
+      title: 'start the game',
+      icon: 'person-outline',
+    },
+    propertyBuy: {
+      title: 'A property was bought',
+      icon: 'home-outline',
+    },
+    propertySell: {
+      title: 'A property was sold',
+      icon: 'home-outline',
+    },
+    dividends: {
+      title: 'Recieved dividends',
+      icon: 'download-outline',
+    },
+    createDeposit: {
+      title: 'Deposit created',
+      icon: 'wallet-outline',
+    },
+    deposit: {
+      title: 'Deposit payed off',
+      icon: 'wallet-outline',
+    },
+    realEstatePayment: {
+      title: 'Real estate payment',
+      icon: 'download-outline',
+    },
+    promoCode: {
+      title: 'Promo code',
+      icon: 'download-outline',
+    },
+    stockBuy: { title: 'Stock buy', icon: 'trending-up-outline' },
+    stockSell: { title: 'Stock sell', icon: 'trending-down-outline' },
   },
 }

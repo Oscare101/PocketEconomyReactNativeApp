@@ -71,3 +71,11 @@ export interface User {
   realEstate: UserRealEstate[]
   realEstateHistory: UserRealEstateHistory[]
 }
+
+export interface Log {
+  date: string
+  time: string
+  title: string
+  icon: string
+  data?: any
+}

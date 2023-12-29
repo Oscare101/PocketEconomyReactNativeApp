@@ -22,35 +22,16 @@ import DividendsScreen from '../screens/application/DividendsScreen'
 import CreateDepositScreen from '../screens/application/CreateDepositScreen'
 import EditDepositScreen from '../screens/application/EditDepositScreen'
 import RealEstateScreen from '../screens/application/RealEstateScreen'
+import LogScreen from '../screens/application/LogScreen'
+import LogInfoScreen from '../screens/application/LogInfoScreen'
+import NewsScreen from '../screens/application/NewsScreen'
+import PromoCodeScreen from '../screens/application/PromoCodeScreen'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 const Drawer = createDrawerNavigator()
 
 export default function MainNavigation() {
-  // function InvestNavigation() {
-  //   return (
-  //     <Tab.Navigator
-  //       tabBar={(props: any) => <CustomBottomTabContent {...props} />}
-  //     >
-  //       <Tab.Screen
-  //         name="InvestScreen"
-  //         component={InvestScreen}
-  //         options={{
-  //           headerShown: false,
-  //         }}
-  //       />
-  //       <Tab.Screen
-  //         name="DepositsScreen"
-  //         component={DepositsScreen}
-  //         options={{
-  //           headerShown: false,
-  //         }}
-  //       />
-  //     </Tab.Navigator>
-  //   )
-  // }
-
   function DrawerNavigation() {
     return (
       <Drawer.Navigator
@@ -67,11 +48,11 @@ export default function MainNavigation() {
           name="SettingsScreen"
           component={SettingsScreen}
         />
-        {/* <Drawer.Screen
+        <Drawer.Screen
           options={{ headerShown: false }}
-          name="InvestNavigation"
-          component={InvestNavigation}
-        /> */}
+          name="NewsScreen"
+          component={NewsScreen}
+        />
         <Drawer.Screen
           options={{ headerShown: false }}
           name="AnalyticsScreen"
@@ -161,6 +142,42 @@ export default function MainNavigation() {
         }}
         name="EditDepositScreen"
         component={EditDepositScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="LogScreen"
+        component={LogScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="LogInfoScreen"
+        component={LogInfoScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="PromoCodeScreen"
+        component={PromoCodeScreen}
       />
     </Stack.Navigator>
   )

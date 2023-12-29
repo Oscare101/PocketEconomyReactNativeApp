@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   Text,
   TouchableOpacity,
@@ -12,7 +13,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import { updateTheme } from '../redux/theme'
 import { MMKV } from 'react-native-mmkv'
+
 export const storage = new MMKV()
+const width = Dimensions.get('screen').width
+
 const themeButtonsData = [
   {
     state: 'system',
@@ -71,7 +75,7 @@ export default function ThemeBlockModal() {
         >
           <Text
             style={{
-              fontSize: 18,
+              fontSize: width * 0.05,
               color: colors[themeColor].text,
             }}
           >
@@ -79,7 +83,7 @@ export default function ThemeBlockModal() {
           </Text>
           <Text
             style={{
-              fontSize: 10,
+              fontSize: width * 0.03,
               color: colors[themeColor].comment,
             }}
           >

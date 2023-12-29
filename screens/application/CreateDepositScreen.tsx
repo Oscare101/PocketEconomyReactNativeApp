@@ -13,14 +13,18 @@ import {
 import HeaderDrawer from '../../components/HeaderDrawer'
 import colors from '../../constants/colors'
 import { useDispatch, useSelector } from 'react-redux'
-import { User, UserDeposit } from '../../constants/interfaces'
+import { Log, User, UserDeposit } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import { useMemo, useRef, useState } from 'react'
 import {
   GetDepositInterestReturn,
   GetDepositMatureDateTime,
 } from '../../functions/depositFunctions'
-import { GetMoneyAmount } from '../../functions/functions'
+import {
+  GetCurrentDate,
+  GetCurrentTime,
+  GetMoneyAmount,
+} from '../../functions/functions'
 import Button from '../../components/Button'
 import {
   BottomSheetModal,
@@ -33,6 +37,7 @@ import { updateUser } from '../../redux/user'
 import { MMKV } from 'react-native-mmkv'
 import rules from '../../constants/rules'
 import { FlatList } from 'react-native-gesture-handler'
+import { updateLog } from '../../redux/log'
 
 export const storage = new MMKV()
 
@@ -45,7 +50,10 @@ export default function CreateDepositScreen({ navigation }: any) {
   const theme = useSelector((state: RootState) => state.theme)
   const user: User = useSelector((state: RootState) => state.user)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+  const log: Log[] = useSelector((state: RootState) => state.log)
+
   const dispatch = useDispatch()
+
   const [request, setRequest] = useState<boolean>(false)
   const [depositValue, setDepositValue] = useState<string>('')
   const [durationHours, setDurationHours] = useState<number>(
@@ -84,6 +92,17 @@ export default function CreateDepositScreen({ navigation }: any) {
     }
 
     dispatch(updateUser(newUserData))
+    dispatch(
+      updateLog([
+        ...log,
+        {
+          ...rules.log.createDeposit,
+          date: GetCurrentDate(),
+          time: GetCurrentTime(),
+          data: newUserData,
+        },
+      ])
+    )
     storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
@@ -451,9 +470,9 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '92%',
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
+    padding: width * 0.03,
+    borderRadius: width * 0.03,
+    marginTop: width * 0.03,
     alignSelf: 'center',
     height: width * 0.17,
   },

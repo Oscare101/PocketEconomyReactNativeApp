@@ -7,7 +7,7 @@ import {
 import MainNavigation from './navigation/MainNavigation'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
-import { StatusBar, Text, View, useColorScheme } from 'react-native'
+import { Dimensions, StatusBar, Text, View, useColorScheme } from 'react-native'
 import colors from './constants/colors'
 import Toast from 'react-native-toast-message'
 import { useEffect, useState } from 'react'
@@ -19,11 +19,13 @@ import { updateCompanies } from './redux/companies'
 import {
   CalculateStock,
   FilterRecentDividendsHistory,
+  GetCurrentDate,
+  GetCurrentTime,
   UpdateCompaniesData,
   countElapsedPeriods,
 } from './functions/functions'
 import { MMKV } from 'react-native-mmkv'
-import { User, UserDeposit, UserRealEstate } from './constants/interfaces'
+import { Log, User, UserDeposit, UserRealEstate } from './constants/interfaces'
 import { updateUser } from './redux/user'
 import {
   CheckMatureDeposits,
@@ -36,8 +38,10 @@ import {
   GetPropertyCost,
   IsRealEstatePaymentTime,
 } from './functions/realEstateFunctions'
+import { updateLog } from './redux/log'
 
 export const storage = new MMKV()
+const width = Dimensions.get('screen').width
 
 export default function App() {
   const toastConfig = {
@@ -46,17 +50,16 @@ export default function App() {
         style={{
           width: '92%',
           backgroundColor: colors.black,
-          padding: 16,
+          padding: width * 0.04,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: 20,
-          borderRadius: 4,
+          borderRadius: width * 0.015,
         }}
       >
         <Text
           style={{
-            fontSize: 16,
+            fontSize: width * 0.05,
             color: colors.white,
             textAlign: 'left',
           }}
@@ -72,9 +75,16 @@ export default function App() {
     const theme = useSelector((state: RootState) => state.theme)
     const companies = useSelector((state: RootState) => state.companies)
     const user: User = useSelector((state: RootState) => state.user)
+    const log: Log[] = useSelector((state: RootState) => state.log)
 
     const themeColor: any = theme === 'system' ? systemTheme : theme
     const dispatch = useDispatch()
+
+    useEffect(() => {
+      if (log.length) {
+        storage.set('log', JSON.stringify(log))
+      }
+    }, [log])
 
     useEffect(() => {
       NavigationBar.setBackgroundColorAsync(colors[themeColor].bgColor)
@@ -96,6 +106,17 @@ export default function App() {
       }
 
       dispatch(updateUser(newUserData))
+      dispatch(
+        updateLog([
+          ...log,
+          {
+            ...rules.log.dividends,
+            date: GetCurrentDate(),
+            time: GetCurrentTime(),
+            data: newUserData,
+          },
+        ])
+      )
       storage.set('user', JSON.stringify(newUserData))
       Toast.show({
         type: 'ToastMessage',
@@ -129,6 +150,17 @@ export default function App() {
 
         if (isMatureDeposits === 0) {
           dispatch(updateUser(newUserData))
+          dispatch(
+            updateLog([
+              ...log,
+              {
+                ...rules.log.deposit,
+                date: GetCurrentDate(),
+                time: GetCurrentTime(),
+                data: newUserData,
+              },
+            ])
+          )
           storage.set('user', JSON.stringify(newUserData))
           break
         }
@@ -182,43 +214,64 @@ export default function App() {
           realEstateHistory: newRealEstateHistory,
         }
         dispatch(updateUser(newUserData))
+        dispatch(
+          updateLog([
+            ...log,
+            {
+              ...rules.log.realEstatePayment,
+              date: GetCurrentDate(),
+              time: GetCurrentTime(),
+              data: newUserData,
+            },
+          ])
+        )
         storage.set('user', JSON.stringify(newUserData))
       }
     }
 
     const [lastUpdate, setLastUpdate] = useState<number>(0)
 
+    function ChechUpdates() {
+      if (
+        countElapsedPeriods(
+          `${companies[0].history[companies[0].history.length - 1].date}T${
+            companies[0].history[companies[0].history.length - 1].time
+          }`
+        )
+      ) {
+        SetNewData()
+      }
+
+      if (
+        IsRealEstatePaymentTime(user.realEstateHistory) &&
+        (user.realEstate.length || user.realEstateHistory.length)
+      ) {
+        SetRealEstatePayment()
+      }
+      if (CheckMatureDeposits(user.deposits).length) {
+        RemoveMatureDeposits()
+        Toast.show({
+          type: 'ToastMessage',
+          props: {
+            title: `The deposit has been repaid`,
+          },
+          position: rules.toast.position,
+        })
+      }
+      setLastUpdate(new Date().getTime())
+    }
+
+    const [initialCheck, setInitialCheck] = useState<boolean>(false)
+
     useEffect(() => {
+      if (companies.length !== 0 && !initialCheck) {
+        setInitialCheck(true)
+        ChechUpdates()
+      }
+
       let timer = setTimeout(() => {
-        if (
-          countElapsedPeriods(
-            `${companies[0].history[companies[0].history.length - 1].date}T${
-              companies[0].history[companies[0].history.length - 1].time
-            }`
-          )
-        ) {
-          SetNewData()
-        }
-
-        if (
-          IsRealEstatePaymentTime(user.realEstateHistory) &&
-          (user.realEstate.length || user.realEstateHistory.length)
-        ) {
-          SetRealEstatePayment()
-        }
-        if (CheckMatureDeposits(user.deposits).length) {
-          RemoveMatureDeposits()
-          Toast.show({
-            type: 'ToastMessage',
-            props: {
-              title: `The deposit has been repaid`,
-            },
-            position: rules.toast.position,
-          })
-        }
-
-        setLastUpdate(new Date().getTime())
-      }, 5000)
+        ChechUpdates()
+      }, 10000)
 
       return () => {
         clearTimeout(timer)

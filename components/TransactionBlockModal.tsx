@@ -13,9 +13,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import { updateTheme } from '../redux/theme'
 import { MMKV } from 'react-native-mmkv'
-import { User, UserStock } from '../constants/interfaces'
+import { Log, User, UserStock } from '../constants/interfaces'
 import Button from './Button'
 import {
+  GetCurrentDate,
+  GetCurrentTime,
   GetMoneyAmount,
   ReduceUserStocks,
   SetNewUserStocks,
@@ -24,6 +26,7 @@ import { useState } from 'react'
 import { updateUser } from '../redux/user'
 import Toast from 'react-native-toast-message'
 import rules from '../constants/rules'
+import { updateLog } from '../redux/log'
 export const storage = new MMKV()
 
 export default function TransactionBlockModal(props: any) {
@@ -31,6 +34,7 @@ export default function TransactionBlockModal(props: any) {
   const theme = useSelector((state: RootState) => state.theme)
   const user: User = useSelector((state: RootState) => state.user)
   const companies = useSelector((state: RootState) => state.companies)
+  const log: Log[] = useSelector((state: RootState) => state.log)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
@@ -130,6 +134,17 @@ export default function TransactionBlockModal(props: any) {
       ),
     }
     dispatch(updateUser(newUserData))
+    dispatch(
+      updateLog([
+        ...log,
+        {
+          ...rules.log.stockBuy,
+          date: GetCurrentDate(),
+          time: GetCurrentTime(),
+          data: newUserData,
+        },
+      ])
+    )
     storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
@@ -150,6 +165,17 @@ export default function TransactionBlockModal(props: any) {
       stocks: ReduceUserStocks(user.stocks, amount, props.transactionStockName),
     }
     dispatch(updateUser(newUserData))
+    dispatch(
+      updateLog([
+        ...log,
+        {
+          ...rules.log.stockSell,
+          date: GetCurrentDate(),
+          time: GetCurrentTime(),
+          data: newUserData,
+        },
+      ])
+    )
     storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',

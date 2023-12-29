@@ -40,9 +40,8 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
             flexDirection: 'column',
             height: '100%',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             aspectRatio: 1.15,
-            padding: 22,
           }}
           activeOpacity={0.8}
           onPress={props.onAction}
@@ -66,7 +65,7 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
 const styles = StyleSheet.create({
   header: {
     width: '100%',
-    height: 70,
+    height: width * 0.18,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

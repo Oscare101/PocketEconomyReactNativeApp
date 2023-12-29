@@ -130,19 +130,6 @@ export default function DepositsScreen({ navigation }: any) {
             color={colors[themeColor].comment}
           />
         </View>
-
-        {/* <View
-          style={[
-            styles.card,
-            { backgroundColor: colors[themeColor].cardColor, width: '48%' },
-          ]}
-        >
-          <Text
-            style={[styles.depositName, { color: colors[themeColor].comment }]}
-          >
-            {item.interest}
-          </Text>
-        </View> */}
         <FlatList data={depositInfo} renderItem={RenderDepositInfo} />
       </TouchableOpacity>
     )
@@ -166,8 +153,11 @@ export default function DepositsScreen({ navigation }: any) {
             navigation.navigate('CreateDepositScreen')
           }}
           style={[
-            styles.button,
-            { backgroundColor: colors[themeColor].cardColor },
+            styles.card,
+            {
+              backgroundColor: colors[themeColor].cardColor,
+              alignItems: 'center',
+            },
           ]}
         >
           <Text
@@ -200,19 +190,10 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '92%',
-    padding: 10,
-    borderRadius: 10,
-    marginVertical: 5,
+    padding: width * 0.03,
+    borderRadius: width * 0.03,
+    marginTop: width * 0.03,
     alignSelf: 'center',
-  },
-  button: {
-    width: '92%',
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
     fontSize: width * 0.05,

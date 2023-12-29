@@ -7,11 +7,8 @@ import {
   View,
   useColorScheme,
 } from 'react-native'
-import Button from '../../components/Button'
 import colors from '../../constants/colors'
-import StatusItem from '../../components/StatusItem'
 import { Ionicons } from '@expo/vector-icons'
-import DrawerButton from '../../components/DrawerButton'
 import HeaderDrawer from '../../components/HeaderDrawer'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
@@ -32,6 +29,7 @@ const filterButtons = [
     value: 'DividendsConsistency',
   },
   { title: 'Company size', icon: 'business-outline', value: 'CompanySize' },
+  { title: 'Industry', text: 'Aa', value: 'Industry' },
 ]
 
 export default function InvestScreen({ navigation }: any) {
@@ -43,13 +41,6 @@ export default function InvestScreen({ navigation }: any) {
 
   const [sortBy, setSortBy] = useState<string>('Name')
   const [sortFrom, setSortFrom] = useState<string>('High')
-
-  function GetDataAboutCompanies(companies: any[]) {
-    const newData = companies.map((c: any) => {
-      return { ...c, history: c.history.slice(-1) }
-    })
-    return newData
-  }
 
   function GetSortedCompanies() {
     const sort: any = {
@@ -93,6 +84,12 @@ export default function InvestScreen({ navigation }: any) {
           b.history[b.history.length - 1].price -
           a.history[a.history.length - 1].price
       ),
+      IndustryFromLow: Object.values(companies).sort((a, b) =>
+        b.industry.localeCompare(a.industry)
+      ),
+      IndustryFromHigh: Object.values(companies).sort((a, b) =>
+        a.industry.localeCompare(b.industry)
+      ),
     }
     return sort[`${sortBy}From${sortFrom}`]
   }
@@ -101,11 +98,10 @@ export default function InvestScreen({ navigation }: any) {
     return (
       <TouchableOpacity
         style={{
-          paddingHorizontal: 10,
+          paddingHorizontal: width * 0.025,
           marginRight: (width * 0.05) / 2,
           marginLeft: index ? 0 : (width * 0.05) / 2,
           height: width * 0.07,
-          // marginVertical: 5,
           alignSelf: 'center',
           alignItems: 'center',
           justifyContent: 'center',
@@ -113,7 +109,7 @@ export default function InvestScreen({ navigation }: any) {
             sortBy === item.value
               ? colors[themeColor].infoBg
               : colors[themeColor].cardColor,
-          borderRadius: 5,
+          borderRadius: width * 0.02,
           flexDirection: 'row',
         }}
         onPress={() => {
@@ -128,7 +124,7 @@ export default function InvestScreen({ navigation }: any) {
         <Text
           style={[
             {
-              marginRight: 3,
+              marginRight: width * 0.01,
               color:
                 sortBy === item.value
                   ? colors[themeColor].text
@@ -148,7 +144,7 @@ export default function InvestScreen({ navigation }: any) {
         {item.text ? (
           <Text
             style={{
-              fontSize: 14,
+              fontSize: width * 0.04,
               color:
                 sortBy === item.value
                   ? colors[themeColor].text
@@ -185,8 +181,8 @@ export default function InvestScreen({ navigation }: any) {
           width: '95%',
           alignSelf: 'center',
           justifyContent: 'space-between',
-          borderRadius: 10,
-          padding: 5,
+          borderRadius: width * 0.02,
+          padding: width * 0.015,
         }}
         activeOpacity={0.8}
         onPress={() => {
@@ -211,16 +207,19 @@ export default function InvestScreen({ navigation }: any) {
               width: '100%',
             }}
           >
-            <Text style={{ fontSize: 20, color: colors[themeColor].text }}>
+            <Text
+              style={{ fontSize: width * 0.05, color: colors[themeColor].text }}
+            >
               {item.name}
             </Text>
           </View>
 
           <Text
             style={{
-              fontSize: 12,
+              fontSize: width * 0.03,
               fontWeight: '300',
               color: colors[themeColor].comment,
+              letterSpacing: 1,
             }}
           >
             {item.industry}
@@ -306,7 +305,7 @@ export default function InvestScreen({ navigation }: any) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginLeft: 10,
+            marginLeft: width * 0.02,
           }}
         >
           <StockStatusItem

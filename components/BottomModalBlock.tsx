@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   StatusBar,
   StyleSheet,
@@ -29,6 +30,9 @@ import StocksOvertakeInfoModal from './StocksOvertakeInfoModal'
 import RealEstateTransactionModal from './RealEstateTransactionModal'
 import RealEstateInfoModal from './RealEstateInfoModal'
 import PromoCodeModal from './PromoCodeModal'
+
+const width = Dimensions.get('screen').width
+
 export default function BottomModalBlock(props: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
@@ -86,8 +90,8 @@ export default function BottomModalBlock(props: any) {
         style={{
           backgroundColor: colors[themeColor].bgColor,
           flex: 1,
-          borderRadius: 25,
-          margin: 10,
+          borderRadius: width * 0.05,
+          margin: width * 0.03,
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'flex-start',

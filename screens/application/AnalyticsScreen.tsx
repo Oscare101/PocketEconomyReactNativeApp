@@ -163,9 +163,6 @@ export default function AnalyticsScreen({ navigation }: any) {
               style={{
                 width: '100%',
                 marginVertical: 5,
-                // backgroundColor: colors[themeColor].cardColor,
-                // padding: 10,
-                // borderRadius: 10,
               }}
               renderItem={RenderCompanyProgress}
               ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
@@ -181,10 +178,6 @@ export default function AnalyticsScreen({ navigation }: any) {
 
     const renderType: any = {
       Progress: progressBlock,
-      // Switch: switchBlock,
-      // Card: content,
-      // Stocks: stocksBlock,
-      // Deposits: depositsBlock,
     }
 
     return <>{renderType[item.type]}</>
@@ -231,9 +224,9 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '92%',
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
+    padding: width * 0.03,
+    borderRadius: width * 0.03,
+    marginTop: width * 0.03,
     alignSelf: 'center',
   },
   rowBetween: {
@@ -255,8 +248,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   cardComment: { fontSize: width * 0.045 },
-  //
-
   columnStart: {
     width: '100%',
     flexDirection: 'column',

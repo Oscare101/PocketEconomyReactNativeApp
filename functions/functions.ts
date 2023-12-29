@@ -1,4 +1,4 @@
-import { User, UserStock } from '../constants/interfaces'
+import { Company, User, UserStock } from '../constants/interfaces'
 import rules from '../constants/rules'
 import defaultData from '../defaultData.json'
 import { GetUserDepositsCapital } from './depositFunctions'
@@ -52,6 +52,20 @@ export function GetTendention(history: any[]) {
   return 0
 }
 
+export function GetNews() {
+  const year = new Date().getFullYear()
+  const month = String(new Date().getMonth() + 1).padStart(2, '0')
+  const day = String(new Date().getDate()).padStart(2, '0')
+
+  const formattedDate = `${year}-${month}-${day}`
+
+  const stanp = +new Date(formattedDate)
+  const up = rules.stock.industries[stanp ** 2 % 11]
+  const newArr = rules.stock.industries.filter((i: any) => i !== up)
+  const down = newArr[stanp ** 2 % 10]
+  return { good: up, bad: down }
+}
+
 export function CountDaysPlayed(loginday: string) {
   const start = new Date(loginday).getTime()
   const today = new Date().getTime()
@@ -59,7 +73,7 @@ export function CountDaysPlayed(loginday: string) {
   return difference
 }
 
-export function CalculateStock(stock: any) {
+export function CalculateStock(stock: Company) {
   const volatility = stock.stat.volatility
   const companySize = stock.stat.companySize
   let price = stock.history[stock.history.length - 1].price
@@ -67,6 +81,14 @@ export function CalculateStock(stock: any) {
   const tactsAmount = rules.stock.tactsPerDay
   const percentPerDay = rules.stock.percentPerDay / 100
   const dailyPercentageChange = percentPerDay / tactsAmount
+
+  const newsImpactValue = 0.07 - companySize / 100
+  const newsImpact =
+    GetNews().good === stock.industry
+      ? -newsImpactValue
+      : GetNews().bad === stock.industry
+      ? +newsImpactValue
+      : 0
 
   const randomChangeUp = Math.random() * 10 * volatility * dailyPercentageChange
   const randomChangeDown =
@@ -78,7 +100,7 @@ export function CalculateStock(stock: any) {
 
   const tendention: number =
     GetTendention(stock.history) / 5 / (companySize / 2)
-  let threshold = 0.5 + tendention
+  let threshold = 0.5 + tendention + newsImpact
   const randomPositiveChange =
     Math.random() > threshold ? randomChangeUp : -randomChangeDown
 
@@ -126,6 +148,7 @@ export function GetElapsedHistory(company: any, userStocks: any[]) {
       company.history[company.history.length - 1].time
     }`
   )
+
   let companyDividends: any = false
 
   for (let i = 0; i < count; i++) {
@@ -179,8 +202,9 @@ export function UpdateCompaniesData(userStocks: any[], companies: any[]) {
   let dividends: any = []
 
   const newCompaniesData = companies.map((c: any) => {
-    const dividend = GetElapsedHistory(c, userStocks).dividend
-    const history = GetElapsedHistory(c, userStocks).arr
+    const elapsedHistory = GetElapsedHistory(c, userStocks)
+    const dividend = elapsedHistory.dividend
+    const history = elapsedHistory.arr
     if (dividend) {
       dividends.push(dividend)
     }
@@ -483,4 +507,15 @@ export function GetUserDividendsValue(dividends: any[]) {
 
 export function GetReversedArr(arr: any[]) {
   return [...arr].reverse()
+}
+
+export function GetCurrentDate() {
+  return new Date().toISOString().split('T')[0]
+}
+
+export function GetCurrentTime() {
+  return `${new Date().getHours().toString().padStart(2, '0')}:${new Date()
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}:${new Date().getSeconds().toString().padStart(2, '0')}`
 }

@@ -29,7 +29,6 @@ import {
 } from '@gorhom/bottom-sheet'
 import BottomModalBlock from '../../components/BottomModalBlock'
 import HeaderDrawer from '../../components/HeaderDrawer'
-import { runOnJS } from 'react-native-reanimated'
 
 const width = Dimensions.get('screen').width
 const stockWidth = width * 0.92 - 20
@@ -41,15 +40,10 @@ const lineWidth: number = 2
 const periodButtonsData: any = [
   { title: 'Hour', numToRender: rules.stock.tactsPerHour },
   { title: 'Day', numToRender: rules.stock.tactsPerDay },
-  // { title: 'Week', numToRender: rules.stock.tactsPerWeek },
 ]
 
 function GetTargetLengthRender(length: number) {
-  // if (length < rules.stock.tactsPerDay / 2) {
-  //   return length
-  // } else {
   return rules.stock.tactsPerHour
-  // }
 }
 
 export default function StockScreen({ navigation, route }: any) {
@@ -98,18 +92,9 @@ export default function StockScreen({ navigation, route }: any) {
       user.stocks.find((s: any) => s.name === route.params.companyName)
         ?.amount || 0
     const price = GetCompany().history[GetCompany().history.length - 1].price
-    // user.stocks.find((s: any) => s.name === route.params.companyName)
-    //   ?.averagePrice || 0
     return `$ ${GetMoneyAmount(amount * price).value}.${
       GetMoneyAmount(amount * price).decimal
     }${GetMoneyAmount(amount * price).title}`
-  }
-
-  function GetUserStockAmount() {
-    const stockAmount =
-      user.stocks.find((s: any) => s.name === route.params.companyName)
-        ?.amount || 0
-    return stockAmount
   }
 
   const companyStatData = [
@@ -396,14 +381,14 @@ export default function StockScreen({ navigation, route }: any) {
   function RenderPeriodButtonItem({ item }: any) {
     return (
       <TouchableOpacity
-        style={{
-          width: '48%',
-          backgroundColor: colors[themeColor].cardColor,
-          padding: 10,
-          borderRadius: 10,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            width: '48%',
+            alignItems: 'center',
+          },
+        ]}
         activeOpacity={0.8}
         onPress={() => {
           setPressedPrice(null)
@@ -424,6 +409,7 @@ export default function StockScreen({ navigation, route }: any) {
               periodToRender === item.title
                 ? colors[themeColor].text
                 : colors[themeColor].comment,
+            fontSize: width * 0.04,
           }}
         >
           {item.title}
@@ -631,7 +617,11 @@ export default function StockScreen({ navigation, route }: any) {
               />
 
               <Button
-                style={{ width: '100%', marginTop: 10 }}
+                style={{
+                  width: '100%',
+                  marginTop: width * 0.03,
+                  borderRadius: width * 0.015,
+                }}
                 title="Transaction"
                 disable={false}
                 type="info"
@@ -644,7 +634,6 @@ export default function StockScreen({ navigation, route }: any) {
           </View>
         </ScrollView>
       </View>
-
       {/* BottomSheet */}
       <BottomModalBlock
         bottomSheetModalRef={bottomSheetModalRef}
@@ -671,6 +660,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: '92%',
   },
+  card: {
+    width: '92%',
+    padding: width * 0.03,
+    borderRadius: width * 0.03,
+    marginTop: width * 0.03,
+  },
   backButton: {
     height: 40,
     width: 40,
@@ -687,12 +682,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     textAlign: 'center',
   },
-  card: {
-    width: '92%',
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
-  },
+
   statItemBlock: {
     flexDirection: 'row',
     alignItems: 'center',

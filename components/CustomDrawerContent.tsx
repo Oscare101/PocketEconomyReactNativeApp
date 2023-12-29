@@ -35,6 +35,11 @@ export default function CustomDrawerContent(props: any) {
       screen: 'PortfolioScreen',
     },
     {
+      title: 'News',
+      icon: 'newspaper-outline',
+      screen: 'NewsScreen',
+    },
+    {
       title: 'Stock market',
       icon: 'bar-chart-outline',
       screen: 'InvestScreen',
@@ -100,14 +105,7 @@ export default function CustomDrawerContent(props: any) {
       {...props}
     >
       <View style={styles.topContainer}>
-        {/* <View
-          style={[
-            styles.card,
-            { backgroundColor: `${colors[themeColor].cardColor}` },
-          ]}
-        > */}
         <LinearGradient
-          // Button Linear Gradient
           colors={
             themeColor === 'dark'
               ? [
@@ -225,8 +223,6 @@ export default function CustomDrawerContent(props: any) {
           </View>
         </LinearGradient>
 
-        {/* </View> */}
-
         <FlatList
           scrollEnabled={false}
           style={{ width: '100%', marginTop: 50 }}
@@ -271,11 +267,12 @@ export default function CustomDrawerContent(props: any) {
 const styles = StyleSheet.create({
   navigationButton: {
     width: '92%',
-    borderRadius: 10,
-    height: 50,
+    height: width * 0.13,
+
+    padding: width * 0.03,
+    borderRadius: width * 0.03,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 5,
   },
   navigationButtonTitle: {
     fontSize: width * 0.05,
@@ -327,18 +324,18 @@ const styles = StyleSheet.create({
   },
   screenButton: {
     width: '92%',
-    height: 50,
+    height: width * 0.13,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.05,
   },
   card: {
     width: '92%',
     aspectRatio: 2,
-    padding: 10,
-    borderRadius: 15,
-    marginTop: 10,
+    padding: width * 0.03,
+    borderRadius: width * 0.03,
+    marginTop: width * 0.03,
     alignSelf: 'center',
   },
   rowBetween: {

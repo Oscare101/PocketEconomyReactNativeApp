@@ -1,10 +1,9 @@
 import {
+  Dimensions,
   FlatList,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
   useColorScheme,
 } from 'react-native'
@@ -18,21 +17,19 @@ import {
 } from '@gorhom/bottom-sheet'
 import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import ThemeBlockModal from '../../components/ThemeBlockModal'
 import BottomModalBlock from '../../components/BottomModalBlock'
+
+const width = Dimensions.get('screen').width
 
 export default function SettingsScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
-  const [bottomSheetContent, setBottomSheetContent] = useState<any>(0)
+  const [bottomSheetContent, setBottomSheetContent] = useState<any>('')
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-  const snapPoints = useMemo(
-    () => [bottomSheetContent === 'themeBlock' ? 290 : 290],
-    []
-  )
+  const snapPoints = useMemo(() => [290], [])
 
   const settingsData = [
     {
@@ -51,8 +48,16 @@ export default function SettingsScreen({ navigation }: any) {
       icon: 'code-working-outline',
       color: colors[themeColor].text,
       action: () => {
-        setBottomSheetContent('promoCodeBlock')
-        bottomSheetModalRef.current?.present()
+        navigation.navigate('PromoCodeScreen')
+      },
+    },
+    {
+      type: 'button',
+      title: 'Logs',
+      icon: 'bookmark-outline',
+      color: colors[themeColor].text,
+      action: () => {
+        navigation.navigate('LogScreen')
       },
     },
   ]
@@ -69,19 +74,19 @@ export default function SettingsScreen({ navigation }: any) {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: item.icon ? 'space-between' : 'center',
-          paddingVertical: 15,
+          paddingVertical: width * 0.04,
           alignSelf: 'center',
         }}
       >
         <Text
           style={{
-            fontSize: 20,
+            fontSize: width * 0.05,
             color: item.color,
           }}
         >
           {item.title}
         </Text>
-        <Ionicons name={item.icon} size={24} color={item.color} />
+        <Ionicons name={item.icon} size={width * 0.06} color={item.color} />
       </TouchableOpacity>
     )
   }
@@ -108,6 +113,7 @@ export default function SettingsScreen({ navigation }: any) {
         snapPoints={snapPoints}
         dismiss={() => bottomSheetModalRef.current?.dismiss()}
         content={bottomSheetContent}
+        transactionStockName={''}
         onClose={() => bottomSheetModalRef.current?.dismiss()}
       />
     </BottomSheetModalProvider>

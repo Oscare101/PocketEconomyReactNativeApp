@@ -204,6 +204,7 @@ export default function PortfolioScreen({ navigation }: any) {
     return (
       <View style={[styles.rowBetween, { marginVertical: 0 }]}>
         <Text
+          numberOfLines={1}
           style={[
             styles.userRatingTitle,
             { color: colors[themeColor].comment },
@@ -365,10 +366,7 @@ export default function PortfolioScreen({ navigation }: any) {
         onPress={() =>
           navigation.navigate('EditDepositScreen', { deposit: item })
         }
-        style={[
-          styles.rowBetween,
-          // { height: width * 0.08, marginVertical: 0, marginTop: 5 },
-        ]}
+        style={[styles.rowBetween]}
       >
         <Ionicons
           name={'open-outline'}
@@ -438,7 +436,6 @@ export default function PortfolioScreen({ navigation }: any) {
               style={[
                 {
                   color: colors[themeColor].comment,
-                  // flex: 1,
                   fontSize: width * 0.03,
                 },
               ]}
@@ -447,8 +444,6 @@ export default function PortfolioScreen({ navigation }: any) {
             </Text>
           </View>
         </View>
-
-        {/*  */}
       </TouchableOpacity>
     )
   }
@@ -531,7 +526,13 @@ export default function PortfolioScreen({ navigation }: any) {
   function RenderUserPortfolioItem({ item }: any) {
     const content = (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            alignSelf: 'center',
+          },
+        ]}
       >
         <View style={styles.rowBetween}>
           <Ionicons
@@ -539,7 +540,10 @@ export default function PortfolioScreen({ navigation }: any) {
             size={width * 0.05}
             color={colors[themeColor].text}
           />
-          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+          <Text
+            numberOfLines={1}
+            style={[styles.cardTitle, { color: colors[themeColor].text }]}
+          >
             {item.title}
           </Text>
           <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
@@ -551,7 +555,13 @@ export default function PortfolioScreen({ navigation }: any) {
 
     const ratingBlock = (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            alignSelf: 'center',
+          },
+        ]}
       >
         <FlatList
           data={item.data}
@@ -617,7 +627,13 @@ export default function PortfolioScreen({ navigation }: any) {
 
     const stocksBlock = (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            alignSelf: 'center',
+          },
+        ]}
       >
         <TouchableOpacity
           activeOpacity={0.8}
@@ -692,7 +708,13 @@ export default function PortfolioScreen({ navigation }: any) {
 
     const dividendsBlock = (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            alignSelf: 'center',
+          },
+        ]}
       >
         <TouchableOpacity
           activeOpacity={0.8}
@@ -782,7 +804,13 @@ export default function PortfolioScreen({ navigation }: any) {
 
     const depositsBlock = (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            alignSelf: 'center',
+          },
+        ]}
       >
         <TouchableOpacity
           activeOpacity={0.8}
@@ -840,7 +868,13 @@ export default function PortfolioScreen({ navigation }: any) {
 
     const realEstateBlock = (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            alignSelf: 'center',
+          },
+        ]}
       >
         <TouchableOpacity
           activeOpacity={0.8}
@@ -882,7 +916,12 @@ export default function PortfolioScreen({ navigation }: any) {
             />
             {user.realEstate.length ? (
               <FlatList
-                data={user.realEstate.filter((r: UserRealEstate) => r.amount)}
+                data={user.realEstate
+                  .filter((r: UserRealEstate) => r.amount)
+                  .sort(
+                    (a: UserRealEstate, b: UserRealEstate) =>
+                      a.region - b.region
+                  )}
                 renderItem={RenderUserRealEstateItem}
               />
             ) : (
@@ -901,7 +940,13 @@ export default function PortfolioScreen({ navigation }: any) {
 
     const rentalPaymentBlock = (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            alignSelf: 'center',
+          },
+        ]}
       >
         <TouchableOpacity
           activeOpacity={0.8}
@@ -1041,13 +1086,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  card: {
-    width: '92%',
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
-    alignSelf: 'center',
-  },
+
   rowBetween: {
     width: '100%',
     flexDirection: 'row',
@@ -1060,6 +1099,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+  },
+  card: {
+    width: '92%',
+    padding: width * 0.03,
+    borderRadius: width * 0.03,
+    marginTop: width * 0.03,
   },
 
   cardTitle: {

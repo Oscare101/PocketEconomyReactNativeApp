@@ -1,8 +1,15 @@
-import { TouchableOpacity, View, useColorScheme } from 'react-native'
+import {
+  Dimensions,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from 'react-native'
 import colors from '../constants/colors'
 import { useNavigation } from '@react-navigation/native'
 import { RootState } from '../redux'
 import { useSelector } from 'react-redux'
+
+const width = Dimensions.get('screen').width
 
 export default function DrawerButton(props: any) {
   const systemTheme = useColorScheme()
@@ -19,7 +26,7 @@ export default function DrawerButton(props: any) {
         alignItems: 'center',
         justifyContent: 'space-between',
         aspectRatio: 1.15,
-        padding: 22,
+        padding: width * 0.05,
       }}
       activeOpacity={0.8}
       onPress={() => navigation.openDrawer()}

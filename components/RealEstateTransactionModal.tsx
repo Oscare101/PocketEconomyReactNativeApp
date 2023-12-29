@@ -2,7 +2,6 @@ import {
   Dimensions,
   FlatList,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   useColorScheme,
@@ -10,16 +9,14 @@ import {
 import colors from '../constants/colors'
 import { RootState } from '../redux'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { Ionicons } from '@expo/vector-icons'
-import { updateTheme } from '../redux/theme'
 import { MMKV } from 'react-native-mmkv'
-import { User, UserRealEstate, UserStock } from '../constants/interfaces'
+import { Log, User, UserRealEstate } from '../constants/interfaces'
 import Button from './Button'
 import {
+  GetCurrentDate,
+  GetCurrentTime,
   GetMoneyAmount,
-  ReduceUserStocks,
-  SetNewUserStocks,
 } from '../functions/functions'
 import { useState } from 'react'
 import { updateUser } from '../redux/user'
@@ -29,6 +26,7 @@ import {
   GetPropertyCost,
   GetPropertyIncome,
 } from '../functions/realEstateFunctions'
+import { updateLog } from '../redux/log'
 
 export const storage = new MMKV()
 const width = Dimensions.get('screen').width
@@ -37,14 +35,12 @@ export default function RealEstateTransactionModal(props: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const user: User = useSelector((state: RootState) => state.user)
+  const log: Log[] = useSelector((state: RootState) => state.log)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const [page, setPage] = useState<string>('Info')
   const [amounOfStocks, setAmounOfStocks] = useState<string>('')
   const [request, setRequest] = useState<boolean>(false)
-
-  const [amountOfStocksToBuyError, setAmountOfStocksToBuyError] =
-    useState<boolean>(false)
 
   const dispatch = useDispatch()
 
@@ -124,6 +120,17 @@ export default function RealEstateTransactionModal(props: any) {
       realEstate: newUserRealEstate,
     }
     dispatch(updateUser(newUserData))
+    dispatch(
+      updateLog([
+        ...log,
+        {
+          ...rules.log.propertyBuy,
+          date: GetCurrentDate(),
+          time: GetCurrentTime(),
+          data: newUserData,
+        },
+      ])
+    )
     storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
@@ -154,6 +161,17 @@ export default function RealEstateTransactionModal(props: any) {
       realEstate: newUserRealEstate,
     }
     dispatch(updateUser(newUserData))
+    dispatch(
+      updateLog([
+        ...log,
+        {
+          ...rules.log.propertySell,
+          date: GetCurrentDate(),
+          time: GetCurrentTime(),
+          data: newUserData,
+        },
+      ])
+    )
     storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
@@ -297,7 +315,6 @@ export default function RealEstateTransactionModal(props: any) {
           onPress={() => {
             setPage('Info')
             setAmounOfStocks('')
-            setAmountOfStocksToBuyError(false)
           }}
         >
           <Ionicons
