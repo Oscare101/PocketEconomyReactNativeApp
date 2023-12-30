@@ -58,18 +58,27 @@ export function GetUserAllPropertiesCost(user: User) {
 }
 
 export function GetNewDateTimeRealEstate(date: string, time: string) {
-  let dateTime = new Date(`${date} ${time}`).getTime()
-  dateTime += 1000 * 60 * 60
-  const newDateTime = new Date(dateTime)
-  return {
-    date: newDateTime.toISOString().split('T')[0],
-    time: `${newDateTime.getHours()}:00`,
-  }
+  const inputDate = new Date(`${date}T${time}`)
+  const newDate = new Date(inputDate.getTime() + 1000 * 60 * 60)
+
+  const formattedDate =
+    newDate.getFullYear() +
+    '-' +
+    (newDate.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    newDate.getDate().toString().padStart(2, '0')
+  const formatedTime =
+    newDate.getHours().toString().padStart(2, '0') +
+    ':' +
+    newDate.getMinutes().toString().padStart(2, '0')
+
+  return { date: formattedDate, time: formatedTime }
 }
 
 export function GetNewUserRealEstateHistory(user: User) {
   let newPaymentHistory: UserRealEstateHistory[] = user.realEstateHistory
   const elapsedPeriods = IsRealEstatePaymentTime(user.realEstateHistory)
+
   for (let i = 0; i < elapsedPeriods; i++) {
     const income = +(
       (GetUserAllPropertiesCost(user) *

@@ -176,6 +176,7 @@ export default function App() {
       dispatch(updateCompanies(newCompaniesData.data))
       storage.set('companies', JSON.stringify(newCompaniesData.data))
     }
+
     function SetRealEstatePayment() {
       if (!user.realEstateHistory.length) {
         const newUserData: User = {
@@ -183,7 +184,7 @@ export default function App() {
           realEstateHistory: [
             {
               date: new Date().toISOString().split('T')[0],
-              time: `${new Date().getHours()}:00`,
+              time: `${new Date().getHours().toString().padStart(2, '0')}:00`,
               value: 0,
             },
           ],

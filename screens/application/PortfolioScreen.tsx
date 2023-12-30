@@ -512,7 +512,7 @@ export default function PortfolioScreen({ navigation }: any) {
             { color: colors[themeColor].comment, flex: 1 },
           ]}
         >
-          {item.time}
+          {item.date} {item.time}
         </Text>
         <Text style={[styles.money, { color: colors[themeColor].text }]}>
           $ {GetMoneyAmount(item.value).value}.
@@ -693,11 +693,28 @@ export default function PortfolioScreen({ navigation }: any) {
             {item.data?.length ? (
               <FlatList data={item.data} renderItem={RenderUserStockItem} />
             ) : (
-              <Text
-                style={[styles.comment, { color: colors[themeColor].comment }]}
-              >
-                No stocks yet
-              </Text>
+              <View style={styles.rowBetween}>
+                <Text
+                  style={[
+                    styles.comment,
+                    { color: colors[themeColor].comment },
+                  ]}
+                >
+                  No stocks yet{' '}
+                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    navigation.navigate('InvestScreen')
+                  }}
+                >
+                  <Ionicons
+                    name={'add-circle-outline'}
+                    size={width * 0.05}
+                    color={colors[themeColor].text}
+                  />
+                </TouchableOpacity>
+              </View>
             )}
           </>
         ) : (
@@ -853,11 +870,28 @@ export default function PortfolioScreen({ navigation }: any) {
             {user.deposits.length ? (
               <FlatList data={item.data} renderItem={RenderUserDepositItem} />
             ) : (
-              <Text
-                style={[styles.comment, { color: colors[themeColor].comment }]}
-              >
-                No deposits yet
-              </Text>
+              <View style={styles.rowBetween}>
+                <Text
+                  style={[
+                    styles.comment,
+                    { color: colors[themeColor].comment },
+                  ]}
+                >
+                  No deposits yet
+                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    navigation.navigate('DepositsScreen')
+                  }}
+                >
+                  <Ionicons
+                    name={'add-circle-outline'}
+                    size={width * 0.05}
+                    color={colors[themeColor].text}
+                  />
+                </TouchableOpacity>
+              </View>
             )}
           </>
         ) : (
@@ -914,7 +948,7 @@ export default function PortfolioScreen({ navigation }: any) {
                 backgroundColor: colors[themeColor].disable,
               }}
             />
-            {user.realEstate.length ? (
+            {user.realEstate.filter((r: UserRealEstate) => r.amount).length ? (
               <FlatList
                 data={user.realEstate
                   .filter((r: UserRealEstate) => r.amount)
@@ -925,11 +959,28 @@ export default function PortfolioScreen({ navigation }: any) {
                 renderItem={RenderUserRealEstateItem}
               />
             ) : (
-              <Text
-                style={[styles.comment, { color: colors[themeColor].comment }]}
-              >
-                No properties yet
-              </Text>
+              <View style={styles.rowBetween}>
+                <Text
+                  style={[
+                    styles.comment,
+                    { color: colors[themeColor].comment },
+                  ]}
+                >
+                  No properties yet
+                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    navigation.navigate('RealEstateScreen')
+                  }}
+                >
+                  <Ionicons
+                    name={'add-circle-outline'}
+                    size={width * 0.05}
+                    color={colors[themeColor].text}
+                  />
+                </TouchableOpacity>
+              </View>
             )}
           </>
         ) : (

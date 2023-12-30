@@ -120,6 +120,8 @@ export default function RealEstateTransactionModal(props: any) {
       realEstate: newUserRealEstate,
     }
     dispatch(updateUser(newUserData))
+
+    storage.set('user', JSON.stringify(newUserData))
     dispatch(
       updateLog([
         ...log,
@@ -131,7 +133,6 @@ export default function RealEstateTransactionModal(props: any) {
         },
       ])
     )
-    storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
       props: {
@@ -155,10 +156,16 @@ export default function RealEstateTransactionModal(props: any) {
         return r
       }
     })
+
     const newUserData: User = {
       ...user,
       cash: +(user.cash + value).toFixed(2),
       realEstate: newUserRealEstate,
+      realEstateHistory: newUserRealEstate.filter(
+        (r: UserRealEstate) => r.amount
+      ).length
+        ? user.realEstateHistory
+        : [],
     }
     dispatch(updateUser(newUserData))
     dispatch(

@@ -125,9 +125,6 @@ export function AddSecondsToDateTime(inputDateTime: string) {
     newDate.getHours().toString().padStart(2, '0') +
     ':' +
     newDate.getMinutes().toString().padStart(2, '0')
-  // +
-  // ':' +
-  // newDate.getSeconds().toString().padStart(2, '0')
 
   return formattedResult
 }

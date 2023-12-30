@@ -8,6 +8,9 @@ import { updateUser } from '../../redux/user'
 import { updateCompanies } from '../../redux/companies'
 import {
   CreateDefaultHistory,
+  FilterRecentDividendsHistory,
+  GetCurrentDate,
+  GetCurrentTime,
   UpdateCompaniesData,
 } from '../../functions/functions'
 import defaultData from '../../defaultData.json'
@@ -15,6 +18,7 @@ import { MMKV } from 'react-native-mmkv'
 import rules from '../../constants/rules'
 import { updateLog } from '../../redux/log'
 import { RootState } from '../../redux'
+import Toast from 'react-native-toast-message'
 
 export const storage = new MMKV()
 
@@ -22,7 +26,40 @@ const width = Dimensions.get('screen').width
 
 export default function LaunchScreen({ navigation }: any) {
   const dispatch = useDispatch()
-  const log: Log[] = useSelector((state: RootState) => state.log)
+
+  function SetUserDividends(dividends: any[], user: User, log: Log[]) {
+    const value = dividends.reduce((a: any, b: any) => a + b.value, 0)
+    const lastDividends = user.dividendsHistory || []
+    const newUserData: User = {
+      ...user,
+      cash: +(user.cash + value).toFixed(2),
+      dividendsHistory: FilterRecentDividendsHistory([
+        ...lastDividends,
+        ...dividends,
+      ]),
+    }
+
+    dispatch(updateUser(newUserData))
+    dispatch(
+      updateLog([
+        ...log,
+        {
+          ...rules.log.dividends,
+          date: GetCurrentDate(),
+          time: GetCurrentTime(),
+          data: newUserData,
+        },
+      ])
+    )
+    storage.set('user', JSON.stringify(newUserData))
+    Toast.show({
+      type: 'ToastMessage',
+      props: {
+        title: `You have received your stock dividend`,
+      },
+      position: rules.toast.position,
+    })
+  }
 
   function GetStorage() {
     const log: any = storage.getString('log')
@@ -73,6 +110,10 @@ export default function LaunchScreen({ navigation }: any) {
         JSON.parse(user).stocks,
         JSON.parse(companies)
       )
+      const dividends = newCompaniesData.dividends
+      if (dividends.length) {
+        SetUserDividends(dividends, JSON.parse(user), JSON.parse(log))
+      }
       dispatch(updateCompanies(newCompaniesData.data))
       storage.set('companies', JSON.stringify(newCompaniesData.data))
     } else {
