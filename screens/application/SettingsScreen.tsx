@@ -18,6 +18,7 @@ import {
 import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import BottomModalBlock from '../../components/BottomModalBlock'
+import rules from '../../constants/rules'
 
 const width = Dimensions.get('screen').width
 

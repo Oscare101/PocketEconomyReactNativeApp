@@ -1,6 +1,7 @@
 import { ToastPosition } from 'react-native-toast-message'
 
 export default {
+  app: { test: true },
   user: { startCash: 100000 },
   stock: {
     percentPerDay: 5,

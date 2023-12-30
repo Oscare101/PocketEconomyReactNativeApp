@@ -84,7 +84,7 @@ export default function StockScreen({ navigation, route }: any) {
     const currentCompany: any = companies.find(
       (c: any) => c.name === route.params.companyName
     )
-    return currentCompany
+    return currentCompany as Company
   }
 
   function GetUserStockPrice() {
@@ -120,6 +120,14 @@ export default function StockScreen({ navigation, route }: any) {
       title: 'Dividend',
       statIcon: false,
       value: `up to ${GetCompany()?.stat.dividendsRate} %`,
+    },
+    {
+      title: 'Industry',
+      statIcon: false,
+      value: `${
+        GetCompany()?.industry.charAt(0).toUpperCase() +
+        GetCompany()?.industry.slice(1)
+      }`,
     },
     {
       title: 'Price',

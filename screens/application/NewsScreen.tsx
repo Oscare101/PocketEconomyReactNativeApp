@@ -1,47 +1,24 @@
 import {
   Dimensions,
-  FlatList,
-  Keyboard,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
   useColorScheme,
 } from 'react-native'
 import HeaderDrawer from '../../components/HeaderDrawer'
 import colors from '../../constants/colors'
-import { useDispatch, useSelector } from 'react-redux'
-import { Log, User, UserDeposit } from '../../constants/interfaces'
+import { useSelector } from 'react-redux'
 import { RootState } from '../../redux'
-import { useMemo, useRef, useState } from 'react'
-import {
-  GetDepositInterestReturn,
-  GetDepositMatureDateTime,
-} from '../../functions/depositFunctions'
-import { GetMoneyAmount, GetNews } from '../../functions/functions'
-import Button from '../../components/Button'
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet'
-import BottomModalBlock from '../../components/BottomModalBlock'
-import { Ionicons } from '@expo/vector-icons'
-import Toast from 'react-native-toast-message'
-import { updateUser } from '../../redux/user'
-import { MMKV } from 'react-native-mmkv'
-import rules from '../../constants/rules'
-
-export const storage = new MMKV()
+import { GetNews } from '../../functions/functions'
 
 const width = Dimensions.get('screen').width
 
-export default function NewsScreen({ navigation, route }: any) {
+export default function NewsScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
+  const companies = useSelector((state: RootState) => state.companies)
+
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
   return (
