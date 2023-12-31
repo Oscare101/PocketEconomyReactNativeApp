@@ -183,7 +183,7 @@ export default function App() {
           ...user,
           realEstateHistory: [
             {
-              date: new Date().toISOString().split('T')[0],
+              date: GetCurrentDate(),
               time: `${new Date().getHours().toString().padStart(2, '0')}:00`,
               value: 0,
             },

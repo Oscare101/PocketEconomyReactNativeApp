@@ -223,7 +223,7 @@ export function CreateDefaultHistory(comapanies: any[]) {
       ...rest,
       history: [
         {
-          date: new Date().toISOString().split('T')[0],
+          date: GetCurrentDate(),
           time: `${new Date()
             .getHours()
             .toString()
@@ -507,7 +507,11 @@ export function GetReversedArr(arr: any[]) {
 }
 
 export function GetCurrentDate() {
-  return new Date().toISOString().split('T')[0]
+  const year = new Date().getFullYear()
+  const month = String(new Date().getMonth() + 1).padStart(2, '0')
+  const day = String(new Date().getDate()).padStart(2, '0')
+  const date = `${year}-${month}-${day}`
+  return date
 }
 
 export function GetCurrentTime() {

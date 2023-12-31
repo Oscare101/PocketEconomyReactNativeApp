@@ -91,7 +91,7 @@ export default function LaunchScreen({ navigation }: any) {
     } else {
       const defaultUser: User = {
         name: 'Oscare',
-        loginDate: new Date().toISOString().split('T')[0],
+        loginDate: GetCurrentDate(),
         cash: rules.user.startCash,
         stocks: [],
         history: [],

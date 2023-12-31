@@ -75,14 +75,8 @@ export default function CreateDepositScreen({ navigation }: any) {
       name: `Deposit ${user.deposits.length + 1}`,
       value: +depositValue,
       interest: interest,
-      openingDate: new Date().toISOString().split('T')[0],
-      openingTime: `${new Date()
-        .getHours()
-        .toString()
-        .padStart(2, '0')}:${new Date()
-        .getMinutes()
-        .toString()
-        .padStart(2, '0')}`,
+      openingDate: GetCurrentDate(),
+      openingTime: GetCurrentTime(),
       durationHours: durationHours,
       autoRenewal: autoRenewal,
     }
@@ -431,27 +425,15 @@ export default function CreateDepositScreen({ navigation }: any) {
             mature date:{' '}
             {
               GetDepositMatureDateTime(
-                new Date().toISOString().split('T')[0],
-                `${new Date()
-                  .getHours()
-                  .toString()
-                  .padStart(2, '0')}:${new Date()
-                  .getMinutes()
-                  .toString()
-                  .padStart(2, '0')}`,
+                GetCurrentDate(),
+                GetCurrentTime(),
                 durationHours
               ).date
             }{' '}
             {
               GetDepositMatureDateTime(
-                new Date().toISOString().split('T')[0],
-                `${new Date()
-                  .getHours()
-                  .toString()
-                  .padStart(2, '0')}:${new Date()
-                  .getMinutes()
-                  .toString()
-                  .padStart(2, '0')}`,
+                GetCurrentDate(),
+                GetCurrentTime(),
                 durationHours
               ).time
             }
