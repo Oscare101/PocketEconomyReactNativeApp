@@ -43,6 +43,8 @@ export default function LogScreen({ navigation, route }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const log: Log[] = useSelector((state: RootState) => state.log)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
+
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const dispatch = useDispatch()
 
@@ -57,18 +59,29 @@ export default function LogScreen({ navigation, route }: any) {
       >
         <View style={styles.rowBetween}>
           <Text
-            style={[styles.dateTime, { color: colors[themeColor].comment }]}
+            style={{
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.035,
+            }}
           >
             {item.date}
           </Text>
           <Text
-            style={[styles.dateTime, { color: colors[themeColor].comment }]}
+            style={{
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.035,
+            }}
           >
             {item.time}
           </Text>
         </View>
 
-        <Text style={[styles.cartTitle, { color: colors[themeColor].text }]}>
+        <Text
+          style={{
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.05,
+          }}
+        >
           {item.title}
         </Text>
       </TouchableOpacity>
@@ -96,6 +109,31 @@ export default function LogScreen({ navigation, route }: any) {
             { backgroundColor: colors[themeColor].bgColor },
           ]}
         >
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors[themeColor].cardColor },
+            ]}
+          >
+            <View style={styles.rowBetween}>
+              <Text
+                style={{
+                  fontSize: width * 0.04,
+                  color: colors[themeColor].comment,
+                }}
+              >
+                Promocode usage
+              </Text>
+              <Text
+                style={{
+                  fontSize: width * 0.04,
+                  color: colors[themeColor].comment,
+                }}
+              >
+                {log.filter((l: Log) => l.title === 'Promo code').length}
+              </Text>
+            </View>
+          </View>
           <FlatList
             style={{ width: '100%', marginBottom: 10 }}
             data={[...log].reverse()}
@@ -127,17 +165,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  cartTitle: {
-    fontSize: width * 0.05,
-  },
-  dateTime: { fontSize: width * 0.035 },
-  cardComment: { fontSize: width * 0.05, fontWeight: '300' },
-  input: {
-    fontSize: width * 0.07,
-    padding: 0,
-    flex: 1,
-    textAlign: 'right',
-    marginLeft: 10,
   },
 })

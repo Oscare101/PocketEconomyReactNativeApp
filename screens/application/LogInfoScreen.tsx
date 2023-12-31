@@ -62,15 +62,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cartTitle: {
-    fontSize: width * 0.05,
-  },
-  dateTime: { fontSize: width * 0.035 },
-  cardComment: { fontSize: width * 0.05, fontWeight: '300' },
-  input: {
-    fontSize: width * 0.07,
-    padding: 0,
-    flex: 1,
-    textAlign: 'right',
-    marginLeft: 10,
+    fontSize: width * 0.04,
   },
 })
