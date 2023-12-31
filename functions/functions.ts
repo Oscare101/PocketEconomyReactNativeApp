@@ -53,13 +53,7 @@ export function GetTendention(history: any[]) {
 }
 
 export function GetNews() {
-  const year = new Date().getFullYear()
-  const month = String(new Date().getMonth() + 1).padStart(2, '0')
-  const day = String(new Date().getDate()).padStart(2, '0')
-
-  const formattedDate = `${year}-${month}-${day}`
-
-  const stanp = +new Date(formattedDate)
+  const stanp = +new Date(GetCurrentDate())
   const up = rules.stock.industries[stanp ** 2 % 11]
   const newArr = rules.stock.industries.filter((i: any) => i !== up)
   const down = newArr[stanp ** 2 % 10]
