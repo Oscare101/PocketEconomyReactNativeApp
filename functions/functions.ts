@@ -82,7 +82,7 @@ export function CalculateStock(stock: Company) {
   const percentPerDay = rules.stock.percentPerDay / 100
   const dailyPercentageChange = percentPerDay / tactsAmount
 
-  const newsImpactValue = 0.07 - companySize / 100
+  const newsImpactValue = rules.news.impactPerCompanySize[companySize - 1]
   const newsImpact =
     GetNews().good === stock.industry
       ? -newsImpactValue

@@ -27,6 +27,9 @@ export default {
       'consumer',
     ],
   },
+  news: {
+    impactPerCompanySize: [3, 2.5, 2, 1.5, 1],
+  },
   deposit: {
     maxValue: 1000000000,
     options: [

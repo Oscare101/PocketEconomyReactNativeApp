@@ -46,7 +46,7 @@ export default function AnalyticsScreen({ navigation }: any) {
       type: 'Progress',
       icon: 'analytics-outline',
       title: 'Stock market',
-      comment: 'Best companies',
+      comment: 'Best companies (last 24h)',
       value: GetEconomicsProgress(companies, 0).toFixed(2),
       infoModalData: '',
       data: GetSortedCompaniesByProgress(companies),
