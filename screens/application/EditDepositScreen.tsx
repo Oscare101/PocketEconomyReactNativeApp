@@ -150,11 +150,13 @@ export default function EditDepositScreen({ navigation, route }: any) {
         <View style={styles.rowBetween}>
           <Text
             numberOfLines={1}
+            ellipsizeMode="tail"
             style={{
               color: item.switch
                 ? colors[themeColor].text
                 : colors[themeColor].comment,
               fontSize: width * interfaceSize * 0.06,
+              flex: 1,
             }}
           >
             {item.title}

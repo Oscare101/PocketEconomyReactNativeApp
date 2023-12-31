@@ -16,13 +16,16 @@ interface StatusItemProps {
   title: string
   type: 'success' | 'warning' | 'error' | 'info'
   icon: keyof typeof Ionicons.glyphMap | ''
+  doNotResize?: boolean
 }
 
 export default function StatusItem(props: StatusItemProps) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
-  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
+  const interfaceSize = props.doNotResize
+    ? 1
+    : useSelector((state: RootState) => state.interfaceSize)
 
   return (
     <View
@@ -65,7 +68,6 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-
     flexDirection: 'row',
   },
   buttonTitle: { fontWeight: '400' },

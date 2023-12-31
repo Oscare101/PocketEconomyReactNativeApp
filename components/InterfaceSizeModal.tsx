@@ -41,7 +41,7 @@ export default function InterfaceSizeModal() {
           justifyContent: 'space-between',
           width: '92%',
           alignSelf: 'center',
-          height: 45,
+          height: 50 * item.size,
           marginVertical: 5,
           backgroundColor: colors[themeColor].cardColor,
           borderRadius: width * 0.03,
@@ -55,7 +55,9 @@ export default function InterfaceSizeModal() {
       >
         <Text
           numberOfLines={1}
+          ellipsizeMode="tail"
           style={{
+            flex: 1,
             fontSize: width * 0.05 * item.size,
             color:
               item.size === interfaceSize
@@ -65,7 +67,14 @@ export default function InterfaceSizeModal() {
         >
           {item.title}
         </Text>
-        <StatusItem title={item.value} type="success" icon="" />
+        <View style={{ transform: [{ scale: item.size }] }}>
+          <StatusItem
+            title={item.value}
+            type="success"
+            icon=""
+            doNotResize={true}
+          />
+        </View>
       </TouchableOpacity>
     )
   }

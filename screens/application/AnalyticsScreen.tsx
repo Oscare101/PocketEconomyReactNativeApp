@@ -75,6 +75,8 @@ export default function AnalyticsScreen({ navigation }: any) {
           color={colors[themeColor].comment}
         />
         <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
           style={[
             styles.companyName,
             {

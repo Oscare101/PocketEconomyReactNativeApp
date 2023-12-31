@@ -206,9 +206,11 @@ export default function PortfolioScreen({ navigation }: any) {
       <View style={[styles.rowBetween, { marginVertical: 0 }]}>
         <Text
           numberOfLines={1}
+          ellipsizeMode="tail"
           style={[
             styles.userRatingTitle,
             {
+              flex: 1,
               color: colors[themeColor].comment,
               fontSize: width * interfaceSize * 0.05,
             },
