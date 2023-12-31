@@ -22,12 +22,18 @@ export default function StatusItem(props: StatusItemProps) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   return (
     <View
       style={[
         styles.button,
-        { backgroundColor: colors[themeColor][`${props.type}Bg`] },
+        {
+          backgroundColor: colors[themeColor][`${props.type}Bg`],
+          paddingVertical: width * interfaceSize * 0.01,
+          paddingHorizontal: width * interfaceSize * 0.02,
+          borderRadius: width * interfaceSize * 0.02,
+        },
       ]}
     >
       {props.icon ? (
@@ -45,6 +51,7 @@ export default function StatusItem(props: StatusItemProps) {
           {
             color: colors[themeColor][`${props.type}Text`],
             marginLeft: props.icon ? 5 : 0,
+            fontSize: width * interfaceSize * 0.04,
           },
         ]}
       >
@@ -56,12 +63,10 @@ export default function StatusItem(props: StatusItemProps) {
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: width * 0.02,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: width * 0.01,
-    paddingHorizontal: width * 0.02,
+
     flexDirection: 'row',
   },
-  buttonTitle: { fontSize: width * 0.04, fontWeight: '400' },
+  buttonTitle: { fontWeight: '400' },
 })

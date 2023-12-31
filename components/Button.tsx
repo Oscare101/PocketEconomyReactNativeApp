@@ -23,6 +23,7 @@ export default function Button(props: ButtonProps) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   return (
     <TouchableOpacity
@@ -32,6 +33,7 @@ export default function Button(props: ButtonProps) {
           backgroundColor: props.disable
             ? colors[themeColor].cardColor
             : colors[themeColor][`${props.type}Bg`],
+          height: width * interfaceSize * 0.15,
         },
         props.style,
       ]}
@@ -46,6 +48,7 @@ export default function Button(props: ButtonProps) {
             color: props.disable
               ? colors[themeColor].disable
               : colors[themeColor][`${props.type}Text`],
+            fontSize: width * interfaceSize * 0.07,
           },
         ]}
       >
@@ -58,10 +61,10 @@ export default function Button(props: ButtonProps) {
 const styles = StyleSheet.create({
   button: {
     width: '92%',
-    height: width * 0.15,
+
     borderRadius: width * 0.03,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonTitle: { fontSize: width * 0.07, fontWeight: '400' },
+  buttonTitle: { fontWeight: '400' },
 })

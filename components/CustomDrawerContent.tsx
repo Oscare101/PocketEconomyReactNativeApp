@@ -24,7 +24,7 @@ export default function CustomDrawerContent(props: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const user: User = useSelector((state: RootState) => state.user)
-  const companies: any = useSelector((state: RootState) => state.companies)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
@@ -52,7 +52,7 @@ export default function CustomDrawerContent(props: any) {
     { title: 'Deposit', icon: 'wallet-outline', screen: 'DepositsScreen' },
 
     { title: 'Real Estate', icon: 'home-outline', screen: 'RealEstateScreen' },
-    { title: 'Store', icon: 'storefront-outline', screen: 'StoreScreen' },
+    { title: 'Store', icon: 'albums-outline', screen: 'StoreScreen' },
   ]
 
   function RenderScreenButtonItem({ item }: any) {
@@ -64,7 +64,13 @@ export default function CustomDrawerContent(props: any) {
         onPress={() => {
           props.navigation.jumpTo(item.screen)
         }}
-        style={styles.screenButton}
+        style={[
+          styles.screenButton,
+          {
+            height: width * interfaceSize * 0.13,
+            paddingHorizontal: width * interfaceSize * 0.05,
+          },
+        ]}
       >
         <Ionicons
           name={item.icon}
@@ -154,13 +160,23 @@ export default function CustomDrawerContent(props: any) {
               />
             </View>
             <Text
-              style={[styles.comment, { color: colors[themeColor].comment }]}
+              style={[
+                {
+                  color: colors[themeColor].comment,
+                  fontSize: width * 0.04,
+                },
+              ]}
             >
               **** 1234
             </Text>
             <View style={{ flex: 1 }} />
             <Text
-              style={[styles.comment, { color: colors[themeColor].comment }]}
+              style={[
+                {
+                  color: colors[themeColor].comment,
+                  fontSize: width * 0.04,
+                },
+              ]}
             >
               06/26
             </Text>
@@ -169,15 +185,25 @@ export default function CustomDrawerContent(props: any) {
             <View style={styles.columnStart}>
               <Text
                 style={[
-                  styles.comment,
-                  { color: colors[themeColor].comment, fontSize: width * 0.05 },
+                  {
+                    color: colors[themeColor].comment,
+                    fontSize: width * 0.05,
+                  },
                 ]}
               >
                 Balance:
               </Text>
-              <Text style={[styles.money, { color: colors[themeColor].text }]}>
+              <Text
+                style={[
+                  styles.money,
+                  {
+                    color: colors[themeColor].text,
+                    fontSize: width * 0.06,
+                  },
+                ]}
+              >
                 $ {GetMoneyAmount(user.cash).value}.
-                <Text style={styles.moneyDecimal}>
+                <Text style={{ fontSize: width * 0.04 }}>
                   {GetMoneyAmount(user.cash).decimal}
                 </Text>
                 {GetMoneyAmount(user.cash).title}
@@ -186,12 +212,12 @@ export default function CustomDrawerContent(props: any) {
             <View style={[styles.columnStart, { alignItems: 'flex-end' }]}>
               <View
                 style={{
-                  width: width * 0.05 * 1.4,
-                  height: width * 0.05,
+                  width: width * 0.05 * 1.4 * interfaceSize,
+                  height: width * 0.05 * interfaceSize,
                   borderWidth: 1,
                   borderColor: colors[themeColor].bgColor,
                   backgroundColor: colors[themeColor].warningBg,
-                  borderRadius: width * 0.05 * 0.15,
+                  borderRadius: width * 0.05 * 0.15 * interfaceSize,
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
@@ -253,10 +279,10 @@ export default function CustomDrawerContent(props: any) {
         ]}
       >
         <Text
-          style={[
-            styles.navigationButtonTitle,
-            { color: colors[themeColor].text },
-          ]}
+          style={{
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.05,
+          }}
         >
           Settings
         </Text>
@@ -275,21 +301,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  navigationButtonTitle: {
-    fontSize: width * 0.05,
-  },
+
   topBlock: {
     width: '100%',
     aspectRatio: 2,
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-  },
-  title: {
-    fontSize: width * 0.07,
-    width: '100%',
-    textAlign: 'center',
-    fontWeight: '300',
   },
   topBlockCircle: {
     width: '35%',
@@ -303,19 +321,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
   },
-
-  name: {
-    fontSize: width * 0.04,
-    padding: width * 0.02,
-    width: '60%',
-  },
   money: {
-    fontSize: width * 0.06,
-    // padding: width * 0.02,
     width: '100%',
     textAlign: 'left',
   },
-  moneyDecimal: { fontSize: width * 0.04, fontWeight: '400' },
   topContainer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -350,8 +359,5 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'flex-start',
     justifyContent: 'space-evenly',
-  },
-  comment: {
-    fontSize: width * 0.04,
   },
 })

@@ -26,6 +26,7 @@ export default function SettingsScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const [bottomSheetContent, setBottomSheetContent] = useState<any>('')
 
@@ -40,6 +41,16 @@ export default function SettingsScreen({ navigation }: any) {
       color: colors[themeColor].text,
       action: () => {
         setBottomSheetContent('themeBlock')
+        bottomSheetModalRef.current?.present()
+      },
+    },
+    {
+      type: 'button',
+      title: 'Interface size',
+      icon: 'pencil',
+      color: colors[themeColor].text,
+      action: () => {
+        setBottomSheetContent('interfaceSizeBlock')
         bottomSheetModalRef.current?.present()
       },
     },
@@ -75,19 +86,23 @@ export default function SettingsScreen({ navigation }: any) {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: item.icon ? 'space-between' : 'center',
-          paddingVertical: width * 0.04,
+          paddingVertical: width * interfaceSize * 0.04,
           alignSelf: 'center',
         }}
       >
         <Text
           style={{
-            fontSize: width * 0.05,
+            fontSize: width * interfaceSize * 0.05,
             color: item.color,
           }}
         >
           {item.title}
         </Text>
-        <Ionicons name={item.icon} size={width * 0.06} color={item.color} />
+        <Ionicons
+          name={item.icon}
+          size={width * interfaceSize * 0.06}
+          color={item.color}
+        />
       </TouchableOpacity>
     )
   }

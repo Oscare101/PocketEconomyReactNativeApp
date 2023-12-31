@@ -19,6 +19,7 @@ import rules from '../../constants/rules'
 import { updateLog } from '../../redux/log'
 import { RootState } from '../../redux'
 import Toast from 'react-native-toast-message'
+import { updateInterfaceSize } from '../../redux/interfaceSize'
 
 export const storage = new MMKV()
 
@@ -62,15 +63,20 @@ export default function LaunchScreen({ navigation }: any) {
   }
 
   function GetStorage() {
-    const log: any = storage.getString('log')
+    const interfaceSize: any = storage.getNumber('interfaceSize')
+    if (interfaceSize) {
+      dispatch(updateInterfaceSize(interfaceSize))
+    } else {
+      storage.set('interfaceSize', 1)
+    }
 
+    const log: any = storage.getString('log')
     if (log && JSON.parse(log).length) {
       dispatch(updateLog(JSON.parse(log)))
     } else {
     }
 
     const theme: any = storage.getString('theme')
-
     if (theme) {
       dispatch(updateTheme(theme))
     } else {

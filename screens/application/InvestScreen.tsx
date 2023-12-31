@@ -36,6 +36,7 @@ export default function InvestScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const companies = useSelector((state: RootState) => state.companies)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
@@ -98,10 +99,10 @@ export default function InvestScreen({ navigation }: any) {
     return (
       <TouchableOpacity
         style={{
-          paddingHorizontal: width * 0.025,
-          marginRight: (width * 0.05) / 2,
-          marginLeft: index ? 0 : (width * 0.05) / 2,
-          height: width * 0.07,
+          paddingHorizontal: width * interfaceSize * 0.025,
+          marginRight: (width * interfaceSize * 0.05) / 2,
+          marginLeft: index ? 0 : (width * interfaceSize * 0.05) / 2,
+          height: width * interfaceSize * 0.07,
           alignSelf: 'center',
           alignItems: 'center',
           justifyContent: 'center',
@@ -109,7 +110,7 @@ export default function InvestScreen({ navigation }: any) {
             sortBy === item.value
               ? colors[themeColor].infoBg
               : colors[themeColor].cardColor,
-          borderRadius: width * 0.02,
+          borderRadius: width * interfaceSize * 0.02,
           flexDirection: 'row',
         }}
         onPress={() => {
@@ -124,7 +125,7 @@ export default function InvestScreen({ navigation }: any) {
         <Text
           style={[
             {
-              marginRight: width * 0.01,
+              marginRight: width * interfaceSize * 0.01,
               color:
                 sortBy === item.value
                   ? colors[themeColor].text
@@ -144,7 +145,7 @@ export default function InvestScreen({ navigation }: any) {
         {item.text ? (
           <Text
             style={{
-              fontSize: width * 0.04,
+              fontSize: width * interfaceSize * 0.04,
               color:
                 sortBy === item.value
                   ? colors[themeColor].text
@@ -181,8 +182,8 @@ export default function InvestScreen({ navigation }: any) {
           width: '95%',
           alignSelf: 'center',
           justifyContent: 'space-between',
-          borderRadius: width * 0.02,
-          padding: width * 0.015,
+          borderRadius: width * interfaceSize * 0.02,
+          padding: width * interfaceSize * 0.015,
         }}
         activeOpacity={0.8}
         onPress={() => {
@@ -208,7 +209,10 @@ export default function InvestScreen({ navigation }: any) {
             }}
           >
             <Text
-              style={{ fontSize: width * 0.05, color: colors[themeColor].text }}
+              style={{
+                fontSize: width * interfaceSize * 0.05,
+                color: colors[themeColor].text,
+              }}
             >
               {item.name}
             </Text>
@@ -216,7 +220,7 @@ export default function InvestScreen({ navigation }: any) {
 
           <Text
             style={{
-              fontSize: width * 0.03,
+              fontSize: width * interfaceSize * 0.03,
               fontWeight: '300',
               color: colors[themeColor].comment,
               letterSpacing: 1,
@@ -228,7 +232,11 @@ export default function InvestScreen({ navigation }: any) {
             <Text
               style={[
                 styles.stockStat,
-                { color: colors[themeColor].text, width: '40%' },
+                {
+                  color: colors[themeColor].text,
+                  width: '40%',
+                  fontSize: width * interfaceSize * 0.035,
+                },
               ]}
             >
               Price: ${' '}
@@ -249,18 +257,33 @@ export default function InvestScreen({ navigation }: any) {
             <Text
               style={[
                 styles.stockStat,
-                { color: colors[themeColor].text, width: '60%' },
+                {
+                  color: colors[themeColor].text,
+                  width: '60%',
+                  fontSize: width * interfaceSize * 0.035,
+                },
               ]}
             >
               Dividend: up to {item.stat.dividendsRate} %{' '}
-              <Text style={styles.stockStatMini}>(ped day)</Text>
+              <Text
+                style={{
+                  fontSize: width * interfaceSize * 0.025,
+                  fontWeight: '300',
+                }}
+              >
+                (ped day)
+              </Text>
             </Text>
           </View>
           <View style={styles.rowBetween}>
             <Text
               style={[
                 styles.companyStockPercent,
-                { color: colors[themeColor].comment, width: '40%' },
+                {
+                  color: colors[themeColor].comment,
+                  width: '40%',
+                  fontSize: width * interfaceSize * 0.03,
+                },
               ]}
             >
               Hour:{' '}
@@ -280,7 +303,11 @@ export default function InvestScreen({ navigation }: any) {
             <Text
               style={[
                 styles.companyStockPercent,
-                { color: colors[themeColor].comment, width: '60%' },
+                {
+                  color: colors[themeColor].comment,
+                  width: '60%',
+                  fontSize: width * interfaceSize * 0.03,
+                },
               ]}
             >
               Day:{' '}
@@ -305,7 +332,7 @@ export default function InvestScreen({ navigation }: any) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginLeft: width * 0.02,
+            marginLeft: width * interfaceSize * 0.02,
           }}
         >
           <StockStatusItem
@@ -342,7 +369,7 @@ export default function InvestScreen({ navigation }: any) {
         showsHorizontalScrollIndicator={false}
         style={{
           width: '100%',
-          height: width * 0.12,
+          height: width * interfaceSize * 0.12,
           borderBottomWidth: 1,
           borderColor: colors[themeColor].disable,
           elevation: 5,
@@ -374,11 +401,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
-  stockStat: { fontSize: width * 0.035, fontWeight: '300' },
-  stockStatMini: { fontSize: width * 0.025, fontWeight: '300' },
+  stockStat: { fontWeight: '300' },
 
   companyStockPercent: {
-    fontSize: width * 0.03,
     fontWeight: '300',
   },
 })

@@ -54,6 +54,7 @@ export default function PortfolioScreen({ navigation }: any) {
   const user: User = useSelector((state: RootState) => state.user)
   const companies: any = useSelector((state: RootState) => state.companies)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const [stockShowProgress, setStockShowProgress] = useState<boolean>(false)
   const [openStocksList, setOpenStocksList] = useState<boolean>(false)
@@ -207,7 +208,10 @@ export default function PortfolioScreen({ navigation }: any) {
           numberOfLines={1}
           style={[
             styles.userRatingTitle,
-            { color: colors[themeColor].comment },
+            {
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.05,
+            },
           ]}
         >
           {item.title}
@@ -223,7 +227,7 @@ export default function PortfolioScreen({ navigation }: any) {
             <Ionicons
               name="information-circle-outline"
               color={colors[themeColor].text}
-              size={width * 0.045}
+              size={width * interfaceSize * 0.045}
             />
           </TouchableOpacity>
         ) : (
@@ -237,7 +241,13 @@ export default function PortfolioScreen({ navigation }: any) {
               </View>
             ) : (
               <Text
-                style={[styles.cardValue, { color: colors[themeColor].text }]}
+                style={[
+                  styles.cardValue,
+                  {
+                    color: colors[themeColor].text,
+                    fontSize: width * interfaceSize * 0.05,
+                  },
+                ]}
               >
                 {item.value}
               </Text>
@@ -245,7 +255,13 @@ export default function PortfolioScreen({ navigation }: any) {
           </>
         ) : (
           <Text
-            style={[styles.cardValue, { color: colors[themeColor].comment }]}
+            style={[
+              styles.cardValue,
+              {
+                color: colors[themeColor].comment,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
           >
             -
           </Text>
@@ -271,18 +287,26 @@ export default function PortfolioScreen({ navigation }: any) {
         }}
         style={[
           styles.rowBetween,
-          { height: width * 0.08, marginVertical: 0, marginTop: 5 },
+          {
+            height: width * interfaceSize * 0.08,
+            marginVertical: 0,
+            marginTop: 5,
+          },
         ]}
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.04}
+          size={width * interfaceSize * 0.04}
           color={colors[themeColor].comment}
         />
         <Text
           style={[
             styles.userStockTitle,
-            { color: colors[themeColor].comment, flex: 1 },
+            {
+              color: colors[themeColor].comment,
+              flex: 1,
+              fontSize: width * interfaceSize * 0.04,
+            },
           ]}
           numberOfLines={1}
         >
@@ -301,7 +325,12 @@ export default function PortfolioScreen({ navigation }: any) {
             }
           />
         ) : (
-          <Text style={[styles.money, { color: colors[themeColor].text }]}>
+          <Text
+            style={{
+              color: colors[themeColor].text,
+              fontSize: width * interfaceSize * 0.04,
+            }}
+          >
             $ {GetMoneyAmount(item.amount * currentStockPrice).value}.
             {GetMoneyAmount(item.amount * currentStockPrice).decimal}
             {GetMoneyAmount(item.amount * currentStockPrice).title}
@@ -325,7 +354,7 @@ export default function PortfolioScreen({ navigation }: any) {
         style={[
           styles.rowBetween,
           {
-            height: width * 0.08,
+            height: width * interfaceSize * 0.08,
             marginVertical: 0,
             marginTop: 5,
           },
@@ -333,25 +362,39 @@ export default function PortfolioScreen({ navigation }: any) {
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.04}
+          size={width * interfaceSize * 0.04}
           color={colors[themeColor].comment}
         />
         <Text
           style={[
             styles.userStockTitle,
-            { color: colors[themeColor].comment, flex: 1 },
+            {
+              color: colors[themeColor].comment,
+              flex: 1,
+              fontSize: width * interfaceSize * 0.04,
+            },
           ]}
         >
           {item}
         </Text>
         {dividends.length ? (
-          <Text style={[styles.money, { color: colors[themeColor].text }]}>
+          <Text
+            style={{
+              color: colors[themeColor].text,
+              fontSize: width * interfaceSize * 0.04,
+            }}
+          >
             $ {GetMoneyAmount(dividendsSum).value}.
             {GetMoneyAmount(dividendsSum).decimal}
             {GetMoneyAmount(dividendsSum).title}
           </Text>
         ) : (
-          <Text style={[styles.money, { color: colors[themeColor].comment }]}>
+          <Text
+            style={{
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.04,
+            }}
+          >
             -
           </Text>
         )}
@@ -370,7 +413,7 @@ export default function PortfolioScreen({ navigation }: any) {
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.04}
+          size={width * interfaceSize * 0.04}
           color={colors[themeColor].comment}
         />
         <View style={styles.collumnEnd}>
@@ -378,7 +421,10 @@ export default function PortfolioScreen({ navigation }: any) {
             <Text
               style={[
                 styles.userStockTitle,
-                { color: colors[themeColor].text },
+                {
+                  color: colors[themeColor].text,
+                  fontSize: width * interfaceSize * 0.04,
+                },
               ]}
               numberOfLines={1}
             >
@@ -387,17 +433,19 @@ export default function PortfolioScreen({ navigation }: any) {
             {item.autoRenewal ? (
               <Ionicons
                 name="repeat-outline"
-                size={width * 0.04}
+                size={width * interfaceSize * 0.04}
                 color={colors[themeColor].successText}
               />
             ) : (
               <></>
             )}
             <Text
-              style={[
-                styles.money,
-                { color: colors[themeColor].text, flex: 1, textAlign: 'right' },
-              ]}
+              style={{
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.04,
+                flex: 1,
+                textAlign: 'right',
+              }}
             >
               $ {GetMoneyAmount(item.value).value}.
               {GetMoneyAmount(item.value).decimal}
@@ -411,7 +459,7 @@ export default function PortfolioScreen({ navigation }: any) {
                 {
                   color: colors[themeColor].comment,
                   flex: 1,
-                  fontSize: width * 0.03,
+                  fontSize: width * interfaceSize * 0.04,
                 },
               ]}
               numberOfLines={1}
@@ -436,7 +484,7 @@ export default function PortfolioScreen({ navigation }: any) {
               style={[
                 {
                   color: colors[themeColor].comment,
-                  fontSize: width * 0.03,
+                  fontSize: width * interfaceSize * 0.03,
                 },
               ]}
             >
@@ -457,25 +505,38 @@ export default function PortfolioScreen({ navigation }: any) {
         }}
         style={[
           styles.rowBetween,
-          { height: width * 0.08, marginVertical: 0, marginTop: 5 },
+          {
+            height: width * interfaceSize * 0.08,
+            marginVertical: 0,
+            marginTop: 5,
+          },
         ]}
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.04}
+          size={width * interfaceSize * 0.04}
           color={colors[themeColor].comment}
         />
         <Text
           style={[
             styles.userStockTitle,
-            { color: colors[themeColor].comment, flex: 1 },
+            {
+              color: colors[themeColor].comment,
+              flex: 1,
+              fontSize: width * interfaceSize * 0.04,
+            },
           ]}
           numberOfLines={1}
         >
           Tier {item.region} region
         </Text>
 
-        <Text style={[styles.money, { color: colors[themeColor].text }]}>
+        <Text
+          style={{
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.04,
+          }}
+        >
           ${' '}
           {GetMoneyAmount(GetPropertiesValuePerRegion(user, item.region)).value}
           .
@@ -495,7 +556,7 @@ export default function PortfolioScreen({ navigation }: any) {
         style={[
           styles.rowBetween,
           {
-            height: width * 0.08,
+            height: width * interfaceSize * 0.08,
             marginVertical: 0,
             marginTop: 5,
           },
@@ -503,18 +564,27 @@ export default function PortfolioScreen({ navigation }: any) {
       >
         <Ionicons
           name={'time-outline'}
-          size={width * 0.04}
+          size={width * interfaceSize * 0.04}
           color={colors[themeColor].comment}
         />
         <Text
           style={[
             styles.userStockTitle,
-            { color: colors[themeColor].comment, flex: 1 },
+            {
+              color: colors[themeColor].comment,
+              flex: 1,
+              fontSize: width * interfaceSize * 0.04,
+            },
           ]}
         >
           {item.date} {item.time}
         </Text>
-        <Text style={[styles.money, { color: colors[themeColor].text }]}>
+        <Text
+          style={{
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.04,
+          }}
+        >
           $ {GetMoneyAmount(item.value).value}.
           {GetMoneyAmount(item.value).decimal}
           {GetMoneyAmount(item.value).title}
@@ -537,16 +607,30 @@ export default function PortfolioScreen({ navigation }: any) {
         <View style={styles.rowBetween}>
           <Ionicons
             name={item.icon}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
           <Text
             numberOfLines={1}
-            style={[styles.cardTitle, { color: colors[themeColor].text }]}
+            style={[
+              styles.cardTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
           >
             {item.title}
           </Text>
-          <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardValue,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.value}
           </Text>
         </View>
@@ -584,7 +668,13 @@ export default function PortfolioScreen({ navigation }: any) {
         ]}
       >
         <Text
-          style={[styles.switchTitle, { color: colors[themeColor].comment }]}
+          style={[
+            styles.switchTitle,
+            {
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.045,
+            },
+          ]}
         >
           {item.title}
         </Text>
@@ -599,7 +689,7 @@ export default function PortfolioScreen({ navigation }: any) {
             <Ionicons
               name="information-circle-outline"
               color={colors[themeColor].text}
-              size={width * 0.045}
+              size={width * interfaceSize * 0.045}
             />
           </TouchableOpacity>
         ) : (
@@ -607,7 +697,7 @@ export default function PortfolioScreen({ navigation }: any) {
         )}
         <View style={styles.rowEnd}>
           <Switch
-            style={{ transform: [{ scale: 1.2 }] }}
+            style={{ transform: [{ scale: 1.2 * interfaceSize }] }}
             trackColor={{
               false: colors[themeColor].cardColor,
               true: colors[themeColor].cardColor,
@@ -641,22 +731,30 @@ export default function PortfolioScreen({ navigation }: any) {
           style={[
             styles.rowBetween,
             {
-              height: width * 0.08 + 10,
+              height: width * interfaceSize * 0.08 + 10,
               marginVertical: 0,
             },
           ]}
         >
           <Ionicons
             name={item.icon}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
-          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.title}
           </Text>
           <Ionicons
             name={openStocksList ? 'chevron-up' : 'chevron-down'}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
           {stockShowProgress ? (
@@ -675,7 +773,13 @@ export default function PortfolioScreen({ navigation }: any) {
             </View>
           ) : (
             <Text
-              style={[styles.cardValue, { color: colors[themeColor].text }]}
+              style={[
+                styles.cardValue,
+                {
+                  color: colors[themeColor].text,
+                  fontSize: width * interfaceSize * 0.05,
+                },
+              ]}
             >
               {item.value}
             </Text>
@@ -710,7 +814,7 @@ export default function PortfolioScreen({ navigation }: any) {
                 >
                   <Ionicons
                     name={'add-circle-outline'}
-                    size={width * 0.05}
+                    size={width * interfaceSize * 0.05}
                     color={colors[themeColor].text}
                   />
                 </TouchableOpacity>
@@ -739,17 +843,25 @@ export default function PortfolioScreen({ navigation }: any) {
           style={[
             styles.rowBetween,
             {
-              height: width * 0.08 + 10,
+              height: width * interfaceSize * 0.08 + 10,
               marginVertical: 0,
             },
           ]}
         >
           <Ionicons
             name={item.icon}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
-          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.title}
           </Text>
           <TouchableOpacity
@@ -763,17 +875,22 @@ export default function PortfolioScreen({ navigation }: any) {
             <Ionicons
               name="information-circle-outline"
               color={colors[themeColor].text}
-              size={width * 0.045}
+              size={width * interfaceSize * 0.045}
             />
           </TouchableOpacity>
           <Ionicons
             name={openDividendsList ? 'chevron-up' : 'chevron-down'}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
           <View style={{ flex: 1 }} />
           <View style={styles.collumnEnd}>
-            <Text style={[styles.money, { color: colors[themeColor].text }]}>
+            <Text
+              style={{
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.04,
+              }}
+            >
               ${' '}
               {
                 GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
@@ -835,26 +952,42 @@ export default function PortfolioScreen({ navigation }: any) {
           style={[
             styles.rowBetween,
             {
-              height: width * 0.08 + 10,
+              height: width * interfaceSize * 0.08 + 10,
               marginVertical: 0,
             },
           ]}
         >
           <Ionicons
             name={item.icon}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
-          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.title}
           </Text>
           <Ionicons
             name={openDepositsList ? 'chevron-up' : 'chevron-down'}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
 
-          <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardValue,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.value}
           </Text>
         </TouchableOpacity>
@@ -887,7 +1020,7 @@ export default function PortfolioScreen({ navigation }: any) {
                 >
                   <Ionicons
                     name={'add-circle-outline'}
-                    size={width * 0.05}
+                    size={width * interfaceSize * 0.05}
                     color={colors[themeColor].text}
                   />
                 </TouchableOpacity>
@@ -916,26 +1049,42 @@ export default function PortfolioScreen({ navigation }: any) {
           style={[
             styles.rowBetween,
             {
-              height: width * 0.08 + 10,
+              height: width * interfaceSize * 0.08 + 10,
               marginVertical: 0,
             },
           ]}
         >
           <Ionicons
             name={item.icon}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
-          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.title}
           </Text>
           <Ionicons
             name={openRealEstateList ? 'chevron-up' : 'chevron-down'}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
 
-          <Text style={[styles.cardValue, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardValue,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.value}
           </Text>
         </TouchableOpacity>
@@ -976,7 +1125,7 @@ export default function PortfolioScreen({ navigation }: any) {
                 >
                   <Ionicons
                     name={'add-circle-outline'}
-                    size={width * 0.05}
+                    size={width * interfaceSize * 0.05}
                     color={colors[themeColor].text}
                   />
                 </TouchableOpacity>
@@ -1005,17 +1154,25 @@ export default function PortfolioScreen({ navigation }: any) {
           style={[
             styles.rowBetween,
             {
-              height: width * 0.08 + 10,
+              height: width * interfaceSize * 0.08 + 10,
               marginVertical: 0,
             },
           ]}
         >
           <Ionicons
             name={item.icon}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
-          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.title}
           </Text>
           {/* <TouchableOpacity
@@ -1034,11 +1191,16 @@ export default function PortfolioScreen({ navigation }: any) {
           </TouchableOpacity> */}
           <Ionicons
             name={openRentalPaymentList ? 'chevron-up' : 'chevron-down'}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
           <View style={styles.collumnEnd}>
-            <Text style={[styles.money, { color: colors[themeColor].text }]}>
+            <Text
+              style={{
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.04,
+              }}
+            >
               {item.value}
             </Text>
             <Text
@@ -1067,7 +1229,13 @@ export default function PortfolioScreen({ navigation }: any) {
               />
             ) : (
               <Text
-                style={[styles.comment, { color: colors[themeColor].comment }]}
+                style={[
+                  styles.comment,
+                  {
+                    color: colors[themeColor].comment,
+                    fontSize: width * interfaceSize * 0.04,
+                  },
+                ]}
               >
                 No playments yet
               </Text>
@@ -1159,27 +1327,21 @@ const styles = StyleSheet.create({
   },
 
   cardTitle: {
-    fontSize: width * 0.05,
     marginHorizontal: 10,
     textAlign: 'left',
   },
-  userRatingTitle: { fontSize: width * 0.05, marginRight: 10 },
+  userRatingTitle: { marginRight: 10 },
   cardValue: {
-    fontSize: width * 0.05,
     flex: 1,
     textAlign: 'right',
   },
-  money: { fontSize: width * 0.04 },
   switchTitle: {
-    fontSize: width * 0.045,
     marginRight: 10,
   },
   userStockTitle: {
-    fontSize: width * 0.04,
     marginHorizontal: 10,
   },
   comment: {
-    fontSize: width * 0.04,
     fontWeight: '300',
     marginVertical: 10,
   },

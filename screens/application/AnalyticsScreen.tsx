@@ -32,6 +32,7 @@ export default function AnalyticsScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const companies: any = useSelector((state: RootState) => state.companies)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const [showAllStocks, setShowAllStocks] = useState<boolean>(false)
@@ -59,7 +60,7 @@ export default function AnalyticsScreen({ navigation }: any) {
         style={[
           styles.rowBetween,
           {
-            height: width * 0.08,
+            height: width * interfaceSize * 0.08,
             marginVertical: 0,
           },
         ]}
@@ -70,10 +71,18 @@ export default function AnalyticsScreen({ navigation }: any) {
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.05}
+          size={width * interfaceSize * 0.05}
           color={colors[themeColor].comment}
         />
-        <Text style={[styles.companyName, { color: colors[themeColor].text }]}>
+        <Text
+          style={[
+            styles.companyName,
+            {
+              color: colors[themeColor].text,
+              fontSize: width * interfaceSize * 0.04,
+            },
+          ]}
+        >
           {item.name}
         </Text>
         <StatusItem
@@ -99,10 +108,18 @@ export default function AnalyticsScreen({ navigation }: any) {
         <View style={[styles.rowBetween, { marginTop: 0 }]}>
           <Ionicons
             name={item.icon}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
-          <Text style={[styles.cardTitle, { color: colors[themeColor].text }]}>
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
             {item.title}:
           </Text>
           <TouchableOpacity
@@ -115,7 +132,7 @@ export default function AnalyticsScreen({ navigation }: any) {
             <Ionicons
               name="information-circle-outline"
               color={colors[themeColor].text}
-              size={width * 0.045}
+              size={width * interfaceSize * 0.045}
             />
           </TouchableOpacity>
           <View style={styles.rowEnd}>
@@ -138,13 +155,16 @@ export default function AnalyticsScreen({ navigation }: any) {
           style={[styles.rowBetween, { marginVertical: 0, paddingVertical: 5 }]}
         >
           <Text
-            style={[styles.cardComment, { color: colors[themeColor].comment }]}
+            style={{
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.045,
+            }}
           >
             {item.comment}:
           </Text>
           <Ionicons
             name={showAllStocks ? 'chevron-up' : 'chevron-down'}
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].text}
           />
         </TouchableOpacity>
@@ -244,10 +264,8 @@ const styles = StyleSheet.create({
   },
 
   cardTitle: {
-    fontSize: width * 0.05,
     marginHorizontal: 10,
   },
-  cardComment: { fontSize: width * 0.045 },
   columnStart: {
     width: '100%',
     flexDirection: 'column',
@@ -255,5 +273,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 5,
   },
-  companyName: { fontSize: width * 0.04, marginHorizontal: 10, flex: 1 },
+  companyName: {
+    marginHorizontal: 10,
+    flex: 1,
+  },
 })

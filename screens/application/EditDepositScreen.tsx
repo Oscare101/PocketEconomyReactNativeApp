@@ -44,6 +44,8 @@ export default function EditDepositScreen({ navigation, route }: any) {
   const theme = useSelector((state: RootState) => state.theme)
   const user: User = useSelector((state: RootState) => state.user)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
+
   const dispatch = useDispatch()
 
   const [request, setRequest] = useState<boolean>(false)
@@ -137,18 +139,23 @@ export default function EditDepositScreen({ navigation, route }: any) {
   function RenderDepositInfo({ item }: any) {
     return (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            height: width * interfaceSize * 0.17,
+          },
+        ]}
       >
         <View style={styles.rowBetween}>
           <Text
-            style={[
-              styles.cartTitle,
-              {
-                color: item.switch
-                  ? colors[themeColor].text
-                  : colors[themeColor].comment,
-              },
-            ]}
+            numberOfLines={1}
+            style={{
+              color: item.switch
+                ? colors[themeColor].text
+                : colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.06,
+            }}
           >
             {item.title}
           </Text>
@@ -156,12 +163,12 @@ export default function EditDepositScreen({ navigation, route }: any) {
           {item.matureIcon && autoRenewal ? (
             <Ionicons
               name="infinite-outline"
-              size={width * 0.05}
+              size={width * interfaceSize * 0.05}
               color={colors[themeColor].successText}
             />
           ) : item.switch ? (
             <Switch
-              style={{ transform: [{ scale: 1.2 }] }}
+              style={{ transform: [{ scale: 1.2 * interfaceSize }] }}
               trackColor={{
                 false: colors[themeColor].cardColor,
                 true: colors[themeColor].cardColor,
@@ -177,10 +184,11 @@ export default function EditDepositScreen({ navigation, route }: any) {
             />
           ) : (
             <Text
-              style={[
-                styles.cartValue,
-                { color: colors[themeColor].comment, fontWeight: '300' },
-              ]}
+              style={{
+                color: colors[themeColor].comment,
+                fontWeight: '300',
+                fontSize: width * interfaceSize * 0.05,
+              }}
             >
               {item.value}
             </Text>
@@ -218,9 +226,9 @@ export default function EditDepositScreen({ navigation, route }: any) {
             >
               <Text
                 style={{
-                  fontSize: width * 0.1,
+                  fontSize: width * interfaceSize * 0.1,
                   color: colors[themeColor].text,
-                  marginTop: width * 0.05,
+                  marginTop: width * interfaceSize * 0.05,
                 }}
               >
                 ${' '}
@@ -234,7 +242,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
                   ).value
                 }
                 .
-                <Text style={{ fontSize: width * 0.07 }}>
+                <Text style={{ fontSize: width * interfaceSize * 0.07 }}>
                   {
                     GetMoneyAmount(
                       GetDepositInterestReturn(
@@ -260,7 +268,8 @@ export default function EditDepositScreen({ navigation, route }: any) {
                   styles.cardComment,
                   {
                     color: colors[themeColor].comment,
-                    marginBottom: width * 0.01,
+                    marginBottom: width * interfaceSize * 0.01,
+                    fontSize: width * interfaceSize * 0.05,
                   },
                 ]}
               >
@@ -274,7 +283,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
                   <Ionicons
                     name="information-circle-outline"
                     color={colors[themeColor].text}
-                    size={width * 0.045}
+                    size={width * interfaceSize * 0.045}
                   />
                 </TouchableOpacity>
               </Text>
@@ -328,7 +337,6 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.03,
     marginTop: width * 0.03,
     alignSelf: 'center',
-    height: width * 0.17,
   },
   rowBetween: {
     width: '100%',
@@ -337,16 +345,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: '100%',
   },
-  cartTitle: {
-    fontSize: width * 0.06,
-  },
-  cartValue: { fontSize: width * 0.05 },
-  cardComment: { fontSize: width * 0.05, fontWeight: '300' },
-  input: {
-    fontSize: width * 0.07,
-    padding: 0,
-    flex: 1,
-    textAlign: 'right',
-    marginLeft: 10,
-  },
+
+  cardComment: { fontWeight: '300' },
 })

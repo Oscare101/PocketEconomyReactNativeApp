@@ -18,6 +18,7 @@ export default function NewsScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const companies = useSelector((state: RootState) => state.companies)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
@@ -49,7 +50,10 @@ export default function NewsScreen({ navigation }: any) {
             ]}
           >
             <Text
-              style={{ fontSize: width * 0.04, color: colors[themeColor].text }}
+              style={{
+                fontSize: width * interfaceSize * 0.04,
+                color: colors[themeColor].text,
+              }}
             >
               There is a lot of good news in the{' '}
               <Text style={{ color: colors[themeColor].successText }}>
@@ -66,7 +70,10 @@ export default function NewsScreen({ navigation }: any) {
             ]}
           >
             <Text
-              style={{ fontSize: width * 0.04, color: colors[themeColor].text }}
+              style={{
+                fontSize: width * interfaceSize * 0.04,
+                color: colors[themeColor].text,
+              }}
             >
               It seems these are not the best times for the{' '}
               <Text style={{ color: colors[themeColor].errorText }}>
@@ -77,10 +84,17 @@ export default function NewsScreen({ navigation }: any) {
             </Text>
           </View>
           <Text
-            style={[styles.cardComment, { color: colors[themeColor].comment }]}
+            style={[
+              styles.cardComment,
+              {
+                color: colors[themeColor].comment,
+                fontSize: width * interfaceSize * 0.04,
+              },
+            ]}
           >
             the news has little impact on companies, but it hits small
-            businesses harder than big ones
+            businesses harder than big ones{'\n'}There are {companies.length}{' '}
+            different companies, choose the best one
           </Text>
         </View>
       </ScrollView>
@@ -101,5 +115,8 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.03,
     marginTop: width * 0.03,
   },
-  cardComment: { fontSize: width * 0.04, fontWeight: '300', width: '92%' },
+  cardComment: {
+    fontWeight: '300',
+    width: '92%',
+  },
 })

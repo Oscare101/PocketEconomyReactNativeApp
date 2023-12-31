@@ -51,6 +51,7 @@ export default function CreateDepositScreen({ navigation }: any) {
   const user: User = useSelector((state: RootState) => state.user)
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const log: Log[] = useSelector((state: RootState) => state.log)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const dispatch = useDispatch()
 
@@ -116,10 +117,21 @@ export default function CreateDepositScreen({ navigation }: any) {
 
   const inputBlock = (
     <View
-      style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      style={[
+        styles.card,
+        {
+          backgroundColor: colors[themeColor].cardColor,
+          height: width * interfaceSize * 0.17,
+        },
+      ]}
     >
       <View style={styles.rowBetween}>
-        <Text style={[styles.cartTitle, { color: colors[themeColor].comment }]}>
+        <Text
+          style={{
+            color: colors[themeColor].comment,
+            fontSize: width * interfaceSize * 0.07,
+          }}
+        >
           $
         </Text>
         <TextInput
@@ -127,7 +139,13 @@ export default function CreateDepositScreen({ navigation }: any) {
           keyboardType="numeric"
           placeholder="100"
           placeholderTextColor={colors[themeColor].disable}
-          style={[styles.input, { color: colors[themeColor].text }]}
+          style={[
+            styles.input,
+            {
+              color: colors[themeColor].text,
+              fontSize: width * interfaceSize * 0.07,
+            },
+          ]}
           onChangeText={(value: string) => {
             if (
               amountCheck.test(value.replace(',', '.').replaceAll(' ', '')) &&
@@ -149,13 +167,19 @@ export default function CreateDepositScreen({ navigation }: any) {
   function CahsBlock() {
     return (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            height: width * interfaceSize * 0.17,
+          },
+        ]}
       >
         <View style={styles.rowBetween}>
           <View
             style={{
-              width: width * 0.05 * 1.6,
-              height: width * 0.05,
+              width: width * interfaceSize * 0.05 * 1.6,
+              height: width * interfaceSize * 0.05,
               marginRight: 10,
             }}
           >
@@ -164,7 +188,7 @@ export default function CreateDepositScreen({ navigation }: any) {
                 height: '100%',
                 aspectRatio: 1,
                 backgroundColor: colors[themeColor].cardColor,
-                borderRadius: width * 0.05,
+                borderRadius: width * interfaceSize * 0.05,
                 position: 'absolute',
                 top: 0,
                 left: 0,
@@ -175,7 +199,7 @@ export default function CreateDepositScreen({ navigation }: any) {
                 height: '100%',
                 aspectRatio: 1,
                 backgroundColor: colors[themeColor].cardColor,
-                borderRadius: width * 0.05,
+                borderRadius: width * interfaceSize * 0.05,
                 position: 'absolute',
                 top: 0,
                 right: 0,
@@ -192,7 +216,7 @@ export default function CreateDepositScreen({ navigation }: any) {
             <Text
               style={{
                 color: colors[themeColor].comment,
-                fontSize: width * 0.04,
+                fontSize: width * interfaceSize * 0.04,
               }}
             >
               **** 1234
@@ -200,7 +224,7 @@ export default function CreateDepositScreen({ navigation }: any) {
             <Text
               style={{
                 color: colors[themeColor].comment,
-                fontSize: width * 0.04,
+                fontSize: width * interfaceSize * 0.04,
               }}
             >
               Balance:
@@ -210,7 +234,7 @@ export default function CreateDepositScreen({ navigation }: any) {
           <View style={{ flex: 1 }} />
           <Text
             style={{
-              fontSize: width * 0.06,
+              fontSize: width * interfaceSize * 0.06,
               color: colors[themeColor].text,
               fontWeight: '300',
             }}
@@ -233,6 +257,7 @@ export default function CreateDepositScreen({ navigation }: any) {
             backgroundColor: colors[themeColor].cardColor,
             flexDirection: 'row',
             justifyContent: 'space-between',
+            height: width * interfaceSize * 0.17,
           },
         ]}
       >
@@ -252,7 +277,7 @@ export default function CreateDepositScreen({ navigation }: any) {
           >
             <Text
               style={{
-                fontSize: width * 0.06,
+                fontSize: width * interfaceSize * 0.06,
                 color:
                   durationHours === item.hours
                     ? colors[themeColor].text
@@ -269,6 +294,7 @@ export default function CreateDepositScreen({ navigation }: any) {
                     durationHours === item.hours
                       ? colors[themeColor].text
                       : colors[themeColor].comment,
+                  fontSize: width * interfaceSize * 0.04,
                 },
               ]}
             >
@@ -283,25 +309,29 @@ export default function CreateDepositScreen({ navigation }: any) {
   function RenewalBlock() {
     return (
       <View
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            height: width * interfaceSize * 0.17,
+          },
+        ]}
       >
         <View style={styles.rowBetween}>
           <Text
-            style={[
-              styles.cartTitle,
-              {
-                color: autoRenewal
-                  ? colors[themeColor].text
-                  : colors[themeColor].comment,
-                fontWeight: '300',
-              },
-            ]}
+            style={{
+              color: autoRenewal
+                ? colors[themeColor].text
+                : colors[themeColor].comment,
+              fontWeight: '300',
+              fontSize: width * interfaceSize * 0.07,
+            }}
           >
             Auto Renewal
           </Text>
 
           <Switch
-            style={{ transform: [{ scale: 1.2 }] }}
+            style={{ transform: [{ scale: 1.2 * interfaceSize }] }}
             trackColor={{
               false: colors[themeColor].cardColor,
               true: colors[themeColor].cardColor,
@@ -335,9 +365,9 @@ export default function CreateDepositScreen({ navigation }: any) {
           />
           <Text
             style={{
-              fontSize: width * 0.1,
+              fontSize: width * interfaceSize * 0.1,
               color: colors[themeColor].text,
-              marginTop: width * 0.05,
+              marginTop: width * interfaceSize * 0.05,
             }}
           >
             ${' '}
@@ -347,7 +377,7 @@ export default function CreateDepositScreen({ navigation }: any) {
               ).value
             }
             .
-            <Text style={{ fontSize: width * 0.07 }}>
+            <Text style={{ fontSize: width * interfaceSize * 0.07 }}>
               {
                 GetMoneyAmount(
                   GetDepositInterestReturn(
@@ -367,7 +397,11 @@ export default function CreateDepositScreen({ navigation }: any) {
           <Text
             style={[
               styles.cartComment,
-              { color: colors[themeColor].comment, marginBottom: width * 0.01 },
+              {
+                color: colors[themeColor].comment,
+                marginBottom: width * interfaceSize * 0.01,
+                fontSize: width * interfaceSize * 0.04,
+              },
             ]}
           >
             estimated yield{' '}
@@ -380,14 +414,18 @@ export default function CreateDepositScreen({ navigation }: any) {
               <Ionicons
                 name="information-circle-outline"
                 color={colors[themeColor].text}
-                size={width * 0.045}
+                size={width * interfaceSize * 0.045}
               />
             </TouchableOpacity>
           </Text>
           <Text
             style={[
               styles.cartComment,
-              { color: colors[themeColor].text, marginBottom: width * 0.05 },
+              {
+                color: colors[themeColor].text,
+                marginBottom: width * interfaceSize * 0.05,
+                fontSize: width * interfaceSize * 0.04,
+              },
             ]}
           >
             mature date:{' '}
@@ -425,6 +463,7 @@ export default function CreateDepositScreen({ navigation }: any) {
                 color: colors[themeColor].comment,
                 textAlign: 'right',
                 width: '92%',
+                fontSize: width * interfaceSize * 0.04,
               },
             ]}
           >
@@ -474,7 +513,6 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.03,
     marginTop: width * 0.03,
     alignSelf: 'center',
-    height: width * 0.17,
   },
   rowBetween: {
     width: '100%',
@@ -483,12 +521,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: '100%',
   },
-  cartTitle: {
-    fontSize: width * 0.07,
-  },
-  cartComment: { fontSize: width * 0.04, fontWeight: '300' },
+
+  cartComment: { fontWeight: '300' },
   input: {
-    fontSize: width * 0.07,
     padding: 0,
     flex: 1,
     textAlign: 'right',

@@ -23,6 +23,7 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   return (
     <View
@@ -31,6 +32,7 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
         {
           backgroundColor: colors[themeColor].bgColor,
           borderColor: colors[themeColor].comment,
+          height: width * interfaceSize * 0.18,
         },
       ]}
     >
@@ -48,14 +50,22 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
         >
           <Ionicons
             name="chevron-back"
-            size={width * 0.07}
+            size={width * interfaceSize * 0.07}
             color={colors[themeColor].text}
           />
         </TouchableOpacity>
       ) : (
         <DrawerButton />
       )}
-      <Text style={[styles.headerTitle, { color: colors[themeColor].text }]}>
+      <Text
+        style={[
+          styles.headerTitle,
+          {
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.07,
+          },
+        ]}
+      >
         {props.title}
       </Text>
     </View>
@@ -65,14 +75,12 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
 const styles = StyleSheet.create({
   header: {
     width: '100%',
-    height: width * 0.18,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
   },
   headerTitle: {
-    fontSize: width * 0.07,
     marginRight: '5%',
     fontWeight: '300',
   },

@@ -30,6 +30,7 @@ import StocksOvertakeInfoModal from './StocksOvertakeInfoModal'
 import RealEstateTransactionModal from './RealEstateTransactionModal'
 import RealEstateInfoModal from './RealEstateInfoModal'
 import PromoCodeModal from './PromoCodeModal'
+import InterfaceSizeModal from './InterfaceSizeModal'
 
 const width = Dimensions.get('screen').width
 
@@ -61,6 +62,7 @@ export default function BottomModalBlock(props: any) {
     ),
     RealEstateInfo: <RealEstateInfoModal />,
     promoCodeBlock: <PromoCodeModal onClose={() => props.onClose()} />,
+    interfaceSizeBlock: <InterfaceSizeModal />,
   }
 
   return (

@@ -25,6 +25,7 @@ export default function DepositsScreen({ navigation }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const user: User = useSelector((state: RootState) => state.user)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
@@ -71,10 +72,11 @@ export default function DepositsScreen({ navigation }: any) {
           }}
         >
           <Text
-            style={[
-              styles.depositName,
-              { color: colors[themeColor].comment, fontWeight: '300' },
-            ]}
+            style={{
+              color: colors[themeColor].comment,
+              fontWeight: '300',
+              fontSize: width * interfaceSize * 0.04,
+            }}
           >
             {item.title}
           </Text>
@@ -82,21 +84,19 @@ export default function DepositsScreen({ navigation }: any) {
           {item.autoRenewalIcon ? (
             <Ionicons
               name="repeat-outline"
-              size={width * 0.04}
+              size={width * interfaceSize * 0.04}
               color={colors[themeColor].successText}
             />
           ) : (
             <></>
           )}
           <Text
-            style={[
-              styles.depositName,
-              {
-                color: colors[themeColor].text,
-                fontWeight: '300',
-                marginLeft: 10,
-              },
-            ]}
+            style={{
+              color: colors[themeColor].text,
+              fontWeight: '300',
+              marginLeft: 10,
+              fontSize: width * interfaceSize * 0.04,
+            }}
           >
             {item.value}
           </Text>
@@ -120,13 +120,16 @@ export default function DepositsScreen({ navigation }: any) {
           }}
         >
           <Text
-            style={[styles.depositName, { color: colors[themeColor].text }]}
+            style={{
+              color: colors[themeColor].text,
+              fontSize: width * interfaceSize * 0.04,
+            }}
           >
             {item.name}
           </Text>
           <Ionicons
             name="open-outline"
-            size={width * 0.05}
+            size={width * interfaceSize * 0.05}
             color={colors[themeColor].comment}
           />
         </View>
@@ -161,12 +164,23 @@ export default function DepositsScreen({ navigation }: any) {
           ]}
         >
           <Text
-            style={[styles.buttonTitle, { color: colors[themeColor].text }]}
+            style={{
+              color: colors[themeColor].text,
+              fontSize: width * interfaceSize * 0.07,
+            }}
           >
             New Deposit
           </Text>
         </TouchableOpacity>
-        <Text style={[styles.title, { color: colors[themeColor].comment }]}>
+        <Text
+          style={[
+            styles.title,
+            {
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.05,
+            },
+          ]}
+        >
           Available deposits:
         </Text>
         <FlatList
@@ -196,12 +210,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
-    fontSize: width * 0.05,
     width: '92%',
     alignSelf: 'center',
   },
-  depositName: {
-    fontSize: width * 0.04,
-  },
-  buttonTitle: { fontSize: width * 0.07 },
 })

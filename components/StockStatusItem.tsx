@@ -38,6 +38,7 @@ export default function StockStatusItem(props: StockStatusItemProps) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
   const themeColor: any = theme === 'system' ? systemTheme : theme
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const colorsTextArr = [
     colors[themeColor].errorText,
@@ -81,6 +82,9 @@ export default function StockStatusItem(props: StockStatusItemProps) {
         styles.stat,
         {
           backgroundColor: `${colorBg[props.type]}`,
+          borderRadius: width * interfaceSize * 0.01,
+          paddingVertical: width * interfaceSize * 0.005,
+          paddingHorizontal: width * interfaceSize * 0.015,
         },
       ]}
     >
@@ -91,6 +95,7 @@ export default function StockStatusItem(props: StockStatusItemProps) {
             {
               color: colorText[props.type],
               marginRight: 5,
+              fontSize: width * interfaceSize * 0.04,
             },
           ]}
         >
@@ -110,12 +115,9 @@ export default function StockStatusItem(props: StockStatusItemProps) {
 
 const styles = StyleSheet.create({
   stat: {
-    borderRadius: width * 0.01,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: width * 0.005,
-    paddingHorizontal: width * 0.015,
     flexDirection: 'row',
   },
-  buttonTitle: { fontSize: width * 0.04, fontWeight: '300' },
+  buttonTitle: { fontWeight: '300' },
 })

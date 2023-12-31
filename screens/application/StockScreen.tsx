@@ -51,6 +51,7 @@ export default function StockScreen({ navigation, route }: any) {
   const theme = useSelector((state: RootState) => state.theme)
   const companies = useSelector((state: RootState) => state.companies)
   const user: User = useSelector((state: RootState) => state.user)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
@@ -215,7 +216,13 @@ export default function StockScreen({ navigation, route }: any) {
     return (
       <View style={styles.statItemBlock}>
         <Text
-          style={[styles.statItemTitle, { color: colors[themeColor].text }]}
+          style={[
+            styles.statItemTitle,
+            {
+              color: colors[themeColor].text,
+              fontSize: width * interfaceSize * 0.04,
+            },
+          ]}
         >
           {item.title}
         </Text>
@@ -239,7 +246,13 @@ export default function StockScreen({ navigation, route }: any) {
           />
         ) : (
           <Text
-            style={[styles.statItemTitle, { color: colors[themeColor].text }]}
+            style={[
+              styles.statItemTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.04,
+              },
+            ]}
           >
             {item.value}
           </Text>
@@ -417,7 +430,7 @@ export default function StockScreen({ navigation, route }: any) {
               periodToRender === item.title
                 ? colors[themeColor].text
                 : colors[themeColor].comment,
-            fontSize: width * 0.04,
+            fontSize: width * interfaceSize * 0.04,
           }}
         >
           {item.title}
@@ -430,7 +443,13 @@ export default function StockScreen({ navigation, route }: any) {
     return (
       <View style={[styles.statItemBlock, { opacity: item.disable ? 0.3 : 1 }]}>
         <Text
-          style={[styles.statItemTitle, { color: colors[themeColor].text }]}
+          style={[
+            styles.statItemTitle,
+            {
+              color: colors[themeColor].text,
+              fontSize: width * interfaceSize * 0.04,
+            },
+          ]}
         >
           {item.title}
         </Text>
@@ -454,7 +473,13 @@ export default function StockScreen({ navigation, route }: any) {
           />
         ) : (
           <Text
-            style={[styles.statItemTitle, { color: colors[themeColor].text }]}
+            style={[
+              styles.statItemTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.04,
+              },
+            ]}
           >
             {item.value}
           </Text>
@@ -494,7 +519,10 @@ export default function StockScreen({ navigation, route }: any) {
             <Text
               style={[
                 styles.description,
-                { color: colors[themeColor].comment },
+                {
+                  color: colors[themeColor].comment,
+                  fontSize: width * interfaceSize * 0.04,
+                },
               ]}
             >
               {GetCompany()?.description}
@@ -568,7 +596,7 @@ export default function StockScreen({ navigation, route }: any) {
                 >
                   <Ionicons
                     name="close-outline"
-                    size={width * 0.05}
+                    size={width * interfaceSize * 0.05}
                     color={colors[themeColor].text}
                   />
                 </TouchableOpacity>
@@ -577,7 +605,7 @@ export default function StockScreen({ navigation, route }: any) {
                     color: colors[themeColor].text,
                     flex: 1,
                     marginLeft: 10,
-                    fontSize: width * 0.04,
+                    fontSize: width * interfaceSize * 0.04,
                   }}
                 >
                   {pressedPrice?.date} {pressedPrice?.time}
@@ -585,7 +613,7 @@ export default function StockScreen({ navigation, route }: any) {
                 <Text
                   style={{
                     color: colors[themeColor].text,
-                    fontSize: width * 0.04,
+                    fontSize: width * interfaceSize * 0.04,
                   }}
                 >
                   $ {GetMoneyAmount(pressedPrice?.price).value}.
@@ -627,8 +655,8 @@ export default function StockScreen({ navigation, route }: any) {
               <Button
                 style={{
                   width: '100%',
-                  marginTop: width * 0.03,
-                  borderRadius: width * 0.015,
+                  marginTop: width * interfaceSize * 0.03,
+                  borderRadius: width * interfaceSize * 0.015,
                 }}
                 title="Transaction"
                 disable={false}
@@ -680,12 +708,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  headerTitle: {
-    fontSize: width * 0.07,
-    marginLeft: width * 0.07,
-  },
+
   description: {
-    fontSize: width * 0.04,
     width: '92%',
     marginVertical: 5,
     textAlign: 'center',
@@ -697,7 +721,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
-  statItemTitle: {
-    fontSize: width * 0.04,
-  },
+  statItemTitle: {},
 })
