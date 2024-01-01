@@ -316,7 +316,7 @@ export function GetSortedCompaniesByProgress(companies: any[]) {
       (c.history[c.history.length - 1].price / c.history[0].price - 1) *
       100
     ).toFixed(2)
-    return { name: c.name, progress: companyProgress }
+    return { name: c.name, progress: companyProgress, industry: c.industry }
   })
   return newCompaniesDate.sort((a: any, b: any) => b.progress - a.progress)
 }

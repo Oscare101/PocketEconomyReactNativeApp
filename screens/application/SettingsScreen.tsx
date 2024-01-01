@@ -119,7 +119,13 @@ export default function SettingsScreen({ navigation }: any) {
 
         <FlatList
           style={{ width: '100%' }}
-          data={settingsData}
+          data={settingsData.filter((s: any) => {
+            if (!rules.app.logAvailable && s.title === 'Promo code') {
+              return false
+            } else {
+              return s
+            }
+          })}
           renderItem={RenderSettingsItem}
         />
       </View>

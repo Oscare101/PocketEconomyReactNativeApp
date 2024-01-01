@@ -85,7 +85,7 @@ export default function LaunchScreen({ navigation }: any) {
 
     const user: any = storage.getString('user')
     //!!user && JSON.parse(user).name
-    if (!!user && JSON.parse(user).name) {
+    if (user && JSON.parse(user).name) {
       dispatch(updateUser(JSON.parse(user)))
     } else {
       const defaultUser: User = {
@@ -105,12 +105,7 @@ export default function LaunchScreen({ navigation }: any) {
 
     const companies: any = storage.getString('companies')
     //!!companies && JSON.parse(companies).length && JSON.parse(user).name
-    if (
-      !!companies &&
-      JSON.parse(companies).length &&
-      !!user &&
-      JSON.parse(user).name
-    ) {
+    if (!!companies && JSON.parse(companies).length && JSON.parse(user).name) {
       const newCompaniesData = UpdateCompaniesData(
         JSON.parse(user).stocks,
         JSON.parse(companies)

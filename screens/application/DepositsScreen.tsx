@@ -129,7 +129,7 @@ export default function DepositsScreen({ navigation }: any) {
           </Text>
           <Ionicons
             name="open-outline"
-            size={width * interfaceSize * 0.05}
+            size={width * interfaceSize * 0.04}
             color={colors[themeColor].comment}
           />
         </View>

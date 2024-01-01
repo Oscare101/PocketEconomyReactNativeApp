@@ -71,7 +71,7 @@ export default function AnalyticsScreen({ navigation }: any) {
       >
         <Ionicons
           name={'open-outline'}
-          size={width * interfaceSize * 0.05}
+          size={width * interfaceSize * 0.04}
           color={colors[themeColor].comment}
         />
         <Text
@@ -86,6 +86,15 @@ export default function AnalyticsScreen({ navigation }: any) {
           ]}
         >
           {item.name}
+          <Text
+            style={{
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.035,
+            }}
+          >
+            {' '}
+            {item.industry}
+          </Text>
         </Text>
         <StatusItem
           title={`${item.progress} %`}

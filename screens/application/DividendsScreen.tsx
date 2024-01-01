@@ -28,6 +28,8 @@ const width = Dimensions.get('screen').width
 export default function DividendsScreen({ navigation, route }: any) {
   const systemTheme = useColorScheme()
   const theme = useSelector((state: RootState) => state.theme)
+  const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
+
   const themeColor: any = theme === 'system' ? systemTheme : theme
 
   function RenderDividendItem({ item }: any) {
@@ -44,21 +46,35 @@ export default function DividendsScreen({ navigation, route }: any) {
       >
         <Ionicons
           name={'open-outline'}
-          size={width * 0.05}
+          size={width * interfaceSize * 0.04}
           color={colors[themeColor].comment}
         />
         <Text
           style={[
             styles.userStockTitle,
-            { color: colors[themeColor].comment, flex: 1 },
+            {
+              color: colors[themeColor].comment,
+              flex: 1,
+              fontSize: width * interfaceSize * 0.04,
+            },
           ]}
           numberOfLines={1}
         >
           {item.name}
         </Text>
 
-        <Text style={[styles.money, { color: colors[themeColor].text }]}>
-          <Text style={[styles.comment, { color: colors[themeColor].comment }]}>
+        <Text
+          style={{
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.04,
+          }}
+        >
+          <Text
+            style={{
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.035,
+            }}
+          >
             {item.interest} % =
           </Text>{' '}
           $ {GetMoneyAmount(item.value).value}.
@@ -96,14 +112,24 @@ export default function DividendsScreen({ navigation, route }: any) {
             <Text
               style={[
                 styles.cardTitle,
-                { color: colors[themeColor].text, marginBottom: 5 },
+                {
+                  color: colors[themeColor].text,
+                  marginBottom: 5,
+                  fontSize: width * interfaceSize * 0.05,
+                },
               ]}
             >
               {route.params.dividends[0].date}
             </Text>
 
             <Text
-              style={[styles.cardValue, { color: colors[themeColor].text }]}
+              style={[
+                styles.cardValue,
+                {
+                  color: colors[themeColor].text,
+                  fontSize: width * interfaceSize * 0.05,
+                },
+              ]}
             >
               ${' '}
               {
@@ -163,19 +189,14 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   cardTitle: {
-    fontSize: width * 0.05,
     marginHorizontal: 10,
     textAlign: 'left',
   },
   userStockTitle: {
-    fontSize: width * 0.04,
     marginHorizontal: 10,
   },
-  money: { fontSize: width * 0.04 },
-  comment: { fontSize: width * 0.035 },
 
   cardValue: {
-    fontSize: width * 0.05,
     flex: 1,
     textAlign: 'right',
   },

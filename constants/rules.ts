@@ -1,7 +1,7 @@
 import { ToastPosition } from 'react-native-toast-message'
 
 export default {
-  app: { test: true },
+  app: { logAvailable: false },
   user: { startCash: 100000 },
   stock: {
     percentPerDay: 5,
@@ -26,15 +26,13 @@ export default {
       'media',
       'consumer',
     ],
-    tendention: [0.3, 0.2, 0.12, 0.1, 0.08],
+    tendention: [0.1, 0.08, 0.07, 0.05, 0.04],
   },
-  news: {
-    impactPerCompanySize: [2, 1.75, 1.5, 1.25, 1],
-  },
+  news: { impactPerCompanySize: [0.1, 0.08, 0.06, 0.05, 0.04] },
   deposit: {
     maxValue: 1000000000,
     options: [
-      { hours: 6, interest: 4 },
+      { hours: 6, interest: 3.5 },
       { hours: 12, interest: 4 },
       { hours: 24, interest: 5 },
       { hours: 48, interest: 6 },
@@ -107,7 +105,13 @@ export default {
       title: 'Promo code',
       icon: 'download-outline',
     },
-    stockBuy: { title: 'Stock buy', icon: 'trending-up-outline' },
-    stockSell: { title: 'Stock sell', icon: 'trending-down-outline' },
+    stockBuy: {
+      title: 'Stock buy',
+      icon: 'trending-up-outline',
+    },
+    stockSell: {
+      title: 'Stock sell',
+      icon: 'trending-down-outline',
+    },
   },
 }
