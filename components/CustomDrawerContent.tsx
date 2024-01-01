@@ -52,7 +52,7 @@ export default function CustomDrawerContent(props: any) {
     { title: 'Deposit', icon: 'wallet-outline', screen: 'DepositsScreen' },
 
     { title: 'Real Estate', icon: 'home-outline', screen: 'RealEstateScreen' },
-    { title: 'Store', icon: 'albums-outline', screen: 'StoreScreen' },
+    { title: 'Businesses', icon: 'albums-outline', screen: 'StoreScreen' },
   ]
 
   function RenderScreenButtonItem({ item }: any) {

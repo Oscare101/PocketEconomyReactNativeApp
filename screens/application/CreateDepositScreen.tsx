@@ -98,7 +98,6 @@ export default function CreateDepositScreen({ navigation }: any) {
         },
       ])
     )
-    storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
       props: {

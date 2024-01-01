@@ -71,7 +71,6 @@ export default function EditDepositScreen({ navigation, route }: any) {
       deposits: newDepositData,
     }
     dispatch(updateUser(newUserData))
-    storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
       props: {

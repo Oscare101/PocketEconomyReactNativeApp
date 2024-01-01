@@ -93,7 +93,8 @@ export function CalculateStock(stock: Company) {
     (0.5 + volatility * 0.083)
 
   const tendention: number =
-    GetTendention(stock.history) / 5 / (companySize / 2)
+    GetTendention(stock.history) * rules.stock.tendention[companySize - 1]
+
   let threshold = 0.5 + tendention + newsImpact
   const randomPositiveChange =
     Math.random() > threshold ? randomChangeUp : -randomChangeDown

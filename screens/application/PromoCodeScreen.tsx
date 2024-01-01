@@ -57,7 +57,6 @@ export default function PromoCodeScreen({ navigation, route }: any) {
         },
       ])
     )
-    storage.set('user', JSON.stringify(newUserData))
     setPromoCode('')
     navigation.goBack()
     Toast.show({

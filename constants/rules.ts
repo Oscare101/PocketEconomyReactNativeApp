@@ -26,9 +26,10 @@ export default {
       'media',
       'consumer',
     ],
+    tendention: [0.3, 0.2, 0.12, 0.1, 0.08],
   },
   news: {
-    impactPerCompanySize: [3, 2.5, 2, 1.5, 1],
+    impactPerCompanySize: [2, 1.75, 1.5, 1.25, 1],
   },
   deposit: {
     maxValue: 1000000000,

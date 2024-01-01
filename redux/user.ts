@@ -2,11 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { User } from '../constants/interfaces'
 
 const initialState: User = {
-  name: 'Oscare',
-  loginDate: '2023-12-21',
-  cash: 1000,
+  name: '',
+  loginDate: '',
+  cash: 0,
   stocks: [],
   history: [],
+  deposits: [],
+  dividendsHistory: [],
+  realEstate: [],
+  realEstateHistory: [],
 }
 
 const userSlice = createSlice({

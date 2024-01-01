@@ -49,7 +49,6 @@ export default function PromoCodeModal(props: any) {
         },
       ])
     )
-    storage.set('user', JSON.stringify(newUserData))
     setPromoCode('')
     props.onClose()
     Toast.show({

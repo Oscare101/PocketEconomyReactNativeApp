@@ -64,8 +64,7 @@ export default function PortfolioScreen({ navigation }: any) {
   const [openRentalPaymentList, setOpenRentalPaymentList] =
     useState<boolean>(false)
 
-  const [bottomSheetContent, setBottomSheetContent] =
-    useState<any>('RatingInfo')
+  const [bottomSheetContent, setBottomSheetContent] = useState<any>('')
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => [360], [])
 
@@ -206,11 +205,11 @@ export default function PortfolioScreen({ navigation }: any) {
       <View style={[styles.rowBetween, { marginVertical: 0 }]}>
         <Text
           numberOfLines={1}
-          ellipsizeMode="tail"
+          // ellipsizeMode="tail"
           style={[
             styles.userRatingTitle,
             {
-              flex: 1,
+              // flex: 1,
               color: colors[themeColor].comment,
               fontSize: width * interfaceSize * 0.05,
             },

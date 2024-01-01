@@ -52,7 +52,6 @@ export default function LaunchScreen({ navigation }: any) {
         },
       ])
     )
-    storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
       props: {

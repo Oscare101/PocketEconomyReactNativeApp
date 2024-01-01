@@ -121,7 +121,6 @@ export default function RealEstateTransactionModal(props: any) {
     }
     dispatch(updateUser(newUserData))
 
-    storage.set('user', JSON.stringify(newUserData))
     dispatch(
       updateLog([
         ...log,
@@ -179,7 +178,6 @@ export default function RealEstateTransactionModal(props: any) {
         },
       ])
     )
-    storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
       props: {

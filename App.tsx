@@ -81,6 +81,12 @@ export default function App() {
     const dispatch = useDispatch()
 
     useEffect(() => {
+      if (user.name) {
+        storage.set('user', JSON.stringify(user))
+      }
+    }, [user])
+
+    useEffect(() => {
       if (log.length) {
         storage.set('log', JSON.stringify(log))
       }
@@ -272,7 +278,7 @@ export default function App() {
 
       let timer = setTimeout(() => {
         ChechUpdates()
-      }, 10000)
+      }, 1000)
 
       return () => {
         clearTimeout(timer)

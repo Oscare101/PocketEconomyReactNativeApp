@@ -145,7 +145,6 @@ export default function TransactionBlockModal(props: any) {
         },
       ])
     )
-    storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
       props: {
@@ -176,7 +175,6 @@ export default function TransactionBlockModal(props: any) {
         },
       ])
     )
-    storage.set('user', JSON.stringify(newUserData))
     Toast.show({
       type: 'ToastMessage',
       props: {
