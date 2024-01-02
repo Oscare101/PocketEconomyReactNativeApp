@@ -109,31 +109,36 @@ export default function LogScreen({ navigation, route }: any) {
             { backgroundColor: colors[themeColor].bgColor },
           ]}
         >
-          <View
-            style={[
-              styles.card,
-              { backgroundColor: colors[themeColor].cardColor },
-            ]}
-          >
-            <View style={styles.rowBetween}>
-              <Text
-                style={{
-                  fontSize: width * 0.04,
-                  color: colors[themeColor].comment,
-                }}
-              >
-                Promocode usage
-              </Text>
-              <Text
-                style={{
-                  fontSize: width * 0.04,
-                  color: colors[themeColor].comment,
-                }}
-              >
-                {log.filter((l: Log) => l.title === 'Promo code').length}
-              </Text>
+          {rules.app.promoCodeAvailable ? (
+            <View
+              style={[
+                styles.card,
+                { backgroundColor: colors[themeColor].cardColor },
+              ]}
+            >
+              <View style={styles.rowBetween}>
+                <Text
+                  style={{
+                    fontSize: width * 0.04,
+                    color: colors[themeColor].comment,
+                  }}
+                >
+                  Promocode usage
+                </Text>
+                <Text
+                  style={{
+                    fontSize: width * 0.04,
+                    color: colors[themeColor].comment,
+                  }}
+                >
+                  {log.filter((l: Log) => l.title === 'Promo code').length}
+                </Text>
+              </View>
             </View>
-          </View>
+          ) : (
+            <></>
+          )}
+
           <FlatList
             style={{ width: '100%', marginBottom: 10 }}
             data={[...log].reverse()}

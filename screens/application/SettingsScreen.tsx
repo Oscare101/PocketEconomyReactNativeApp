@@ -120,7 +120,9 @@ export default function SettingsScreen({ navigation }: any) {
         <FlatList
           style={{ width: '100%' }}
           data={settingsData.filter((s: any) => {
-            if (!rules.app.logAvailable && s.title === 'Promo code') {
+            if (!rules.app.promoCodeAvailable && s.title === 'Promo code') {
+              return false
+            } else if (!rules.app.logAvailable && s.title === 'Logs') {
               return false
             } else {
               return s
