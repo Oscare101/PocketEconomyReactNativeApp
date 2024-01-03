@@ -96,6 +96,147 @@ export default function CustomDrawerContent(props: any) {
     )
   }
 
+  const card = (
+    <LinearGradient
+      colors={
+        themeColor === 'dark'
+          ? [
+              `${colors[themeColor].cardColor}`,
+              `${colors[themeColor].cardColor}`,
+            ]
+          : [
+              `${colors[themeColor].cardColor}`,
+              `${colors[themeColor].cardColor}`,
+            ]
+      }
+      start={[0, 0]}
+      end={[1, 1]}
+      style={styles.card}
+    >
+      <View style={styles.rowBetween}>
+        <View
+          style={{
+            width: width * 0.05 * 1.6,
+            height: width * 0.05,
+            marginRight: 10,
+          }}
+        >
+          <View
+            style={{
+              height: '100%',
+              aspectRatio: 1,
+              backgroundColor: colors[themeColor].cardColor,
+              borderRadius: width * 0.05,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+            }}
+          />
+          <View
+            style={{
+              height: '100%',
+              aspectRatio: 1,
+              backgroundColor: colors[themeColor].cardColor,
+              borderRadius: width * 0.05,
+              position: 'absolute',
+              top: 0,
+              right: 0,
+            }}
+          />
+        </View>
+        <Text
+          style={[
+            {
+              color: colors[themeColor].comment,
+              fontSize: width * 0.04,
+            },
+          ]}
+        >
+          **** 1234
+        </Text>
+        <View style={{ flex: 1 }} />
+        <Text
+          style={[
+            {
+              color: colors[themeColor].comment,
+              fontSize: width * 0.04,
+            },
+          ]}
+        >
+          {(new Date().getMonth() + 1).toString().padStart(2, '0')}/
+          {(new Date().getFullYear() + 1).toString().slice(-2)}
+        </Text>
+      </View>
+      <View style={[styles.rowBetween, { flex: 1 }]}>
+        <View style={styles.columnStart}>
+          <Text
+            style={[
+              {
+                color: colors[themeColor].comment,
+                fontSize: width * 0.05,
+              },
+            ]}
+          >
+            Balance:
+          </Text>
+          <Text
+            style={[
+              styles.money,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * 0.06,
+              },
+            ]}
+          >
+            $ {GetMoneyAmount(user.cash).value}.
+            <Text style={{ fontSize: width * 0.04 }}>
+              {GetMoneyAmount(user.cash).decimal}
+            </Text>
+            {GetMoneyAmount(user.cash).title}
+          </Text>
+        </View>
+        <View style={[styles.columnStart, { alignItems: 'flex-end' }]}>
+          <View
+            style={{
+              width: width * 0.05 * 1.4 * interfaceSize,
+              height: width * 0.05 * interfaceSize,
+              borderWidth: 1,
+              borderColor: colors[themeColor].bgColor,
+              backgroundColor: colors[themeColor].warningBg,
+              borderRadius: width * 0.05 * 0.15 * interfaceSize,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <View
+              style={{
+                width: '50%',
+                height: '100%',
+                borderRightWidth: 1,
+                borderLeftWidth: 1,
+                borderColor: colors[themeColor].bgColor,
+                backgroundColor: colors[themeColor].warningBg,
+                zIndex: 2,
+              }}
+            />
+            <View
+              style={{
+                width: '100%',
+                height: '33%',
+                borderBottomWidth: 1,
+                borderTopWidth: 1,
+                borderColor: colors[themeColor].bgColor,
+                backgroundColor: colors[themeColor].warningBg,
+                position: 'absolute',
+                zIndex: 1,
+              }}
+            />
+          </View>
+        </View>
+      </View>
+    </LinearGradient>
+  )
+
   return (
     <DrawerContentScrollView
       style={{
@@ -112,143 +253,7 @@ export default function CustomDrawerContent(props: any) {
       {...props}
     >
       <View style={styles.topContainer}>
-        <LinearGradient
-          colors={
-            themeColor === 'dark'
-              ? [
-                  `${colors[themeColor].infoBg}`,
-                  `${colors[themeColor].infoBg}99`,
-                ]
-              : [
-                  `${colors[themeColor].infoBg}99`,
-                  `${colors[themeColor].infoBg}`,
-                ]
-          }
-          start={[0, 0]}
-          end={[1, 1]}
-          style={styles.card}
-        >
-          <View style={styles.rowBetween}>
-            <View
-              style={{
-                width: width * 0.05 * 1.6,
-                height: width * 0.05,
-                marginRight: 10,
-              }}
-            >
-              <View
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  backgroundColor: colors[themeColor].cardColor,
-                  borderRadius: width * 0.05,
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                }}
-              />
-              <View
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  backgroundColor: colors[themeColor].cardColor,
-                  borderRadius: width * 0.05,
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                }}
-              />
-            </View>
-            <Text
-              style={[
-                {
-                  color: colors[themeColor].comment,
-                  fontSize: width * 0.04,
-                },
-              ]}
-            >
-              **** 1234
-            </Text>
-            <View style={{ flex: 1 }} />
-            <Text
-              style={[
-                {
-                  color: colors[themeColor].comment,
-                  fontSize: width * 0.04,
-                },
-              ]}
-            >
-              06/26
-            </Text>
-          </View>
-          <View style={[styles.rowBetween, { flex: 1 }]}>
-            <View style={styles.columnStart}>
-              <Text
-                style={[
-                  {
-                    color: colors[themeColor].comment,
-                    fontSize: width * 0.05,
-                  },
-                ]}
-              >
-                Balance:
-              </Text>
-              <Text
-                style={[
-                  styles.money,
-                  {
-                    color: colors[themeColor].text,
-                    fontSize: width * 0.06,
-                  },
-                ]}
-              >
-                $ {GetMoneyAmount(user.cash).value}.
-                <Text style={{ fontSize: width * 0.04 }}>
-                  {GetMoneyAmount(user.cash).decimal}
-                </Text>
-                {GetMoneyAmount(user.cash).title}
-              </Text>
-            </View>
-            <View style={[styles.columnStart, { alignItems: 'flex-end' }]}>
-              <View
-                style={{
-                  width: width * 0.05 * 1.4 * interfaceSize,
-                  height: width * 0.05 * interfaceSize,
-                  borderWidth: 1,
-                  borderColor: colors[themeColor].bgColor,
-                  backgroundColor: colors[themeColor].warningBg,
-                  borderRadius: width * 0.05 * 0.15 * interfaceSize,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <View
-                  style={{
-                    width: '50%',
-                    height: '100%',
-                    borderRightWidth: 1,
-                    borderLeftWidth: 1,
-                    borderColor: colors[themeColor].bgColor,
-                    backgroundColor: colors[themeColor].warningBg,
-                    zIndex: 2,
-                  }}
-                />
-                <View
-                  style={{
-                    width: '100%',
-                    height: '33%',
-                    borderBottomWidth: 1,
-                    borderTopWidth: 1,
-                    borderColor: colors[themeColor].bgColor,
-                    backgroundColor: colors[themeColor].warningBg,
-                    position: 'absolute',
-                    zIndex: 1,
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-        </LinearGradient>
+        {card}
 
         <FlatList
           scrollEnabled={false}
@@ -275,12 +280,18 @@ export default function CustomDrawerContent(props: any) {
         }}
         style={[
           styles.navigationButton,
-          { backgroundColor: colors[themeColor].cardColor },
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            height: width * interfaceSize * 0.13,
+          },
         ]}
       >
         <Text
           style={{
-            color: colors[themeColor].text,
+            color:
+              props.state.routeNames[props.state.index] === 'SettingsScreen'
+                ? colors[themeColor].text
+                : colors[themeColor].comment,
             fontSize: width * interfaceSize * 0.05,
           }}
         >
@@ -294,9 +305,6 @@ export default function CustomDrawerContent(props: any) {
 const styles = StyleSheet.create({
   navigationButton: {
     width: '92%',
-    height: width * 0.13,
-
-    padding: width * 0.03,
     borderRadius: width * 0.03,
     alignItems: 'center',
     justifyContent: 'center',
