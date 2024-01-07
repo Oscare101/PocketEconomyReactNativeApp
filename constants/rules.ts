@@ -1,7 +1,11 @@
 import { ToastPosition } from 'react-native-toast-message'
 
 export default {
-  app: { logAvailable: true, promoCodeAvailable: false },
+  app: {
+    logAvailable: true,
+    promoCodeAvailable: false,
+    showTestScreens: false,
+  },
   user: { startCash: 100000 },
   stock: {
     percentPerDay: 5,

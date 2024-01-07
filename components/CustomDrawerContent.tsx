@@ -17,6 +17,7 @@ import { RootState } from '../redux'
 import { useSelector } from 'react-redux'
 import { User } from '../constants/interfaces'
 import { LinearGradient } from 'expo-linear-gradient'
+import rules from '../constants/rules'
 
 const width = Dimensions.get('screen').width
 
@@ -33,26 +34,45 @@ export default function CustomDrawerContent(props: any) {
       title: 'Portfolio',
       icon: 'briefcase-outline',
       screen: 'PortfolioScreen',
+      test: false,
     },
     {
       title: 'News',
       icon: 'newspaper-outline',
       screen: 'NewsScreen',
+      test: false,
     },
     {
       title: 'Stock market',
       icon: 'bar-chart-outline',
       screen: 'InvestScreen',
+      test: false,
     },
     {
       title: 'Analytics',
       icon: 'analytics-outline',
       screen: 'AnalyticsScreen',
+      test: false,
     },
-    { title: 'Deposit', icon: 'wallet-outline', screen: 'DepositsScreen' },
+    {
+      title: 'Deposit',
+      icon: 'wallet-outline',
+      screen: 'DepositsScreen',
+      test: false,
+    },
 
-    { title: 'Real Estate', icon: 'home-outline', screen: 'RealEstateScreen' },
-    { title: 'Businesses', icon: 'albums-outline', screen: 'StoreScreen' },
+    {
+      title: 'Real Estate',
+      icon: 'home-outline',
+      screen: 'RealEstateScreen',
+      test: false,
+    },
+    {
+      title: 'Businesses',
+      icon: 'albums-outline',
+      screen: 'StoreScreen',
+      test: true,
+    },
   ]
 
   function RenderScreenButtonItem({ item }: any) {
@@ -258,7 +278,9 @@ export default function CustomDrawerContent(props: any) {
         <FlatList
           scrollEnabled={false}
           style={{ width: '100%', marginTop: 50 }}
-          data={screensButtonData}
+          data={screensButtonData.filter(
+            (s: any) => !!(rules.app.showTestScreens || !s.test)
+          )}
           renderItem={RenderScreenButtonItem}
           ItemSeparatorComponent={() => (
             <View

@@ -181,14 +181,25 @@ export default function DepositsScreen({ navigation }: any) {
             },
           ]}
         >
-          Available deposits:
+          Your deposits:
         </Text>
-        <FlatList
-          scrollEnabled={false}
-          style={{ width: '100%' }}
-          data={user.deposits}
-          renderItem={RenderDepositItem}
-        />
+        {user.deposits.length ? (
+          <FlatList
+            scrollEnabled={false}
+            style={{ width: '100%' }}
+            data={user.deposits}
+            renderItem={RenderDepositItem}
+          />
+        ) : (
+          <Text
+            style={{
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.04,
+            }}
+          >
+            No deposits yet
+          </Text>
+        )}
       </ScrollView>
     </View>
   )
