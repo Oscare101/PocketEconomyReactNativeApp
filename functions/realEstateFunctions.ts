@@ -13,9 +13,29 @@ export function GetPropertyCost(startDate: string, region: number) {
   return +currectValue.toFixed(2)
 }
 
+export function GetPropertyCostToDate(
+  startDate: string,
+  date: string,
+  region: number
+) {
+  const dayPassed = GetDaysFromDateToDate(startDate, date)
+  const initialValue = rules.realEstate.value[region - 1]
+  const currectValue =
+    initialValue * (1 + rules.realEstate.percentPerDay / 100) ** dayPassed
+  return +currectValue.toFixed(2)
+}
+
 export function GetDaysFromDate(date: string) {
   const targetDate = new Date(date).getTime()
   const currentDate = new Date().getTime()
+  const timeDifference = currentDate - targetDate
+  const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+  return daysPassed
+}
+
+export function GetDaysFromDateToDate(date1: string, date2: string) {
+  const targetDate = new Date(date1).getTime()
+  const currentDate = new Date(date2).getTime()
   const timeDifference = currentDate - targetDate
   const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
   return daysPassed
@@ -60,7 +80,7 @@ export function GetUserAllPropertiesCost(user: User) {
 export function GetUserAllPropertiesCostToDate(user: User, date: string) {
   let sum: number = 0
   user.realEstate.forEach((r: UserRealEstate) => {
-    sum += GetPropertyCost(date, r.region) * r.amount
+    sum += GetPropertyCostToDate(user.loginDate, date, r.region) * r.amount
   })
   return sum
 }
