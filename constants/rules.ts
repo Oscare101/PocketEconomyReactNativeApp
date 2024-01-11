@@ -6,7 +6,9 @@ export default {
     promoCodeAvailable: false,
     showTestScreens: false,
   },
-  user: { startCash: 100000 },
+  user: {
+    startCash: 100000,
+  },
   stock: {
     percentPerDay: 5,
     secondsPerTact: 60,
@@ -32,7 +34,9 @@ export default {
     ],
     tendention: [0.1, 0.08, 0.07, 0.05, 0.04],
   },
-  news: { impactPerCompanySize: [0.1, 0.08, 0.06, 0.05, 0.04] },
+  news: {
+    impactPerCompanySize: [0.1, 0.08, 0.06, 0.05, 0.04],
+  },
   deposit: {
     maxValue: 1000000000,
     options: [

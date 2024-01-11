@@ -57,6 +57,14 @@ export function GetUserAllPropertiesCost(user: User) {
   return sum
 }
 
+export function GetUserAllPropertiesCostToDate(user: User, date: string) {
+  let sum: number = 0
+  user.realEstate.forEach((r: UserRealEstate) => {
+    sum += GetPropertyCost(date, r.region) * r.amount
+  })
+  return sum
+}
+
 export function GetNewDateTimeRealEstate(date: string, time: string) {
   const inputDate = new Date(`${date}T${time}`)
   const newDate = new Date(inputDate.getTime() + 1000 * 60 * 60)
@@ -80,8 +88,19 @@ export function GetNewUserRealEstateHistory(user: User) {
   const elapsedPeriods = IsRealEstatePaymentTime(user.realEstateHistory)
 
   for (let i = 0; i < elapsedPeriods; i++) {
+    // const income = +(
+    //   (GetUserAllPropertiesCost(user) *
+    //     (rules.realEstate.incomePerDayPercent / 100)) /
+    //   rules.realEstate.paymentTimes.length
+    // ).toFixed(2)
+
+    // TODO check
+
     const income = +(
-      (GetUserAllPropertiesCost(user) *
+      (GetUserAllPropertiesCostToDate(
+        user,
+        newPaymentHistory[newPaymentHistory.length - 1].date
+      ) *
         (rules.realEstate.incomePerDayPercent / 100)) /
       rules.realEstate.paymentTimes.length
     ).toFixed(2)
