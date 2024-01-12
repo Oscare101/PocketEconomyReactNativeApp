@@ -108,27 +108,16 @@ export function GetNewUserRealEstateHistory(user: User) {
   const elapsedPeriods = IsRealEstatePaymentTime(user.realEstateHistory)
 
   for (let i = 0; i < elapsedPeriods; i++) {
-    // const income = +(
-    //   (GetUserAllPropertiesCost(user) *
-    //     (rules.realEstate.incomePerDayPercent / 100)) /
-    //   rules.realEstate.paymentTimes.length
-    // ).toFixed(2)
-
-    // TODO check
-
-    const income = +(
-      (GetUserAllPropertiesCostToDate(
-        user,
-        newPaymentHistory[newPaymentHistory.length - 1].date
-      ) *
-        (rules.realEstate.incomePerDayPercent / 100)) /
-      rules.realEstate.paymentTimes.length
-    ).toFixed(2)
-
     const newDateTime = GetNewDateTimeRealEstate(
       newPaymentHistory[newPaymentHistory.length - 1].date,
       newPaymentHistory[newPaymentHistory.length - 1].time
     )
+
+    const income = +(
+      (GetUserAllPropertiesCostToDate(user, newDateTime.date) *
+        (rules.realEstate.incomePerDayPercent / 100)) /
+      rules.realEstate.paymentTimes.length
+    ).toFixed(2)
 
     newPaymentHistory = [
       ...newPaymentHistory,
