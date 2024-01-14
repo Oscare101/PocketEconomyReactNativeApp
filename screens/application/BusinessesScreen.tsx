@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux'
 import { updateLog } from '../../redux/log'
 import { Log, User } from '../../constants/interfaces'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { updateUser } from '../../redux/user'
 import {
   GetCurrentDate,
@@ -27,7 +27,11 @@ import Toast from 'react-native-toast-message'
 import Button from '../../components/Button'
 import { MMKV } from 'react-native-mmkv'
 import { FontAwesome } from '@expo/vector-icons'
-
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet'
+import BottomModalBlock from '../../components/BottomModalBlock'
 export const storage = new MMKV()
 
 const width = Dimensions.get('screen').width
@@ -40,11 +44,17 @@ export default function BusinessesScreen({ navigation, route }: any) {
   const themeColor: any = theme === 'system' ? systemTheme : theme
   const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
+  const [bottomSheetContent, setBottomSheetContent] = useState<any>('')
+
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const snapPoints = useMemo(() => [290], [])
+
   const dispatch = useDispatch()
 
   const data = [
     {
       title: 'Bank',
+      type: 'bank',
       screen: 'BankScreen',
       icon: (
         <FontAwesome
@@ -60,7 +70,17 @@ export default function BusinessesScreen({ navigation, route }: any) {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => {}}
+        onPress={() => {
+          if (
+            user.bisuness &&
+            user.bisuness.find((b: any) => b.type === item.type)
+          ) {
+            navigation.navigate('BankScreen')
+          } else {
+            setBottomSheetContent(item.type)
+            bottomSheetModalRef.current?.present()
+          }
+        }}
         style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
       >
         {item.icon}
@@ -76,21 +96,108 @@ export default function BusinessesScreen({ navigation, route }: any) {
     )
   }
 
+  function RenderUserBusinessItem({ item }: any) {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          if (
+            user.bisuness &&
+            user.bisuness.find((b: any) => b.type === item.type)
+          ) {
+            navigation.navigate('BankScreen')
+          } else {
+            setBottomSheetContent(item.type)
+            bottomSheetModalRef.current?.present()
+          }
+        }}
+        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
+      >
+        {data.find((b: any) => b.type === item.type)?.icon}
+        <Text
+          style={{
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.04,
+          }}
+        >
+          {data.find((b: any) => b.type === item.type)?.title}
+        </Text>
+        <Text
+          style={{
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.04,
+          }}
+        >
+          {item.cash}
+        </Text>
+      </TouchableOpacity>
+    )
+  }
+
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: colors[themeColor].bgColor, paddingBottom: 20 },
-      ]}
-    >
-      <HeaderDrawer title="Businesses" />
-      <FlatList
-        style={{ width: '100%', marginTop: width * 0.02 }}
-        numColumns={2}
-        data={data}
-        renderItem={RenderBusinessItem}
+    <BottomSheetModalProvider>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: colors[themeColor].bgColor, paddingBottom: 20 },
+        ]}
+      >
+        <HeaderDrawer title="Businesses" />
+        <Text
+          style={{
+            width: '92%',
+            alignSelf: 'center',
+            color: colors[themeColor].comment,
+            fontSize: width * interfaceSize * 0.05,
+          }}
+        >
+          Your businesses:
+        </Text>
+        {user.bisuness && user.bisuness.length ? (
+          <FlatList
+            style={{ width: '100%', marginTop: width * 0.02 }}
+            numColumns={2}
+            data={user.bisuness}
+            renderItem={RenderUserBusinessItem}
+          />
+        ) : (
+          <Text
+            style={{
+              color: colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.04,
+              marginVertical: width * interfaceSize * 0.05,
+              fontWeight: '300',
+            }}
+          >
+            No businesses yet
+          </Text>
+        )}
+        <Text
+          style={{
+            width: '92%',
+            alignSelf: 'center',
+            color: colors[themeColor].comment,
+            fontSize: width * interfaceSize * 0.05,
+          }}
+        >
+          Available businesses:
+        </Text>
+        <FlatList
+          style={{ width: '100%', marginTop: width * 0.02 }}
+          numColumns={2}
+          data={data}
+          renderItem={RenderBusinessItem}
+        />
+      </View>
+      {/* BottomSheet */}
+      <BottomModalBlock
+        bottomSheetModalRef={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        dismiss={() => bottomSheetModalRef.current?.dismiss()}
+        content={`business-${bottomSheetContent}`}
+        onClose={() => bottomSheetModalRef.current?.dismiss()}
       />
-    </View>
+    </BottomSheetModalProvider>
   )
 }
 

@@ -28,6 +28,7 @@ import NewsScreen from '../screens/application/NewsScreen'
 import PromoCodeScreen from '../screens/application/PromoCodeScreen'
 import StoreScreen from '../screens/application/StoreScreen'
 import BusinessesScreen from '../screens/application/BusinessesScreen'
+import BankScreen from '../screens/application/BankScreen'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -185,6 +186,18 @@ export default function MainNavigation() {
         }}
         name="PromoCodeScreen"
         component={PromoCodeScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerLeft: () => null,
+          animationEnabled: true,
+          gestureDirection: 'horizontal',
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="BankScreen"
+        component={BankScreen}
       />
     </Stack.Navigator>
   )

@@ -31,6 +31,7 @@ import RealEstateTransactionModal from './RealEstateTransactionModal'
 import RealEstateInfoModal from './RealEstateInfoModal'
 import PromoCodeModal from './PromoCodeModal'
 import InterfaceSizeModal from './InterfaceSizeModal'
+import OpenBankBlockModal from './OpenBankBlockModal'
 
 const width = Dimensions.get('screen').width
 
@@ -63,6 +64,7 @@ export default function BottomModalBlock(props: any) {
     RealEstateInfo: <RealEstateInfoModal />,
     promoCodeBlock: <PromoCodeModal onClose={() => props.onClose()} />,
     interfaceSizeBlock: <InterfaceSizeModal />,
+    'business-bank': <OpenBankBlockModal onClose={() => props.onClose()} />,
   }
 
   return (

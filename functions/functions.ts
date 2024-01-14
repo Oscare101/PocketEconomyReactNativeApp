@@ -406,7 +406,8 @@ export function GetUserAllTimeProgress(user: User, companies: any[]) {
     GetUserStocksCapital(user.stocks, companies) +
     user.cash +
     GetUserDepositsCapital(user.deposits) +
-    GetUserAllPropertiesCost(user)
+    GetUserAllPropertiesCost(user) +
+    GetUserAllBusinessesCapital(user?.bisuness || [])
   const progress = finish / start
   return progress
 }
@@ -518,4 +519,12 @@ export function GetCurrentTime() {
     .getMinutes()
     .toString()
     .padStart(2, '0')}:${new Date().getSeconds().toString().padStart(2, '0')}`
+}
+
+export function GetUserAllBusinessesCapital(businesses: any[]) {
+  if (businesses.length) {
+    return businesses.reduce((a, b) => a + b.cash, 0)
+  } else {
+    return 0
+  }
 }

@@ -19,6 +19,7 @@ import {
   GetPortfolioProgress,
   GetRatingPerPeriod,
   GetReversedArr,
+  GetUserAllBusinessesCapital,
   GetUserDividendsValue,
   GetUserRating,
   GetUserStocksCapital,
@@ -110,21 +111,24 @@ export default function PortfolioScreen({ navigation }: any) {
           GetUserStocksCapital(user.stocks, companies) +
             user.cash +
             GetUserDepositsCapital(user.deposits) +
-            GetUserAllPropertiesCost(user)
+            GetUserAllPropertiesCost(user) +
+            GetUserAllBusinessesCapital(user?.bisuness || [])
         ).value
       }.${
         GetMoneyAmount(
           GetUserStocksCapital(user.stocks, companies) +
             user.cash +
             GetUserDepositsCapital(user.deposits) +
-            GetUserAllPropertiesCost(user)
+            GetUserAllPropertiesCost(user) +
+            GetUserAllBusinessesCapital(user?.bisuness || [])
         ).decimal
       }${
         GetMoneyAmount(
           GetUserStocksCapital(user.stocks, companies) +
             user.cash +
             GetUserDepositsCapital(user.deposits) +
-            GetUserAllPropertiesCost(user)
+            GetUserAllPropertiesCost(user) +
+            GetUserAllBusinessesCapital(user?.bisuness || [])
         ).title
       }`,
     },

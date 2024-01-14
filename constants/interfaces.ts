@@ -60,6 +60,16 @@ export interface UserRealEstateHistory {
   value: number
 }
 
+export interface Bank {
+  type: 'bank'
+  cash: number
+  clientsAmount: number
+  depositRate: number
+  creditRate: number
+  commission: number
+  startDate: string
+}
+
 export interface User {
   name: string
   loginDate: string
@@ -70,6 +80,7 @@ export interface User {
   dividendsHistory: DividendHistory[]
   realEstate: UserRealEstate[]
   realEstateHistory: UserRealEstateHistory[]
+  bisuness?: any[]
 }
 
 export interface Log {

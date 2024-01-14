@@ -3,7 +3,7 @@ import { ToastPosition } from 'react-native-toast-message'
 export default {
   app: {
     logAvailable: true,
-    promoCodeAvailable: false,
+    promoCodeAvailable: true, // TODO remove
     showTestScreens: false,
   },
   user: {
@@ -120,6 +120,18 @@ export default {
     stockSell: {
       title: 'Stock sell',
       icon: 'trending-down-outline',
+    },
+    bankOpenning: {
+      title: 'Open bank',
+      icon: 'briefcase-outline',
+    },
+  },
+  business: {
+    bank: {
+      cost: 1000000,
+      centralBankDepositRate: 5,
+      centralBankCreditRate: 20,
+      centralBankCommission: 1,
     },
   },
 }
