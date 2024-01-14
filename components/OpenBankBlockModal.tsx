@@ -74,7 +74,7 @@ export default function OpenBankBlockModal(props: any) {
     Toast.show({
       type: 'ToastMessage',
       props: {
-        title: 'Youe have opened a bank',
+        title: 'You have opened a bank',
       },
       position: rules.toast.position,
     })

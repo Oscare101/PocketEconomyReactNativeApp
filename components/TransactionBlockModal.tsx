@@ -105,18 +105,6 @@ export default function TransactionBlockModal(props: any) {
         GetMoneyAmount(GetCompanyPrice()).decimal
       }${GetMoneyAmount(GetCompanyPrice()).title}`,
     },
-    // {
-    //   state: 'light',
-    //   title: 'Light',
-    //   description: 'Always use light theme',
-    //   icon: 'sunny-outline',
-    // },
-    // {
-    //   state: 'dark',
-    //   title: 'Dark',
-    //   description: 'Always use dark theme',
-    //   icon: 'moon-outline',
-    // },
   ]
 
   function BuyStocks() {

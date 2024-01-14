@@ -7,7 +7,7 @@ export function GenerateCash() {
 }
 
 export function GenerateIncome() {
-  const cash = Math.random() * rules.business.bank.userAvarageIncome * 24
+  const cash = Math.random() * rules.business.bank.userAvarageIncome * 12
   return +cash.toFixed(2)
 }
 
@@ -24,6 +24,7 @@ export function GenerateRateFrom(min: number) {
 export function GetDepositClientInterested(depositInterest: number) {
   const koef: number =
     depositInterest / rules.business.bank.centralBankDepositRate
+
   let result: number = 0
   if (koef <= 1) {
     result = (koef / 1.136) ** (2 * Math.E)
@@ -88,7 +89,17 @@ export function GetUserIncreaseKoef(bank: Bank) {
   const userInterested =
     GetDepositClientInterested(bank.depositRate) *
     GetCreditClientInterested(bank.creditRate)
-  let result: number = userInterested * 20 * ((0.2 - bank.commission) / 0.2)
+
+  let result: number =
+    userInterested * 20 * ((0.2 - bank.commission / 100) / 0.2)
 
   return 0.96 + result / 100
+}
+
+export function GetAdCost(startDate: string) {
+  const dayPassed = CountElapsedDays(startDate)
+  const initialValue = rules.business.bank.adCost
+  const currectValue =
+    initialValue * (1 + rules.business.bank.adPercentPerDay / 100) ** dayPassed
+  return +currectValue.toFixed(2)
 }

@@ -262,31 +262,40 @@ export default function App() {
       const periodsElapsed = CountElapsedDays(
         user.bisuness?.find((b: any) => b.type === 'bank').lastUpdate
       )
+
       let bankData = user.bisuness?.find((b: any) => b.type === 'bank') as Bank
-      let bankCapital: number = bankData.cash
-      let deposit: number = 0
-      let credit: number = 0
+      // let deposit: number = 0
+      // let credit: number = 0
       let usersCash: number = 0
       let usersIncome: number = 0
       let usersAmount: number = bankData.clientsAmount
+      let temporaryCash: number = bankData.cash
 
       for (let i = 0; i < periodsElapsed; i++) {
         usersAmount = Math.ceil(usersAmount * GetUserIncreaseKoef(bankData))
 
-        for (let i = 0; i < +bankData.lastUpdate; i++) {
+        for (let i = 0; i < +usersAmount; i++) {
           usersCash += GenerateCash()
           usersIncome += GenerateIncome()
           if (CreditInterestedClient(bankData.creditRate)) {
-            credit += GetCreditClient()
+            const credit = GetCreditClient()
+            if (credit <= temporaryCash) {
+              temporaryCash += credit * (bankData.creditRate / 100)
+            }
           } else if (DepositInterestedClient(bankData.depositRate)) {
-            deposit += GetDepositClient()
+            const deposit = GetDepositClient()
+            temporaryCash -= deposit * (bankData.depositRate / 100)
           }
         }
       }
-      bankCapital -= deposit * bankData.depositRate
-      bankCapital += credit * bankData.creditRate
-      bankCapital +=
-        usersCash * bankData.commission + usersIncome * 12 * bankData.commission
+      // console.log('usersCash', usersCash)
+      // console.log('usersIncome', usersIncome)
+      // console.log('-deposits', deposit)
+      // console.log('+credits', credit)
+      // console.log('+commision', usersIncome * (bankData.commission / 100))
+
+      temporaryCash += usersIncome * (bankData.commission / 100)
+      // console.log('temporaryCash', temporaryCash)
 
       const businessesWithoutBank =
         user.bisuness?.filter((b: any) => b.type !== 'bank') || []
@@ -294,7 +303,7 @@ export default function App() {
       const newBankData: Bank = {
         ...bankData,
         lastUpdate: GetCurrentDate(),
-        cash: bankCapital,
+        cash: +temporaryCash.toFixed(2),
         clientsAmount: usersAmount,
       }
 
@@ -350,7 +359,7 @@ export default function App() {
 
       let timer = setTimeout(() => {
         ChechUpdates()
-      }, 1000)
+      }, 5000)
 
       return () => {
         clearTimeout(timer)

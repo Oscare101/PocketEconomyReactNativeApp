@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux'
 import { updateLog } from '../../redux/log'
 import { Bank, Log, User } from '../../constants/interfaces'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { updateUser } from '../../redux/user'
 import {
   GetCurrentDate,
@@ -28,6 +28,11 @@ import Button from '../../components/Button'
 import { MMKV } from 'react-native-mmkv'
 import { Ionicons } from '@expo/vector-icons'
 import { Slider } from '@miblanchard/react-native-slider'
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet'
+import BottomModalBlock from '../../components/BottomModalBlock'
 
 export const storage = new MMKV()
 const width = Dimensions.get('screen').width
@@ -41,6 +46,10 @@ export default function BankScreen({ navigation, route }: any) {
   const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const dispatch = useDispatch()
+
+  const [bottomSheetContent, setBottomSheetContent] = useState<any>('')
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const snapPoints = useMemo(() => [420], [])
 
   const [request, setRequest] = useState<boolean>(false)
   const [openedFolder, setOpenedFolder] = useState<any[]>([])
@@ -76,17 +85,31 @@ export default function BankScreen({ navigation, route }: any) {
       value: `$ ${GetMoneyAmount(GetUserBankInfo().cash).value}.${
         GetMoneyAmount(GetUserBankInfo().cash).decimal
       }${GetMoneyAmount(GetUserBankInfo().cash).title}`,
+      open: 'button',
+      buttonTitle: 'Trasaction',
+      buttonIcon: 'add-outline',
+      buttonAction: () => {
+        setBottomSheetContent('BankInvest')
+        bottomSheetModalRef.current?.present()
+      },
     },
     {
       title: 'Clents',
       icon: 'people-outline',
       value: GetUserBankInfo().clientsAmount,
+      open: 'button',
+      buttonTitle: 'Attract customers',
+      buttonIcon: 'person-add-outline',
+      buttonAction: () => {
+        setBottomSheetContent('BankAdvertisement')
+        bottomSheetModalRef.current?.present()
+      },
     },
     {
       title: 'Deposit rate',
       icon: 'log-in-outline',
       value: `${GetUserBankInfo().depositRate} %`,
-      open: true,
+      open: 'slider',
       sliderMin: 0,
       sliderMax: rules.business.bank.centralBankDepositRate * 2,
       sliderValue: newDepositRate,
@@ -108,7 +131,7 @@ export default function BankScreen({ navigation, route }: any) {
       title: 'Credit rate',
       icon: 'log-out-outline',
       value: `${GetUserBankInfo().creditRate} %`,
-      open: true,
+      open: 'slider',
       sliderMin: 0,
       sliderMax: rules.business.bank.centralBankCreditRate * 2,
       sliderValue: newCreditRate,
@@ -128,7 +151,7 @@ export default function BankScreen({ navigation, route }: any) {
       title: 'Commissions',
       icon: 'log-out-outline',
       value: `${GetUserBankInfo().commission} %`,
-      open: true,
+      open: 'slider',
       sliderMin: 0,
       sliderMax: rules.business.bank.centralBankCommission * 10,
       sliderValue: newCommission,
@@ -147,6 +170,42 @@ export default function BankScreen({ navigation, route }: any) {
   ]
 
   function RenderBankStatItem({ item }: any) {
+    const buttonBlock = (
+      <>
+        <Button
+          title={item.buttonTitle}
+          type="info"
+          disable={false}
+          action={item.buttonAction}
+          style={{ width: '100%', marginTop: width * 0.03 }}
+        />
+      </>
+    )
+
+    const sliderBlock = (
+      <>
+        <Slider
+          step={0.5}
+          minimumValue={item.sliderMin}
+          maximumValue={item.sliderMax}
+          value={item.sliderValue}
+          onValueChange={(value) => {
+            item.slideAction(value)
+          }}
+          maximumTrackTintColor={colors[themeColor].disable}
+          minimumTrackTintColor={colors[themeColor].text}
+          thumbTintColor={colors[themeColor].comment}
+        />
+        <Button
+          title={`Change to ${item.sliderValue} %`}
+          disable={request}
+          type="info"
+          action={item.action}
+          style={{ width: '100%' }}
+        />
+      </>
+    )
+
     return (
       <View
         style={[
@@ -232,25 +291,7 @@ export default function BankScreen({ navigation, route }: any) {
                 backgroundColor: colors[themeColor].disable,
               }}
             />
-            <Slider
-              step={0.5}
-              minimumValue={item.sliderMin}
-              maximumValue={item.sliderMax}
-              value={item.sliderValue}
-              onValueChange={(value) => {
-                item.slideAction(value)
-              }}
-              maximumTrackTintColor={colors[themeColor].disable}
-              minimumTrackTintColor={colors[themeColor].text}
-              thumbTintColor={colors[themeColor].comment}
-            />
-            <Button
-              title={`Change to ${item.sliderValue} %`}
-              disable={request}
-              type="info"
-              action={item.action}
-              style={{ width: '100%' }}
-            />
+            {item.open === 'slider' ? sliderBlock : buttonBlock}
           </>
         ) : (
           <></>
@@ -260,29 +301,39 @@ export default function BankScreen({ navigation, route }: any) {
   }
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: colors[themeColor].bgColor, paddingBottom: 20 },
-      ]}
-    >
-      <HeaderDrawer title="Bank" onAction={() => navigation.goBack()} />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{
-          width: '100%',
-          flex: 1,
-          backgroundColor: colors[themeColor].bgColor,
-        }}
+    <BottomSheetModalProvider>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: colors[themeColor].bgColor, paddingBottom: 20 },
+        ]}
       >
-        <FlatList
-          style={{ width: '100%' }}
-          data={bankData}
-          renderItem={RenderBankStatItem}
-          scrollEnabled={false}
-        />
-      </ScrollView>
-    </View>
+        <HeaderDrawer title="Bank" onAction={() => navigation.goBack()} />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{
+            width: '100%',
+            flex: 1,
+            backgroundColor: colors[themeColor].bgColor,
+          }}
+        >
+          <FlatList
+            style={{ width: '100%' }}
+            data={bankData}
+            renderItem={RenderBankStatItem}
+            scrollEnabled={false}
+          />
+        </ScrollView>
+      </View>
+      {/* BottomSheet */}
+      <BottomModalBlock
+        bottomSheetModalRef={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        dismiss={() => bottomSheetModalRef.current?.dismiss()}
+        content={bottomSheetContent}
+        onClose={() => bottomSheetModalRef.current?.dismiss()}
+      />
+    </BottomSheetModalProvider>
   )
 }
 

@@ -45,7 +45,6 @@ export default function BusinessesScreen({ navigation, route }: any) {
   const interfaceSize = useSelector((state: RootState) => state.interfaceSize)
 
   const [bottomSheetContent, setBottomSheetContent] = useState<any>('')
-
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => [290], [])
 

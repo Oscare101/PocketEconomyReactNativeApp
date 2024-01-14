@@ -3,7 +3,7 @@ import { ToastPosition } from 'react-native-toast-message'
 export default {
   app: {
     logAvailable: true,
-    promoCodeAvailable: true, // TODO remove
+    promoCodeAvailable: true, // TODO false
     showTestScreens: false,
   },
   user: {
@@ -132,8 +132,13 @@ export default {
       centralBankDepositRate: 5,
       centralBankCreditRate: 20,
       centralBankCommission: 1,
-      userAvarageCash: 50000,
-      userAvarageIncome: 10000,
+      userAvarageCash: 20000,
+      userAvarageIncome: 1000,
+      adCost: 1,
+      adPercentPerDay: 4,
+      clientsPerAdd: 0.001,
+      withdrawCommission: 5,
+      investCommission: 0,
     },
   },
 }

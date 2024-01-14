@@ -31,6 +31,12 @@ export function GetMoneyAmount(money: number) {
   return result
 }
 
+export function GetMoneyAmountString(money: number) {
+  return `${GetMoneyAmount(money).value}.${GetMoneyAmount(money).decimal}${
+    GetMoneyAmount(money).title
+  }`
+}
+
 export function GetTendention(history: any[]) {
   if (history.length < 3) {
     return 0
