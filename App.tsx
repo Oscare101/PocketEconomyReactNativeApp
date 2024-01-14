@@ -25,7 +25,13 @@ import {
   countElapsedPeriods,
 } from './functions/functions'
 import { MMKV } from 'react-native-mmkv'
-import { Log, User, UserDeposit, UserRealEstate } from './constants/interfaces'
+import {
+  Bank,
+  Log,
+  User,
+  UserDeposit,
+  UserRealEstate,
+} from './constants/interfaces'
 import { updateUser } from './redux/user'
 import {
   CheckMatureDeposits,
@@ -39,6 +45,16 @@ import {
   IsRealEstatePaymentTime,
 } from './functions/realEstateFunctions'
 import { updateLog } from './redux/log'
+import {
+  CountElapsedDays,
+  CreditInterestedClient,
+  DepositInterestedClient,
+  GenerateCash,
+  GenerateIncome,
+  GetCreditClient,
+  GetDepositClient,
+  GetUserIncreaseKoef,
+} from './functions/bankFunctions'
 
 export const storage = new MMKV()
 const width = Dimensions.get('screen').width
@@ -242,6 +258,53 @@ export default function App() {
       }
     }
 
+    function BankUpdate() {
+      const periodsElapsed = CountElapsedDays(
+        user.bisuness?.find((b: any) => b.type === 'bank').lastUpdate
+      )
+      let bankData = user.bisuness?.find((b: any) => b.type === 'bank') as Bank
+      let bankCapital: number = bankData.cash
+      let deposit: number = 0
+      let credit: number = 0
+      let usersCash: number = 0
+      let usersIncome: number = 0
+      let usersAmount: number = bankData.clientsAmount
+
+      for (let i = 0; i < periodsElapsed; i++) {
+        usersAmount = Math.ceil(usersAmount * GetUserIncreaseKoef(bankData))
+
+        for (let i = 0; i < +bankData.lastUpdate; i++) {
+          usersCash += GenerateCash()
+          usersIncome += GenerateIncome()
+          if (CreditInterestedClient(bankData.creditRate)) {
+            credit += GetCreditClient()
+          } else if (DepositInterestedClient(bankData.depositRate)) {
+            deposit += GetDepositClient()
+          }
+        }
+      }
+      bankCapital -= deposit * bankData.depositRate
+      bankCapital += credit * bankData.creditRate
+      bankCapital +=
+        usersCash * bankData.commission + usersIncome * 12 * bankData.commission
+
+      const businessesWithoutBank =
+        user.bisuness?.filter((b: any) => b.type !== 'bank') || []
+
+      const newBankData: Bank = {
+        ...bankData,
+        lastUpdate: GetCurrentDate(),
+        cash: bankCapital,
+        clientsAmount: usersAmount,
+      }
+
+      const newUserData: User = {
+        ...user,
+        bisuness: [...businessesWithoutBank, newBankData],
+      }
+      dispatch(updateUser(newUserData))
+    }
+
     const [lastUpdate, setLastUpdate] = useState<number>(0)
 
     function ChechUpdates() {
@@ -255,6 +318,15 @@ export default function App() {
         SetNewData()
       }
 
+      if (
+        user.bisuness &&
+        user.bisuness.length &&
+        CountElapsedDays(
+          user.bisuness?.find((b: any) => b.type === 'bank').lastUpdate
+        )
+      ) {
+        BankUpdate()
+      }
       if (
         IsRealEstatePaymentTime(user.realEstateHistory) &&
         (user.realEstate.length || user.realEstateHistory.length)

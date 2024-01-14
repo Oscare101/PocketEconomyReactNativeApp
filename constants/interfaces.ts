@@ -68,6 +68,7 @@ export interface Bank {
   creditRate: number
   commission: number
   startDate: string
+  lastUpdate: string
 }
 
 export interface User {

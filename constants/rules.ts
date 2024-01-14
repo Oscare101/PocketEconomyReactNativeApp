@@ -132,6 +132,8 @@ export default {
       centralBankDepositRate: 5,
       centralBankCreditRate: 20,
       centralBankCommission: 1,
+      userAvarageCash: 50000,
+      userAvarageIncome: 10000,
     },
   },
 }

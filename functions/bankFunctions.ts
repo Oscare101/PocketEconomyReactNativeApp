@@ -1,10 +1,13 @@
+import { Bank } from '../constants/interfaces'
+import rules from '../constants/rules'
+
 export function GenerateCash() {
-  const cash = Math.random() * 50000
+  const cash = Math.random() * rules.business.bank.userAvarageCash * 0.1
   return +cash.toFixed(2)
 }
 
 export function GenerateIncome() {
-  const cash = Math.random() * 10000
+  const cash = Math.random() * rules.business.bank.userAvarageIncome * 24
   return +cash.toFixed(2)
 }
 
@@ -18,11 +21,9 @@ export function GenerateRateFrom(min: number) {
   return rate
 }
 
-export function GetDepositClientInterested(
-  depositInterest: number,
-  centralBankDepositRate: number
-) {
-  const koef: number = depositInterest / centralBankDepositRate
+export function GetDepositClientInterested(depositInterest: number) {
+  const koef: number =
+    depositInterest / rules.business.bank.centralBankDepositRate
   let result: number = 0
   if (koef <= 1) {
     result = (koef / 1.136) ** (2 * Math.E)
@@ -34,13 +35,9 @@ export function GetDepositClientInterested(
   return result
 }
 
-export function DepositInterestedClient(
-  depositInterest: number,
-  centralBankDepositRate: number
-) {
+export function DepositInterestedClient(depositInterest: number) {
   const depositIsBetterThanCentralBank =
-    GetDepositClientInterested(depositInterest, centralBankDepositRate) >=
-    Math.random()
+    GetDepositClientInterested(depositInterest) >= Math.random()
   const userFinancialLiteracy = GenerateRate() > 2
   const userIsInterested =
     depositIsBetterThanCentralBank && userFinancialLiteracy
@@ -48,11 +45,8 @@ export function DepositInterestedClient(
   return userIsInterested
 }
 
-export function GetCreditClientInterested(
-  creditInterest: number,
-  centralBankCreditRate: number
-) {
-  const koef = creditInterest / centralBankCreditRate
+export function GetCreditClientInterested(creditInterest: number) {
+  const koef = creditInterest / rules.business.bank.centralBankCreditRate
   let result: number = 0
   if (koef <= 1) {
     result = -((0.8 * koef) ** (1.143 * Math.E)) + 1
@@ -64,24 +58,37 @@ export function GetCreditClientInterested(
   return result
 }
 
-export function CreditInterestedClient(
-  creditInterest: number,
-  centralBankCreditRate: number
-) {
+export function CreditInterestedClient(creditInterest: number) {
   const creditIsBetterThanCentralBank =
-    GetCreditClientInterested(creditInterest, centralBankCreditRate) >=
-    Math.random()
+    GetCreditClientInterested(creditInterest) >= Math.random()
   const userImpulseBuyerRate = GenerateRate() > 2
   const userIsInterested = creditIsBetterThanCentralBank && userImpulseBuyerRate
   return userIsInterested
 }
 
 export function GetDepositClient() {
-  const deposit = GenerateCash() * GenerateRateFrom(3) * 0.1
+  const deposit = GenerateCash() * GenerateRateFrom(3)
   return deposit
 }
 
 export function GetCreditClient() {
-  const credit = GenerateIncome() * GenerateRateFrom(3) * 24
+  const credit = GenerateIncome() * GenerateRateFrom(3)
   return credit
+}
+
+export function CountElapsedDays(date: string) {
+  const targetDate = new Date(date).getTime()
+  const currentDate = new Date().getTime()
+  const timeDifference = currentDate - targetDate
+  const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+  return daysPassed
+}
+
+export function GetUserIncreaseKoef(bank: Bank) {
+  const userInterested =
+    GetDepositClientInterested(bank.depositRate) *
+    GetCreditClientInterested(bank.creditRate)
+  let result: number = userInterested * 20 * ((0.2 - bank.commission) / 0.2)
+
+  return 0.96 + result / 100
 }

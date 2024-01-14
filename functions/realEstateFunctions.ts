@@ -147,11 +147,3 @@ export function GetAllRentalPaymentValue(history: UserRealEstateHistory[]) {
   )
   return sum
 }
-
-export function GetUserAllBusinessesCapital(businesses: any[]) {
-  if (businesses.length) {
-    return businesses.reduce((a, b) => a + b.cash, 0)
-  } else {
-    return 0
-  }
-}

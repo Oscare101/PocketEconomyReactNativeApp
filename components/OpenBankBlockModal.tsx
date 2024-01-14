@@ -50,6 +50,7 @@ export default function OpenBankBlockModal(props: any) {
       creditRate: rules.business.bank.centralBankCreditRate,
       commission: rules.business.bank.centralBankCommission,
       startDate: GetCurrentDate(),
+      lastUpdate: GetCurrentDate(),
     }
     const newUserData: User = {
       ...user,
