@@ -27,6 +27,7 @@ import LogInfoScreen from '../screens/application/LogInfoScreen'
 import NewsScreen from '../screens/application/NewsScreen'
 import PromoCodeScreen from '../screens/application/PromoCodeScreen'
 import StoreScreen from '../screens/application/StoreScreen'
+import BusinessesScreen from '../screens/application/BusinessesScreen'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -76,8 +77,8 @@ export default function MainNavigation() {
         />
         <Drawer.Screen
           options={{ headerShown: false }}
-          name="StoreScreen"
-          component={StoreScreen}
+          name="BusinessesScreen"
+          component={BusinessesScreen}
         />
       </Drawer.Navigator>
     )

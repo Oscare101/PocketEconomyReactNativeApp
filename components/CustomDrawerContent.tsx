@@ -70,8 +70,8 @@ export default function CustomDrawerContent(props: any) {
     {
       title: 'Businesses',
       icon: 'albums-outline',
-      screen: 'StoreScreen',
-      test: true,
+      screen: 'BusinessesScreen',
+      test: false,
     },
   ]
 
