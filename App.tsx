@@ -123,7 +123,6 @@ export default function App() {
           },
         ])
       )
-      storage.set('user', JSON.stringify(newUserData))
       Toast.show({
         type: 'ToastMessage',
         props: {
@@ -171,6 +170,13 @@ export default function App() {
           break
         }
       }
+      Toast.show({
+        type: 'ToastMessage',
+        props: {
+          title: `The deposit has been repaid`,
+        },
+        position: rules.toast.position,
+      })
     }
 
     function SetNewData() {
@@ -255,15 +261,9 @@ export default function App() {
       ) {
         SetRealEstatePayment()
       }
+
       if (CheckMatureDeposits(user.deposits).length) {
         RemoveMatureDeposits()
-        Toast.show({
-          type: 'ToastMessage',
-          props: {
-            title: `The deposit has been repaid`,
-          },
-          position: rules.toast.position,
-        })
       }
       setLastUpdate(new Date().getTime())
     }
@@ -271,7 +271,7 @@ export default function App() {
     const [initialCheck, setInitialCheck] = useState<boolean>(false)
 
     useEffect(() => {
-      if (companies.length !== 0 && !initialCheck) {
+      if (companies.length !== 0 && user.name && !initialCheck) {
         setInitialCheck(true)
         ChechUpdates()
       }
