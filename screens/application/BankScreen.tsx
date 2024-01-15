@@ -323,6 +323,9 @@ export default function BankScreen({ navigation, route }: any) {
             renderItem={RenderBankStatItem}
             scrollEnabled={false}
           />
+          <Text style={{ color: colors[themeColor].errorText }}>
+            last update {GetUserBankInfo().lastUpdate}
+          </Text>
         </ScrollView>
       </View>
       {/* BottomSheet */}

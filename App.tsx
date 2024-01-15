@@ -182,7 +182,7 @@ export default function App() {
               },
             ])
           )
-          storage.set('user', JSON.stringify(newUserData))
+          // storage.set('user', JSON.stringify(newUserData))
           break
         }
       }
@@ -218,7 +218,7 @@ export default function App() {
           ],
         }
         dispatch(updateUser(newUserData))
-        storage.set('user', JSON.stringify(newUserData))
+        // storage.set('user', JSON.stringify(newUserData))
       } else {
         const elapsedPeriods: number = IsRealEstatePaymentTime(
           user.realEstateHistory
@@ -254,7 +254,7 @@ export default function App() {
             },
           ])
         )
-        storage.set('user', JSON.stringify(newUserData))
+        // storage.set('user', JSON.stringify(newUserData))
       }
     }
 

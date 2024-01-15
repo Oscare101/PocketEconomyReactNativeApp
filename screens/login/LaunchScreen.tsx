@@ -100,7 +100,7 @@ export default function LaunchScreen({ navigation }: any) {
         realEstateHistory: [],
       }
       dispatch(updateUser(defaultUser))
-      storage.set('user', JSON.stringify(defaultUser))
+      // storage.set('user', JSON.stringify(defaultUser))
     }
 
     const companies: any = storage.getString('companies')
