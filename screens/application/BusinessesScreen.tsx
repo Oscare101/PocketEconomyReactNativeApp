@@ -133,6 +133,40 @@ export default function BusinessesScreen({ navigation, route }: any) {
     )
   }
 
+  const yourBusinessesBlock = (
+    <>
+      <Text
+        style={{
+          width: '92%',
+          alignSelf: 'center',
+          color: colors[themeColor].comment,
+          fontSize: width * interfaceSize * 0.05,
+        }}
+      >
+        Your businesses:
+      </Text>
+      {user.bisuness && user.bisuness.length ? (
+        <FlatList
+          style={{ width: '100%', marginTop: width * 0.02 }}
+          numColumns={2}
+          data={user.bisuness}
+          renderItem={RenderUserBusinessItem}
+        />
+      ) : (
+        <Text
+          style={{
+            color: colors[themeColor].comment,
+            fontSize: width * interfaceSize * 0.04,
+            marginVertical: width * interfaceSize * 0.05,
+            fontWeight: '300',
+          }}
+        >
+          No businesses yet
+        </Text>
+      )}
+    </>
+  )
+
   return (
     <BottomSheetModalProvider>
       <View
@@ -142,35 +176,7 @@ export default function BusinessesScreen({ navigation, route }: any) {
         ]}
       >
         <HeaderDrawer title="Businesses" />
-        <Text
-          style={{
-            width: '92%',
-            alignSelf: 'center',
-            color: colors[themeColor].comment,
-            fontSize: width * interfaceSize * 0.05,
-          }}
-        >
-          Your businesses:
-        </Text>
-        {user.bisuness && user.bisuness.length ? (
-          <FlatList
-            style={{ width: '100%', marginTop: width * 0.02 }}
-            numColumns={2}
-            data={user.bisuness}
-            renderItem={RenderUserBusinessItem}
-          />
-        ) : (
-          <Text
-            style={{
-              color: colors[themeColor].comment,
-              fontSize: width * interfaceSize * 0.04,
-              marginVertical: width * interfaceSize * 0.05,
-              fontWeight: '300',
-            }}
-          >
-            No businesses yet
-          </Text>
-        )}
+        {/* {yourBusinessesBlock} */}
         <Text
           style={{
             width: '92%',
