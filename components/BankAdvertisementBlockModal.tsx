@@ -3,7 +3,6 @@ import {
   FlatList,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   useColorScheme,
 } from 'react-native'
@@ -12,20 +11,13 @@ import { RootState } from '../redux'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Ionicons } from '@expo/vector-icons'
-import { updateTheme } from '../redux/theme'
 import { MMKV } from 'react-native-mmkv'
 import Button from './Button'
 import { useState } from 'react'
 import { Bank, Log, User } from '../constants/interfaces'
 import rules from '../constants/rules'
-import {
-  GetCurrentDate,
-  GetCurrentTime,
-  GetMoneyAmount,
-  GetMoneyAmountString,
-} from '../functions/functions'
+import { GetMoneyAmountString } from '../functions/functions'
 import { updateUser } from '../redux/user'
-import { updateLog } from '../redux/log'
 import Toast from 'react-native-toast-message'
 import { GetAdCost } from '../functions/bankFunctions'
 

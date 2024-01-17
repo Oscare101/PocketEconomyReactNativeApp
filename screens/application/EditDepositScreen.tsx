@@ -22,7 +22,7 @@ import {
   GetDepositInterestReturn,
   GetDepositMatureDateTime,
 } from '../../functions/depositFunctions'
-import { GetMoneyAmount } from '../../functions/functions'
+import { GetMoneyAmount, GetMoneyAmountString } from '../../functions/functions'
 import Button from '../../components/Button'
 import {
   BottomSheetModal,
@@ -84,9 +84,7 @@ export default function EditDepositScreen({ navigation, route }: any) {
   const depositData = [
     {
       title: '$',
-      value: `${GetMoneyAmount(route.params.deposit.value).value}.${
-        GetMoneyAmount(route.params.deposit.value).decimal
-      }${GetMoneyAmount(route.params.deposit.value).title}`,
+      value: `${GetMoneyAmountString(route.params.deposit.value)}`,
     },
     {
       title: 'Interest',

@@ -1,37 +1,18 @@
 import {
   Dimensions,
   FlatList,
-  Keyboard,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
-  TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
   useColorScheme,
 } from 'react-native'
 import HeaderDrawer from '../../components/HeaderDrawer'
 import colors from '../../constants/colors'
 import { useDispatch, useSelector } from 'react-redux'
-import { Log, User, UserDeposit } from '../../constants/interfaces'
+import { Log } from '../../constants/interfaces'
 import { RootState } from '../../redux'
-import { useMemo, useRef, useState } from 'react'
-import {
-  GetDepositInterestReturn,
-  GetDepositMatureDateTime,
-} from '../../functions/depositFunctions'
-import { GetMoneyAmount } from '../../functions/functions'
-import Button from '../../components/Button'
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet'
-import BottomModalBlock from '../../components/BottomModalBlock'
-import { Ionicons } from '@expo/vector-icons'
-import Toast from 'react-native-toast-message'
-import { updateUser } from '../../redux/user'
 import { MMKV } from 'react-native-mmkv'
 import rules from '../../constants/rules'
 

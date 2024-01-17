@@ -21,6 +21,7 @@ import {
   GetCurrentDate,
   GetCurrentTime,
   GetMoneyAmount,
+  GetMoneyAmountString,
 } from '../functions/functions'
 import { updateUser } from '../redux/user'
 import { updateLog } from '../redux/log'
@@ -155,9 +156,7 @@ export default function OpenBankBlockModal(props: any) {
                 color: colors[themeColor].text,
               }}
             >
-              {GetMoneyAmount(rules.business.bank.cost).value}.
-              {GetMoneyAmount(rules.business.bank.cost).decimal}
-              {GetMoneyAmount(rules.business.bank.cost).title}
+              {GetMoneyAmountString(rules.business.bank.cost)}
             </Text>
           </View>
         </View>

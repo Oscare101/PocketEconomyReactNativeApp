@@ -21,6 +21,7 @@ import {
   GetCurrentDate,
   GetCurrentTime,
   GetMoneyAmount,
+  GetMoneyAmountString,
 } from '../../functions/functions'
 import rules from '../../constants/rules'
 import Toast from 'react-native-toast-message'
@@ -82,9 +83,7 @@ export default function BankScreen({ navigation, route }: any) {
     {
       title: 'Cash',
       icon: 'briefcase-outline',
-      value: `$ ${GetMoneyAmount(GetUserBankInfo().cash).value}.${
-        GetMoneyAmount(GetUserBankInfo().cash).decimal
-      }${GetMoneyAmount(GetUserBankInfo().cash).title}`,
+      value: `$ ${GetMoneyAmountString(GetUserBankInfo().cash)}`,
       open: 'button',
       buttonTitle: 'Trasaction',
       buttonIcon: 'add-outline',

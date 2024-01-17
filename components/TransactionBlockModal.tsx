@@ -19,6 +19,7 @@ import {
   GetCurrentDate,
   GetCurrentTime,
   GetMoneyAmount,
+  GetMoneyAmountString,
   ReduceUserStocks,
   SetNewUserStocks,
 } from '../functions/functions'
@@ -94,16 +95,12 @@ export default function TransactionBlockModal(props: any) {
     {
       title: 'Your stocks worth',
       icon: 'cash-outline',
-      value: `$ ${GetMoneyAmount(GetUserStocksAmount().averagePrice).value}.${
-        GetMoneyAmount(GetUserStocksAmount().averagePrice).decimal
-      }${GetMoneyAmount(GetUserStocksAmount().averagePrice).title}`,
+      value: `$ ${GetMoneyAmountString(GetUserStocksAmount().averagePrice)}`,
     },
     {
       title: 'Current stocks price',
       icon: 'receipt-outline',
-      value: `$ ${GetMoneyAmount(GetCompanyPrice()).value}.${
-        GetMoneyAmount(GetCompanyPrice()).decimal
-      }${GetMoneyAmount(GetCompanyPrice()).title}`,
+      value: `$ ${GetMoneyAmountString(GetCompanyPrice())}`,
     },
   ]
 
@@ -312,9 +309,7 @@ export default function TransactionBlockModal(props: any) {
               color: colors[themeColor].text,
             }}
           >
-            $ {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).value}.
-            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).decimal}
-            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).title}
+            $ {GetMoneyAmountString(GetCompanyPrice() * +amounOfStocks)}
           </Text>
         </View>
       </View>
@@ -449,9 +444,7 @@ export default function TransactionBlockModal(props: any) {
               color: colors[themeColor].text,
             }}
           >
-            $ {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).value}.
-            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).decimal}
-            {GetMoneyAmount(GetCompanyPrice() * +amounOfStocks).title}
+            $ {GetMoneyAmountString(GetCompanyPrice() * +amounOfStocks)}
           </Text>
         </View>
       </View>

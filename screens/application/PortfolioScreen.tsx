@@ -16,6 +16,7 @@ import {
   GenerateDividendsDates,
   GetEconomicsProgress,
   GetMoneyAmount,
+  GetMoneyAmountString,
   GetPortfolioProgress,
   GetRatingPerPeriod,
   GetReversedArr,
@@ -106,39 +107,19 @@ export default function PortfolioScreen({ navigation }: any) {
       type: 'Card',
       icon: 'briefcase-outline',
       title: 'Capital',
-      value: `$ ${
-        GetMoneyAmount(
-          GetUserStocksCapital(user.stocks, companies) +
-            user.cash +
-            GetUserDepositsCapital(user.deposits) +
-            GetUserAllPropertiesCost(user) +
-            GetUserAllBusinessesCapital(user?.bisuness || [])
-        ).value
-      }.${
-        GetMoneyAmount(
-          GetUserStocksCapital(user.stocks, companies) +
-            user.cash +
-            GetUserDepositsCapital(user.deposits) +
-            GetUserAllPropertiesCost(user) +
-            GetUserAllBusinessesCapital(user?.bisuness || [])
-        ).decimal
-      }${
-        GetMoneyAmount(
-          GetUserStocksCapital(user.stocks, companies) +
-            user.cash +
-            GetUserDepositsCapital(user.deposits) +
-            GetUserAllPropertiesCost(user) +
-            GetUserAllBusinessesCapital(user?.bisuness || [])
-        ).title
-      }`,
+      value: `$ ${GetMoneyAmountString(
+        GetUserStocksCapital(user.stocks, companies) +
+          user.cash +
+          GetUserDepositsCapital(user.deposits) +
+          GetUserAllPropertiesCost(user) +
+          GetUserAllBusinessesCapital(user?.bisuness || [])
+      )}`,
     },
     {
       type: 'Card',
       icon: 'cash-outline',
       title: 'Cash',
-      value: `$ ${GetMoneyAmount(user.cash).value}.${
-        GetMoneyAmount(user.cash).decimal
-      }${GetMoneyAmount(user.cash).title}`,
+      value: `$ ${GetMoneyAmountString(user.cash)}`,
     },
     {
       type: 'Rating',
@@ -153,11 +134,9 @@ export default function PortfolioScreen({ navigation }: any) {
       type: 'Stocks',
       title: 'Stocks',
       icon: 'trending-up-outline',
-      value: `$ ${
-        GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).value
-      }.${
-        GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).decimal
-      }${GetMoneyAmount(GetUserStocksCapital(user.stocks, companies)).title}`,
+      value: `$ ${GetMoneyAmountString(
+        GetUserStocksCapital(user.stocks, companies)
+      )}`,
       progress: GetPortfolioProgress(user, companies, 0).toFixed(2),
       data: user.stocks,
     },
@@ -171,33 +150,23 @@ export default function PortfolioScreen({ navigation }: any) {
       type: 'Deposits',
       title: 'Deposits',
       icon: 'wallet-outline',
-      value: `$ ${
-        GetMoneyAmount(GetUserDepositsCapital(user.deposits)).value
-      }.${GetMoneyAmount(GetUserDepositsCapital(user.deposits)).decimal}${
-        GetMoneyAmount(GetUserDepositsCapital(user.deposits)).title
-      }`,
+      value: `$ ${GetMoneyAmountString(GetUserDepositsCapital(user.deposits))}`,
       data: user.deposits,
     },
     {
       type: 'RealEstate',
       title: 'Real Estate',
       icon: 'home-outline',
-      value: `$ ${GetMoneyAmount(GetUserAllPropertiesCost(user)).value}.${
-        GetMoneyAmount(GetUserAllPropertiesCost(user)).decimal
-      }${GetMoneyAmount(GetUserAllPropertiesCost(user)).title}`,
+      value: `$ ${GetMoneyAmountString(GetUserAllPropertiesCost(user))}`,
       data: user.realEstate,
     },
     {
       type: 'RentalPayment',
       title: 'Rental Payment',
       icon: 'download-outline',
-      value: `$ ${
-        GetMoneyAmount(GetAllRentalPaymentValue(user.realEstateHistory)).value
-      }.${
-        GetMoneyAmount(GetAllRentalPaymentValue(user.realEstateHistory)).decimal
-      }${
-        GetMoneyAmount(GetAllRentalPaymentValue(user.realEstateHistory)).title
-      }`,
+      value: `$ ${GetMoneyAmountString(
+        GetAllRentalPaymentValue(user.realEstateHistory)
+      )}`,
       data: user.realEstateHistory,
     },
   ]
@@ -336,9 +305,7 @@ export default function PortfolioScreen({ navigation }: any) {
               fontSize: width * interfaceSize * 0.04,
             }}
           >
-            $ {GetMoneyAmount(item.amount * currentStockPrice).value}.
-            {GetMoneyAmount(item.amount * currentStockPrice).decimal}
-            {GetMoneyAmount(item.amount * currentStockPrice).title}
+            $ {GetMoneyAmountString(item.amount * currentStockPrice)}
           </Text>
         )}
       </TouchableOpacity>
@@ -389,9 +356,7 @@ export default function PortfolioScreen({ navigation }: any) {
               fontSize: width * interfaceSize * 0.04,
             }}
           >
-            $ {GetMoneyAmount(dividendsSum).value}.
-            {GetMoneyAmount(dividendsSum).decimal}
-            {GetMoneyAmount(dividendsSum).title}
+            $ {GetMoneyAmountString(dividendsSum)}
           </Text>
         ) : (
           <Text
@@ -452,9 +417,7 @@ export default function PortfolioScreen({ navigation }: any) {
                 textAlign: 'right',
               }}
             >
-              $ {GetMoneyAmount(item.value).value}.
-              {GetMoneyAmount(item.value).decimal}
-              {GetMoneyAmount(item.value).title}
+              $ {GetMoneyAmountString(item.value)}
             </Text>
           </View>
           <View style={[styles.rowBetween, { marginVertical: 1 }]}>
@@ -543,13 +506,7 @@ export default function PortfolioScreen({ navigation }: any) {
           }}
         >
           ${' '}
-          {GetMoneyAmount(GetPropertiesValuePerRegion(user, item.region)).value}
-          .
-          {
-            GetMoneyAmount(GetPropertiesValuePerRegion(user, item.region))
-              .decimal
-          }
-          {GetMoneyAmount(GetPropertiesValuePerRegion(user, item.region)).title}
+          {GetMoneyAmountString(GetPropertiesValuePerRegion(user, item.region))}
         </Text>
       </TouchableOpacity>
     )
@@ -590,9 +547,7 @@ export default function PortfolioScreen({ navigation }: any) {
             fontSize: width * interfaceSize * 0.04,
           }}
         >
-          $ {GetMoneyAmount(item.value).value}.
-          {GetMoneyAmount(item.value).decimal}
-          {GetMoneyAmount(item.value).title}
+          $ {GetMoneyAmountString(item.value)}
         </Text>
       </View>
     )
@@ -897,19 +852,9 @@ export default function PortfolioScreen({ navigation }: any) {
               }}
             >
               ${' '}
-              {
-                GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
-                  .value
-              }
-              .
-              {
-                GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
-                  .decimal
-              }
-              {
-                GetMoneyAmount(GetUserDividendsValue(user.dividendsHistory))
-                  .title
-              }
+              {GetMoneyAmountString(
+                GetUserDividendsValue(user.dividendsHistory)
+              )}
             </Text>
             <Text
               style={[

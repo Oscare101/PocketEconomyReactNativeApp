@@ -19,6 +19,7 @@ import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import {
   GetMoneyAmount,
+  GetMoneyAmountString,
   GetUserDividendsValue,
 } from '../../functions/functions'
 import { DividendHistory } from '../../constants/interfaces'
@@ -77,9 +78,7 @@ export default function DividendsScreen({ navigation, route }: any) {
           >
             {item.interest} % =
           </Text>{' '}
-          $ {GetMoneyAmount(item.value).value}.
-          {GetMoneyAmount(item.value).decimal}
-          {GetMoneyAmount(item.value).title}
+          $ {GetMoneyAmountString(item.value)}
         </Text>
       </TouchableOpacity>
     )
@@ -132,19 +131,9 @@ export default function DividendsScreen({ navigation, route }: any) {
               ]}
             >
               ${' '}
-              {
-                GetMoneyAmount(GetUserDividendsValue(route.params.dividends))
-                  .value
-              }
-              .
-              {
-                GetMoneyAmount(GetUserDividendsValue(route.params.dividends))
-                  .decimal
-              }
-              {
-                GetMoneyAmount(GetUserDividendsValue(route.params.dividends))
-                  .title
-              }
+              {GetMoneyAmountString(
+                GetUserDividendsValue(route.params.dividends)
+              )}
             </Text>
           </View>
 

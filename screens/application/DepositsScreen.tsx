@@ -15,7 +15,7 @@ import { Company, User } from '../../constants/interfaces'
 import { updateUser } from '../../redux/user'
 import { RootState } from '../../redux'
 import HeaderDrawer from '../../components/HeaderDrawer'
-import { GetMoneyAmount } from '../../functions/functions'
+import { GetMoneyAmount, GetMoneyAmountString } from '../../functions/functions'
 import { Ionicons } from '@expo/vector-icons'
 import { GetDepositMatureDateTime } from '../../functions/depositFunctions'
 
@@ -39,9 +39,7 @@ export default function DepositsScreen({ navigation }: any) {
       },
       {
         title: 'Value',
-        value: `$ ${GetMoneyAmount(item.value).value}.${
-          GetMoneyAmount(item.value).decimal
-        }${GetMoneyAmount(item.value).title}`,
+        value: `$ ${GetMoneyAmountString(item.value)}`,
       },
       {
         title: 'Next payment',

@@ -24,6 +24,7 @@ import {
   GetCurrentDate,
   GetCurrentTime,
   GetMoneyAmount,
+  GetMoneyAmountString,
 } from '../../functions/functions'
 import Button from '../../components/Button'
 import {
@@ -232,9 +233,7 @@ export default function CreateDepositScreen({ navigation }: any) {
               fontWeight: '300',
             }}
           >
-            $ {GetMoneyAmount(user.cash).value}.
-            {GetMoneyAmount(user.cash).decimal}
-            {GetMoneyAmount(user.cash).title}
+            $ {GetMoneyAmountString(user.cash)}
           </Text>
         </View>
       </View>
@@ -448,9 +447,7 @@ export default function CreateDepositScreen({ navigation }: any) {
               },
             ]}
           >
-            Max $ {GetMoneyAmount(rules.deposit.maxValue).value}.
-            {GetMoneyAmount(rules.deposit.maxValue).decimal}
-            {GetMoneyAmount(rules.deposit.maxValue).title}
+            Max $ {GetMoneyAmountString(rules.deposit.maxValue)}
           </Text>
           {inputBlock}
           <CahsBlock />

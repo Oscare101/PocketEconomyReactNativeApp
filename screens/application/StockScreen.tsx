@@ -13,11 +13,7 @@ import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import colors from '../../constants/colors'
 import StockStatusItem from '../../components/StockStatusItem'
-import {
-  GetMoneyAmount,
-  GetProfit,
-  countElapsedPeriods,
-} from '../../functions/functions'
+import { GetMoneyAmountString, GetProfit } from '../../functions/functions'
 import rules from '../../constants/rules'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import StatusItem from '../../components/StatusItem'
@@ -93,9 +89,7 @@ export default function StockScreen({ navigation, route }: any) {
       user.stocks.find((s: any) => s.name === route.params.companyName)
         ?.amount || 0
     const price = GetCompany().history[GetCompany().history.length - 1].price
-    return `$ ${GetMoneyAmount(amount * price).value}.${
-      GetMoneyAmount(amount * price).decimal
-    }${GetMoneyAmount(amount * price).title}`
+    return `$ ${GetMoneyAmountString(amount * price)}`
   }
 
   const companyStatData = [
@@ -133,19 +127,9 @@ export default function StockScreen({ navigation, route }: any) {
     {
       title: 'Price',
       statIcon: false,
-      value: `$ ${
-        GetMoneyAmount(
-          GetCompany().history[GetCompany().history.length - 1].price
-        ).value
-      }.${
-        GetMoneyAmount(
-          GetCompany().history[GetCompany().history.length - 1].price
-        ).decimal
-      }${
-        GetMoneyAmount(
-          GetCompany().history[GetCompany().history.length - 1].price
-        ).title
-      }`,
+      value: `$ ${GetMoneyAmountString(
+        GetCompany().history[GetCompany().history.length - 1].price
+      )}`,
     },
     {
       title: 'Public stocks amount',
@@ -616,9 +600,7 @@ export default function StockScreen({ navigation, route }: any) {
                     fontSize: width * interfaceSize * 0.04,
                   }}
                 >
-                  $ {GetMoneyAmount(pressedPrice?.price).value}.
-                  {GetMoneyAmount(pressedPrice?.price).decimal}
-                  {GetMoneyAmount(pressedPrice?.price).title}
+                  $ {GetMoneyAmountString(pressedPrice?.price)}
                 </Text>
               </View>
             ) : (

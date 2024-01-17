@@ -13,7 +13,7 @@ import HeaderDrawer from '../../components/HeaderDrawer'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
 import StockStatusItem from '../../components/StockStatusItem'
-import { GetMoneyAmount, GetProfit } from '../../functions/functions'
+import { GetMoneyAmountString, GetProfit } from '../../functions/functions'
 import rules from '../../constants/rules'
 import { useState } from 'react'
 
@@ -240,19 +240,9 @@ export default function InvestScreen({ navigation }: any) {
               ]}
             >
               Price: ${' '}
-              {
-                GetMoneyAmount(item.history[item.history.length - 1].price)
-                  .value
-              }
-              .
-              {
-                GetMoneyAmount(item.history[item.history.length - 1].price)
-                  .decimal
-              }
-              {
-                GetMoneyAmount(item.history[item.history.length - 1].price)
-                  .title
-              }
+              {GetMoneyAmountString(
+                item.history[item.history.length - 1].price
+              )}
             </Text>
             <Text
               style={[

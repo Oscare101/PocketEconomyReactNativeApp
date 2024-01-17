@@ -10,6 +10,7 @@ import {
   GetCurrentDate,
   GetCurrentTime,
   GetMoneyAmount,
+  GetMoneyAmountString,
 } from '../functions/functions'
 import { useState } from 'react'
 import { updateUser } from '../redux/user'
@@ -54,9 +55,7 @@ export default function PromoCodeModal(props: any) {
     Toast.show({
       type: 'ToastMessage',
       props: {
-        title: `$ ${GetMoneyAmount(value).value}.${
-          GetMoneyAmount(value).decimal
-        }${GetMoneyAmount(value).title} added to your account`,
+        title: `$ ${GetMoneyAmountString(value)} added to your account`,
       },
       position: rules.toast.position,
     })

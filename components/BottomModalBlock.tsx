@@ -1,24 +1,14 @@
 import {
   Dimensions,
-  FlatList,
   StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
   useColorScheme,
 } from 'react-native'
 import colors from '../constants/colors'
-import HeaderDrawer from '../components/HeaderDrawer'
 import { RootState } from '../redux'
 import { useSelector } from 'react-redux'
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet'
-import { useMemo, useRef, useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import ThemeBlockModal from '../components/ThemeBlockModal'
 import TransactionBlockModal from '../components/TransactionBlockModal'
 import RatingInfoModal from './RatingInfoModal'

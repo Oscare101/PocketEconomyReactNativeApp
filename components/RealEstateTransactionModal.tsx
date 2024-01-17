@@ -17,6 +17,7 @@ import {
   GetCurrentDate,
   GetCurrentTime,
   GetMoneyAmount,
+  GetMoneyAmountString,
 } from '../functions/functions'
 import { useState } from 'react'
 import { updateUser } from '../redux/user'
@@ -48,22 +49,16 @@ export default function RealEstateTransactionModal(props: any) {
     {
       title: 'Property cost',
       icon: 'briefcase-outline',
-      value: `$ ${
-        GetMoneyAmount(GetPropertyCost(user.loginDate, props.region)).value
-      }.${
-        GetMoneyAmount(GetPropertyCost(user.loginDate, props.region)).decimal
-      }${GetMoneyAmount(GetPropertyCost(user.loginDate, props.region)).title}`,
+      value: `$ ${GetMoneyAmountString(
+        GetPropertyCost(user.loginDate, props.region)
+      )}`,
     },
     {
       title: 'Daily income per day',
       icon: 'cash-outline',
-      value: `$ ${
-        GetMoneyAmount(GetPropertyIncome(user.loginDate, props.region)).value
-      }.${
-        GetMoneyAmount(GetPropertyIncome(user.loginDate, props.region)).decimal
-      }${
-        GetMoneyAmount(GetPropertyIncome(user.loginDate, props.region)).title
-      }`,
+      value: `$ ${GetMoneyAmountString(
+        GetPropertyIncome(user.loginDate, props.region)
+      )}`,
     },
   ]
 
@@ -71,22 +66,10 @@ export default function RealEstateTransactionModal(props: any) {
     {
       title: `Property sell cost (${rules.realEstate.sellValue * 100} %)`,
       icon: 'briefcase-outline',
-      value: `$ ${
-        GetMoneyAmount(
-          GetPropertyCost(user.loginDate, props.region) *
-            rules.realEstate.sellValue
-        ).value
-      }.${
-        GetMoneyAmount(
-          GetPropertyCost(user.loginDate, props.region) *
-            rules.realEstate.sellValue
-        ).decimal
-      }${
-        GetMoneyAmount(
-          GetPropertyCost(user.loginDate, props.region) *
-            rules.realEstate.sellValue
-        ).title
-      }`,
+      value: `$ ${GetMoneyAmountString(
+        GetPropertyCost(user.loginDate, props.region) *
+          rules.realEstate.sellValue
+      )}`,
     },
   ]
 

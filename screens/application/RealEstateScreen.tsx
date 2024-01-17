@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux'
 import IconBlock from '../../components/IconBlock'
 import rules from '../../constants/rules'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { GetMoneyAmount } from '../../functions/functions'
+import { GetMoneyAmount, GetMoneyAmountString } from '../../functions/functions'
 import { Ionicons } from '@expo/vector-icons'
 import Button from '../../components/Button'
 import {
@@ -977,12 +977,7 @@ export default function RealEstateScreen({ navigation, route }: any) {
                 style={[styles.regionValue, { color: colors[themeColor].text }]}
               >
                 ${' '}
-                {GetMoneyAmount(GetPropertyCost(user.loginDate, region)).value}.
-                {
-                  GetMoneyAmount(GetPropertyCost(user.loginDate, region))
-                    .decimal
-                }
-                {GetMoneyAmount(GetPropertyCost(user.loginDate, region)).title}
+                {GetMoneyAmountString(GetPropertyCost(user.loginDate, region))}
               </Text>
             </View>
             <View
@@ -1003,19 +998,9 @@ export default function RealEstateScreen({ navigation, route }: any) {
                 style={[styles.regionValue, { color: colors[themeColor].text }]}
               >
                 ${' '}
-                {
-                  GetMoneyAmount(GetPropertyIncome(user.loginDate, region))
-                    .value
-                }
-                .
-                {
-                  GetMoneyAmount(GetPropertyIncome(user.loginDate, region))
-                    .decimal
-                }
-                {
-                  GetMoneyAmount(GetPropertyIncome(user.loginDate, region))
-                    .title
-                }
+                {GetMoneyAmountString(
+                  GetPropertyIncome(user.loginDate, region)
+                )}
               </Text>
             </View>
             <View

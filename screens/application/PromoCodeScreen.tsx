@@ -19,6 +19,7 @@ import {
   GetCurrentDate,
   GetCurrentTime,
   GetMoneyAmount,
+  GetMoneyAmountString,
 } from '../../functions/functions'
 import rules from '../../constants/rules'
 import Toast from 'react-native-toast-message'
@@ -62,9 +63,7 @@ export default function PromoCodeScreen({ navigation, route }: any) {
     Toast.show({
       type: 'ToastMessage',
       props: {
-        title: `$ ${GetMoneyAmount(value).value}.${
-          GetMoneyAmount(value).decimal
-        }${GetMoneyAmount(value).title} added to your account`,
+        title: `$ ${GetMoneyAmountString(value)} added to your account`,
       },
       position: rules.toast.position,
     })
