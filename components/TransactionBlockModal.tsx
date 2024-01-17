@@ -9,16 +9,13 @@ import {
 import colors from '../constants/colors'
 import { RootState } from '../redux'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { Ionicons } from '@expo/vector-icons'
-import { updateTheme } from '../redux/theme'
 import { MMKV } from 'react-native-mmkv'
-import { Log, User, UserStock } from '../constants/interfaces'
+import { Log, User } from '../constants/interfaces'
 import Button from './Button'
 import {
   GetCurrentDate,
   GetCurrentTime,
-  GetMoneyAmount,
   GetMoneyAmountString,
   ReduceUserStocks,
   SetNewUserStocks,

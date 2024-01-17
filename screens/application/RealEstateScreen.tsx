@@ -2,11 +2,9 @@ import {
   Dimensions,
   FlatList,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
   useColorScheme,
 } from 'react-native'
@@ -17,11 +15,9 @@ import { useSelector } from 'react-redux'
 import IconBlock from '../../components/IconBlock'
 import rules from '../../constants/rules'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { GetMoneyAmount, GetMoneyAmountString } from '../../functions/functions'
+import { GetMoneyAmountString } from '../../functions/functions'
 import { Ionicons } from '@expo/vector-icons'
-import Button from '../../components/Button'
 import {
-  GetDaysFromDate,
   GetPropertyCost,
   GetPropertyIncome,
 } from '../../functions/realEstateFunctions'

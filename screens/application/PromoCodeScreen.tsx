@@ -1,8 +1,6 @@
 import {
   Dimensions,
-  ScrollView,
   StyleSheet,
-  Text,
   TextInput,
   View,
   useColorScheme,
@@ -18,7 +16,6 @@ import { updateUser } from '../../redux/user'
 import {
   GetCurrentDate,
   GetCurrentTime,
-  GetMoneyAmount,
   GetMoneyAmountString,
 } from '../../functions/functions'
 import rules from '../../constants/rules'

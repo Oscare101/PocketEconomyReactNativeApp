@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import {
   Dimensions,
   FlatList,
@@ -9,13 +8,12 @@ import {
   View,
   useColorScheme,
 } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import colors from '../../constants/colors'
-import { Company, User } from '../../constants/interfaces'
-import { updateUser } from '../../redux/user'
+import { User } from '../../constants/interfaces'
 import { RootState } from '../../redux'
 import HeaderDrawer from '../../components/HeaderDrawer'
-import { GetMoneyAmount, GetMoneyAmountString } from '../../functions/functions'
+import { GetMoneyAmountString } from '../../functions/functions'
 import { Ionicons } from '@expo/vector-icons'
 import { GetDepositMatureDateTime } from '../../functions/depositFunctions'
 

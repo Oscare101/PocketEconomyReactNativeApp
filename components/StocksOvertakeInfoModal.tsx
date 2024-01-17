@@ -2,7 +2,6 @@ import { Dimensions, Text, View, useColorScheme } from 'react-native'
 import colors from '../constants/colors'
 import { RootState } from '../redux'
 import { useSelector } from 'react-redux'
-import rules from '../constants/rules'
 
 const width = Dimensions.get('screen').width
 

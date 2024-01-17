@@ -9,7 +9,6 @@ import {
 import colors from '../constants/colors'
 import { RootState } from '../redux'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { Ionicons } from '@expo/vector-icons'
 import { MMKV } from 'react-native-mmkv'
 import Button from './Button'

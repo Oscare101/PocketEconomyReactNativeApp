@@ -15,7 +15,6 @@ import PortfolioScreen from '../screens/application/PortfolioScreen'
 import InvestScreen from '../screens/application/InvestScreen'
 import StockScreen from '../screens/application/StockScreen'
 
-import CustomBottomTabContent from '../components/CustomBottomTabContent'
 import DepositsScreen from '../screens/application/DepositsScreen'
 import AnalyticsScreen from '../screens/application/AnalyticsScreen'
 import DividendsScreen from '../screens/application/DividendsScreen'

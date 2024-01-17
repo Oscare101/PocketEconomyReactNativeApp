@@ -14,8 +14,6 @@ import colors from '../../constants/colors'
 import {
   CountDaysPlayed,
   GenerateDividendsDates,
-  GetEconomicsProgress,
-  GetMoneyAmount,
   GetMoneyAmountString,
   GetPortfolioProgress,
   GetRatingPerPeriod,
@@ -29,7 +27,7 @@ import {
 import StatusItem from '../../components/StatusItem'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
-import { User, UserRealEstate, UserStock } from '../../constants/interfaces'
+import { User, UserRealEstate } from '../../constants/interfaces'
 import { Ionicons } from '@expo/vector-icons'
 import { useMemo, useRef, useState } from 'react'
 import {

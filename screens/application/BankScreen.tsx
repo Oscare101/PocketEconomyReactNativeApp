@@ -4,7 +4,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   useColorScheme,
@@ -13,18 +12,11 @@ import HeaderDrawer from '../../components/HeaderDrawer'
 import colors from '../../constants/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux'
-import { updateLog } from '../../redux/log'
 import { Bank, Log, User } from '../../constants/interfaces'
 import { useMemo, useRef, useState } from 'react'
 import { updateUser } from '../../redux/user'
-import {
-  GetCurrentDate,
-  GetCurrentTime,
-  GetMoneyAmount,
-  GetMoneyAmountString,
-} from '../../functions/functions'
+import { GetMoneyAmountString } from '../../functions/functions'
 import rules from '../../constants/rules'
-import Toast from 'react-native-toast-message'
 import Button from '../../components/Button'
 import { MMKV } from 'react-native-mmkv'
 import { Ionicons } from '@expo/vector-icons'

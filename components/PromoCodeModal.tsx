@@ -2,14 +2,12 @@ import { Text, TextInput, View, useColorScheme } from 'react-native'
 import colors from '../constants/colors'
 import { RootState } from '../redux'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { MMKV } from 'react-native-mmkv'
 import { Log, User } from '../constants/interfaces'
 import Button from './Button'
 import {
   GetCurrentDate,
   GetCurrentTime,
-  GetMoneyAmount,
   GetMoneyAmountString,
 } from '../functions/functions'
 import { useState } from 'react'
@@ -17,6 +15,7 @@ import { updateUser } from '../redux/user'
 import Toast from 'react-native-toast-message'
 import rules from '../constants/rules'
 import { updateLog } from '../redux/log'
+
 export const storage = new MMKV()
 
 export default function PromoCodeModal(props: any) {

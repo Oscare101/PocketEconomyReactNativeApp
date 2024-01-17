@@ -9,10 +9,7 @@ import {
 import colors from '../constants/colors'
 import { RootState } from '../redux'
 import { useSelector, useDispatch } from 'react-redux'
-import { Ionicons } from '@expo/vector-icons'
-import { updateTheme } from '../redux/theme'
 import { MMKV } from 'react-native-mmkv'
-import { useState } from 'react'
 import StatusItem from './StatusItem'
 import { updateInterfaceSize } from '../redux/interfaceSize'
 

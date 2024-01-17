@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux'
 import { Log, User } from '../../constants/interfaces'
 import { useMemo, useRef, useState } from 'react'
-import { GetMoneyAmount, GetMoneyAmountString } from '../../functions/functions'
+import { GetMoneyAmountString } from '../../functions/functions'
 import { MMKV } from 'react-native-mmkv'
 import { FontAwesome } from '@expo/vector-icons'
 import {

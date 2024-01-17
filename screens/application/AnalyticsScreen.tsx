@@ -17,7 +17,6 @@ import {
 import StatusItem from '../../components/StatusItem'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
-import { User } from '../../constants/interfaces'
 import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import {

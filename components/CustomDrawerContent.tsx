@@ -3,8 +3,6 @@ import colors from '../constants/colors'
 import {
   Dimensions,
   FlatList,
-  Image,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,7 +10,7 @@ import {
   useColorScheme,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { GetMoneyAmount, GetUserStocksCapital } from '../functions/functions'
+import { GetMoneyAmount } from '../functions/functions'
 import { RootState } from '../redux'
 import { useSelector } from 'react-redux'
 import { User } from '../constants/interfaces'

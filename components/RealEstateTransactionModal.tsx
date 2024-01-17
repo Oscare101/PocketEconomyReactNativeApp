@@ -16,7 +16,6 @@ import Button from './Button'
 import {
   GetCurrentDate,
   GetCurrentTime,
-  GetMoneyAmount,
   GetMoneyAmountString,
 } from '../functions/functions'
 import { useState } from 'react'

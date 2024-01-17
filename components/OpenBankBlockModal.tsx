@@ -1,17 +1,8 @@
-import {
-  Dimensions,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from 'react-native'
+import { Dimensions, Text, View, useColorScheme } from 'react-native'
 import colors from '../constants/colors'
 import { RootState } from '../redux'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { Ionicons } from '@expo/vector-icons'
-import { updateTheme } from '../redux/theme'
 import { MMKV } from 'react-native-mmkv'
 import Button from './Button'
 import { useState } from 'react'
@@ -20,7 +11,6 @@ import rules from '../constants/rules'
 import {
   GetCurrentDate,
   GetCurrentTime,
-  GetMoneyAmount,
   GetMoneyAmountString,
 } from '../functions/functions'
 import { updateUser } from '../redux/user'

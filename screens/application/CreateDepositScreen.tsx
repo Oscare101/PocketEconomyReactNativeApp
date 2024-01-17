@@ -37,7 +37,6 @@ import Toast from 'react-native-toast-message'
 import { updateUser } from '../../redux/user'
 import { MMKV } from 'react-native-mmkv'
 import rules from '../../constants/rules'
-import { FlatList } from 'react-native-gesture-handler'
 import { updateLog } from '../../redux/log'
 
 export const storage = new MMKV()

@@ -2,11 +2,9 @@ import {
   Dimensions,
   FlatList,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
   useColorScheme,
 } from 'react-native'
@@ -14,15 +12,11 @@ import colors from '../../constants/colors'
 import HeaderDrawer from '../../components/HeaderDrawer'
 import { RootState } from '../../redux'
 import { useSelector } from 'react-redux'
-
-import { useMemo, useRef, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import {
-  GetMoneyAmount,
   GetMoneyAmountString,
   GetUserDividendsValue,
 } from '../../functions/functions'
-import { DividendHistory } from '../../constants/interfaces'
 
 const width = Dimensions.get('screen').width
 
