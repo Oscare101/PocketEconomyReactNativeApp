@@ -21,6 +21,7 @@ import {
   GetCurrentDate,
   GetCurrentTime,
   GetMoneyAmount,
+  GetMoneyAmountString,
 } from '../../functions/functions'
 import rules from '../../constants/rules'
 import Toast from 'react-native-toast-message'
@@ -55,25 +56,18 @@ export default function BusinessesScreen({ navigation, route }: any) {
       title: 'Bank',
       type: 'bank',
       screen: 'BankScreen',
-      icon: (
-        <FontAwesome
-          name="bank"
-          size={width * interfaceSize * 0.08}
-          color={colors[themeColor].text}
-        />
-      ),
+      icon: 'bank',
     },
   ]
 
   function RenderBusinessItem({ item }: any) {
+    const isUsersBusiness: boolean =
+      user.bisuness && user.bisuness.find((b: any) => b.type === item.type)
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
-          if (
-            user.bisuness &&
-            user.bisuness.find((b: any) => b.type === item.type)
-          ) {
+          if (isUsersBusiness) {
             navigation.navigate('BankScreen')
           } else {
             setBottomSheetContent(item.type)
@@ -82,90 +76,54 @@ export default function BusinessesScreen({ navigation, route }: any) {
         }}
         style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
       >
-        {item.icon}
+        <FontAwesome
+          name={item.icon}
+          size={width * interfaceSize * 0.08}
+          color={
+            isUsersBusiness
+              ? colors[themeColor].text
+              : colors[themeColor].comment
+          }
+        />
         <Text
           style={{
-            color: colors[themeColor].text,
+            color: isUsersBusiness
+              ? colors[themeColor].text
+              : colors[themeColor].comment,
             fontSize: width * interfaceSize * 0.04,
           }}
         >
           {item.title}
         </Text>
+        {isUsersBusiness ? (
+          <Text
+            style={{
+              color: isUsersBusiness
+                ? colors[themeColor].text
+                : colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.035,
+            }}
+          >
+            ${' '}
+            {GetMoneyAmountString(
+              user.bisuness?.find((b: any) => b.type === item.type).cash
+            )}
+          </Text>
+        ) : (
+          <Text
+            style={{
+              color: isUsersBusiness
+                ? colors[themeColor].text
+                : colors[themeColor].comment,
+              fontSize: width * interfaceSize * 0.035,
+            }}
+          >
+            Open
+          </Text>
+        )}
       </TouchableOpacity>
     )
   }
-
-  function RenderUserBusinessItem({ item }: any) {
-    return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {
-          if (
-            user.bisuness &&
-            user.bisuness.find((b: any) => b.type === item.type)
-          ) {
-            navigation.navigate('BankScreen')
-          } else {
-            setBottomSheetContent(item.type)
-            bottomSheetModalRef.current?.present()
-          }
-        }}
-        style={[styles.card, { backgroundColor: colors[themeColor].cardColor }]}
-      >
-        {data.find((b: any) => b.type === item.type)?.icon}
-        <Text
-          style={{
-            color: colors[themeColor].text,
-            fontSize: width * interfaceSize * 0.04,
-          }}
-        >
-          {data.find((b: any) => b.type === item.type)?.title}
-        </Text>
-        <Text
-          style={{
-            color: colors[themeColor].text,
-            fontSize: width * interfaceSize * 0.04,
-          }}
-        >
-          {item.cash}
-        </Text>
-      </TouchableOpacity>
-    )
-  }
-
-  const yourBusinessesBlock = (
-    <>
-      <Text
-        style={{
-          width: '92%',
-          alignSelf: 'center',
-          color: colors[themeColor].comment,
-          fontSize: width * interfaceSize * 0.05,
-        }}
-      >
-        Your businesses:
-      </Text>
-      {user.bisuness && user.bisuness.length ? (
-        <FlatList
-          style={{ width: '100%', marginTop: width * 0.02 }}
-          numColumns={2}
-          data={user.bisuness}
-          renderItem={RenderUserBusinessItem}
-        />
-      ) : (
-        <Text
-          style={{
-            color: colors[themeColor].comment,
-            fontSize: width * interfaceSize * 0.04,
-            marginVertical: width * interfaceSize * 0.05,
-            fontWeight: '300',
-          }}
-        >
-          No businesses yet
-        </Text>
-      )}
-    </>
-  )
 
   return (
     <BottomSheetModalProvider>
@@ -176,7 +134,6 @@ export default function BusinessesScreen({ navigation, route }: any) {
         ]}
       >
         <HeaderDrawer title="Businesses" />
-        {/* {yourBusinessesBlock} */}
         <Text
           style={{
             width: '92%',
