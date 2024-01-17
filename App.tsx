@@ -198,6 +198,7 @@ export default function App() {
     function SetNewData() {
       const newCompaniesData = UpdateCompaniesData(user.stocks, companies)
       const dividends = newCompaniesData.dividends
+
       if (dividends.length) {
         SetUserDividends(dividends)
       }
@@ -359,7 +360,7 @@ export default function App() {
 
       let timer = setTimeout(() => {
         ChechUpdates()
-      }, 5000)
+      }, 10000)
 
       return () => {
         clearTimeout(timer)

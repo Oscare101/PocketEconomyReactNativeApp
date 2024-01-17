@@ -199,7 +199,7 @@ export function GetElapsedHistory(company: any, userStocks: any[]) {
 export function UpdateCompaniesData(userStocks: any[], companies: any[]) {
   let dividends: any = []
 
-  const newCompaniesData = companies.map((c: any) => {
+  const newCompaniesData = [...companies].map((c: any) => {
     const elapsedHistory = GetElapsedHistory(c, userStocks)
     const dividend = elapsedHistory.dividend
     const history = elapsedHistory.arr
