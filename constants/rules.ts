@@ -3,7 +3,7 @@ import { ToastPosition } from 'react-native-toast-message'
 export default {
   app: {
     logAvailable: true,
-    promoCodeAvailable: true, // TODO false
+    promoCodeAvailable: false,
     showTestScreens: false,
   },
   user: {

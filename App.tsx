@@ -116,7 +116,11 @@ export default function App() {
     }, [themeColor])
 
     function SetUserDividends(dividends: any[]) {
+      // console.log('SetUserDividends()', dividends)
+
       const value = dividends.reduce((a: any, b: any) => a + b.value, 0)
+      // console.log('value', value)
+
       const lastDividends = user.dividendsHistory || []
       const newUserData: User = {
         ...user,
@@ -126,6 +130,7 @@ export default function App() {
           ...dividends,
         ]),
       }
+      // console.log('newUserData', newUserData)
 
       dispatch(updateUser(newUserData))
       dispatch(
@@ -197,7 +202,8 @@ export default function App() {
 
     function SetNewData() {
       const newCompaniesData = UpdateCompaniesData(user.stocks, companies)
-      const dividends = newCompaniesData.dividends
+      const dividends = [...newCompaniesData.dividends]
+      // console.log('dividends', dividends)
 
       if (dividends.length) {
         SetUserDividends(dividends)
@@ -354,6 +360,8 @@ export default function App() {
 
     useEffect(() => {
       if (companies.length !== 0 && user.name && !initialCheck) {
+        console.log(user.dividendsHistory)
+
         setInitialCheck(true)
         ChechUpdates()
       }

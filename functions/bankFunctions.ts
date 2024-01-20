@@ -103,3 +103,8 @@ export function GetAdCost(startDate: string) {
     initialValue * (1 + rules.business.bank.adPercentPerDay / 100) ** dayPassed
   return +currectValue.toFixed(2)
 }
+
+export function GetUserBusinessesCash(businesses: any) {
+  const amount = businesses.reduce((a: number, b: any) => a + b.cash, 0) || 0
+  return amount
+}

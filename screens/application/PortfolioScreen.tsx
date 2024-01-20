@@ -45,6 +45,7 @@ import {
   GetPropertiesValuePerRegion,
   GetUserAllPropertiesCost,
 } from '../../functions/realEstateFunctions'
+import { GetUserBusinessesCash } from '../../functions/bankFunctions'
 
 const width = Dimensions.get('screen').width
 
@@ -58,6 +59,7 @@ export default function PortfolioScreen({ navigation }: any) {
 
   const [stockShowProgress, setStockShowProgress] = useState<boolean>(false)
   const [openStocksList, setOpenStocksList] = useState<boolean>(false)
+  const [openBusinessesList, setOpenBusinessesList] = useState<boolean>(false)
   const [openDepositsList, setOpenDepositsList] = useState<boolean>(false)
   const [openDividendsList, setOpenDividendsList] = useState<boolean>(false)
   const [openRealEstateList, setOpenRealEstateList] = useState<boolean>(false)
@@ -143,6 +145,13 @@ export default function PortfolioScreen({ navigation }: any) {
       title: 'Dividends',
       icon: 'download-outline',
       data: user.dividendsHistory,
+    },
+    {
+      type: 'Businesses',
+      title: 'Businesses',
+      icon: 'albums-outline',
+      value: `$ ${GetMoneyAmountString(GetUserBusinessesCash(user.bisuness))}`,
+      data: user.bisuness,
     },
     {
       type: 'Deposits',
@@ -366,6 +375,55 @@ export default function PortfolioScreen({ navigation }: any) {
             -
           </Text>
         )}
+      </TouchableOpacity>
+    )
+  }
+
+  function RenderUserBusinessItem({ item }: any) {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          if (item.type === 'bank') {
+            navigation.navigate('BankScreen')
+          }
+        }}
+        style={[
+          styles.rowBetween,
+          {
+            height: width * interfaceSize * 0.08,
+            marginVertical: 0,
+            marginTop: 5,
+          },
+        ]}
+      >
+        <Ionicons
+          name={'open-outline'}
+          size={width * interfaceSize * 0.04}
+          color={colors[themeColor].comment}
+        />
+        <Text
+          style={[
+            styles.userStockTitle,
+            {
+              color: colors[themeColor].comment,
+              flex: 1,
+              fontSize: width * interfaceSize * 0.04,
+            },
+          ]}
+          numberOfLines={1}
+        >
+          {item.type[0].toUpperCase() + item.type.substring(1)}
+        </Text>
+
+        <Text
+          style={{
+            color: colors[themeColor].text,
+            fontSize: width * interfaceSize * 0.04,
+          }}
+        >
+          $ {GetMoneyAmountString(item.cash)}
+        </Text>
       </TouchableOpacity>
     )
   }
@@ -884,6 +942,103 @@ export default function PortfolioScreen({ navigation }: any) {
       </View>
     )
 
+    const businessesBlock = (
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors[themeColor].cardColor,
+            alignSelf: 'center',
+          },
+        ]}
+      >
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setOpenBusinessesList(!openBusinessesList)}
+          style={[
+            styles.rowBetween,
+            {
+              height: width * interfaceSize * 0.08 + 10,
+              marginVertical: 0,
+            },
+          ]}
+        >
+          <Ionicons
+            name={item.icon}
+            size={width * interfaceSize * 0.05}
+            color={colors[themeColor].text}
+          />
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
+            {item.title}
+          </Text>
+          <Ionicons
+            name={openBusinessesList ? 'chevron-up' : 'chevron-down'}
+            size={width * interfaceSize * 0.05}
+            color={colors[themeColor].text}
+          />
+
+          <Text
+            style={[
+              styles.cardValue,
+              {
+                color: colors[themeColor].text,
+                fontSize: width * interfaceSize * 0.05,
+              },
+            ]}
+          >
+            {item.value}
+          </Text>
+        </TouchableOpacity>
+        {openBusinessesList ? (
+          <>
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: colors[themeColor].disable,
+              }}
+            />
+            {item.data?.length ? (
+              <FlatList data={item.data} renderItem={RenderUserBusinessItem} />
+            ) : (
+              <View style={styles.rowBetween}>
+                <Text
+                  style={[
+                    styles.comment,
+                    { color: colors[themeColor].comment },
+                  ]}
+                >
+                  No businesses yet{' '}
+                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    navigation.navigate('BusinessesScreen')
+                  }}
+                >
+                  <Ionicons
+                    name={'add-circle-outline'}
+                    size={width * interfaceSize * 0.05}
+                    color={colors[themeColor].text}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+    )
+
     const depositsBlock = (
       <View
         style={[
@@ -1204,6 +1359,7 @@ export default function PortfolioScreen({ navigation }: any) {
       Deposits: depositsBlock,
       RealEstate: realEstateBlock,
       RentalPayment: rentalPaymentBlock,
+      Businesses: businessesBlock,
     }
 
     return <>{renderType[item.type]}</>
