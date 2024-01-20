@@ -1,4 +1,4 @@
-import { Company, User, UserStock } from '../constants/interfaces'
+import { Company, StockStat, User, UserStock } from '../constants/interfaces'
 import rules from '../constants/rules'
 import defaultData from '../defaultData.json'
 import { GetUserDepositsCapital } from './depositFunctions'
@@ -284,36 +284,55 @@ export function GetEconomicsProgress(companies: any[], lastPeriod: number) {
   return economicsCapitalPercent / economicsCapitalStart
 }
 
-export function GetEconomicsAllTimeProgress(companies: any[]) {
-  const economicsArr: any = []
+export function GetEconomicsAllTimeProgress(companies: any[], user: User) {
+  let startEconomicsCapital = 0
+  let currentEconomicsCapital = 0
   const defaultDataPrices: any = defaultData
 
-  companies.map((s: any) => {
-    const start = defaultDataPrices[s.name].price
-    const finish = s.history[s.history.length - 1].price
-    const percent = (finish / start - 1) * 100
-    economicsArr.push({
-      finish: finish,
-      percent: percent,
-      companySize: s.stat.companySize,
-    })
+  companies.map((c: Company) => {
+    startEconomicsCapital +=
+      defaultDataPrices[c.name].price *
+      rules.stock.companySizeStocksAmount[c.stat.companySize - 1]
+    currentEconomicsCapital +=
+      c.history[c.history.length - 1].price *
+      rules.stock.companySizeStocksAmount[c.stat.companySize - 1]
   })
 
-  // use company size to get their weight in economics
-  const economicsCapitalStart = economicsArr.reduce(
-    (a: any, b: any) =>
-      a + rules.stock.companySizeStocksAmount[b.companySize - 1],
-    0
+  return СalculateAPY(
+    startEconomicsCapital,
+    currentEconomicsCapital,
+    CountDaysPlayed(user.loginDate)
   )
 
-  // use company size to multiply their percent
-  const economicsCapitalPercent = economicsArr.reduce(
-    (a: any, b: any) =>
-      a + rules.stock.companySizeStocksAmount[b.companySize - 1] * b.percent,
-    0
-  )
-
-  return economicsCapitalPercent / economicsCapitalStart / 100 + 1
+  // const economicsArr: any = []
+  // const defaultDataPrices: any = defaultData
+  // const startEconomicsCapital = 0
+  // const currentEconomicsCapital = 0
+  // companies.map((s: any) => {
+  //   startEconomicsCapital +=
+  //     defaultDataPrices[s.name].price * defaultDataPrices[s.name].amountOfStocks
+  //   const start = defaultDataPrices[s.name].price
+  //   const finish = s.history[s.history.length - 1].price
+  //   const percent = (finish / start - 1) * 100
+  //   economicsArr.push({
+  //     finish: finish,
+  //     percent: percent,
+  //     companySize: s.stat.companySize,
+  //   })
+  // })
+  // // use company size to get their weight in economics
+  // const economicsCapitalStart = economicsArr.reduce(
+  //   (a: any, b: any) =>
+  //     a + rules.stock.companySizeStocksAmount[b.companySize - 1],
+  //   0
+  // )
+  // // use company size to multiply their percent
+  // const economicsCapitalPercent = economicsArr.reduce(
+  //   (a: any, b: any) =>
+  //     a + rules.stock.companySizeStocksAmount[b.companySize - 1] * b.percent,
+  //   0
+  // )
+  // return economicsCapitalPercent / economicsCapitalStart / 100 + 1
 }
 
 export function GetSortedCompaniesByProgress(companies: any[]) {
@@ -418,10 +437,29 @@ export function GetUserAllTimeProgress(user: User, companies: any[]) {
   return progress
 }
 
+function СalculateAPY(
+  initialCapital: number,
+  finalCapital: number,
+  periods: number
+) {
+  const apy = Math.pow(finalCapital / initialCapital, 1 / periods) - 1
+  const apyPercentage = apy * 100
+  return apyPercentage
+}
+
 export function GetUserRating(user: User, companies: any[]) {
-  const economicsProgress = GetEconomicsAllTimeProgress(companies)
-  const userProgress = GetUserAllTimeProgress(user, companies)
-  const rating = (userProgress - 1) / (economicsProgress - 1)
+  const economicsProgress = GetEconomicsAllTimeProgress(companies, user)
+  const userProgress = СalculateAPY(
+    rules.user.startCash,
+    GetUserStocksCapital(user.stocks, companies) +
+      user.cash +
+      GetUserDepositsCapital(user.deposits) +
+      GetUserAllPropertiesCost(user) +
+      GetUserAllBusinessesCapital(user?.bisuness || []),
+    CountDaysPlayed(user.loginDate)
+  )
+
+  const rating = userProgress / economicsProgress
   return +rating
 }
 

@@ -360,7 +360,7 @@ export default function App() {
 
     useEffect(() => {
       if (companies.length !== 0 && user.name && !initialCheck) {
-        console.log(user.dividendsHistory)
+        // console.log(user.dividendsHistory)
 
         setInitialCheck(true)
         ChechUpdates()
