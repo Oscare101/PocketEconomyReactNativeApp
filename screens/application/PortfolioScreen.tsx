@@ -150,8 +150,10 @@ export default function PortfolioScreen({ navigation }: any) {
       type: 'Businesses',
       title: 'Businesses',
       icon: 'albums-outline',
-      value: `$ ${GetMoneyAmountString(GetUserBusinessesCash(user.bisuness))}`,
-      data: user.bisuness,
+      value: `$ ${GetMoneyAmountString(
+        GetUserAllBusinessesCapital(user?.bisuness || [])
+      )}`,
+      data: user?.bisuness || [],
     },
     {
       type: 'Deposits',
